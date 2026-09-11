@@ -11,7 +11,7 @@ export default function Navbar() {
             alt="Dinosaku Logo" 
             width={140} 
             height={48} 
-            className="object-contain"
+            className="w-28 md:w-[140px] object-contain"
             priority
           />
         </Link>
