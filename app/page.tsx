@@ -1,35 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-app text-primary overflow-hidden">
-      {/* NAVBAR */}
-      <header className="sticky top-0 z-50 w-full border-b border-default bg-surface/80 backdrop-blur-md">
-        <div className="container-main flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-white font-bold">
-              D
-            </div>
-            <span className="font-heading font-bold text-xl tracking-tight text-primary">
-              Dinosaku
-            </span>
-          </div>
-          <nav className="hidden md:flex items-center gap-8 text-label text-secondary">
-            <Link href="#features" className="hover:text-primary transition-colors">Fitur</Link>
-            <Link href="#how-it-works" className="hover:text-primary transition-colors">Cara Kerja</Link>
-            <Link href="#testimonials" className="hover:text-primary transition-colors">Testimoni</Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="text-label font-semibold text-secondary hover:text-primary transition-colors hidden sm:block">
-              Masuk
-            </Link>
-            <Link href="/register" className="button-primary px-5 py-2 text-sm">
-              Daftar Gratis
-            </Link>
-          </div>
-        </div>
-      </header>
+    <>
+      <Navbar />
+      <div className="flex flex-col min-h-screen bg-app text-primary overflow-x-hidden">
 
       <main className="flex-1">
         {/* HERO SECTION */}
@@ -47,28 +24,19 @@ export default function Home() {
 
           <div className="container-main grid lg:grid-cols-2 gap-12 items-center">
             <div className="flex flex-col gap-8 text-center lg:text-left z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-success-soft text-success text-sm font-semibold w-fit mx-auto lg:mx-0">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-                </span>
-                Versi 1.0 Telah Rilis!
-              </div>
               
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-primary">
-                Atur Uang Saku <br/>
+                Berpetualang Sambil <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#064E2B] to-[#98CE36]">
-                  Lebih Menyenangkan
+                  Belajar Keuangan
                 </span>
               </h1>
               
-              <p className="text-body text-secondary max-w-xl mx-auto lg:mx-0 text-lg md:text-xl">
-                Dinosaku membantu kamu melacak pengeluaran, menabung untuk impianmu, dan belajar mengelola uang sejak dini dengan cara yang interaktif!
-              </p>
+
               
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
                 <Link href="/register" className="button-primary px-8 py-4 w-full sm:w-auto text-lg shadow-card">
-                  Mulai Sekarang 
+                  Berpetualang Sekarang 
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </Link>
                 <Link href="/demo" className="button-secondary px-8 py-4 w-full sm:w-auto text-lg">
@@ -87,25 +55,24 @@ export default function Home() {
             </div>
             
             <div className="relative flex justify-center items-center z-10 mt-10 lg:mt-0">
-              <div className="relative w-full max-w-md aspect-square">
+              <div className="relative w-full max-w-[450px] aspect-square">
                 {/* Pulse rings */}
                 <div className="absolute inset-0 bg-brand-accent-soft rounded-full" style={{ animation: 'pulseRing 4s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
                 <div className="absolute inset-4 bg-surface-green rounded-full shadow-soft" style={{ animation: 'pulseRing 4s cubic-bezier(0.4, 0, 0.6, 1) infinite 1s' }} />
                 
-                {/* Mascot Image */}
+                {/* Mascot Video */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <Image 
-                    src="/dino-mascot.png" 
-                    alt="Dinosaku Mascot" 
-                    width={400} 
-                    height={400}
-                    className="object-contain drop-shadow-2xl z-10 gpu-layer"
-                    style={{ animation: 'floatMascot 4s ease-in-out infinite' }}
-                    priority
+                  <video 
+                    src="/mascot/dinosaku-hero.webm" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    className="w-full max-w-[450px] object-contain drop-shadow-2xl z-10 gpu-layer"
                   />
                   {/* Shadow under mascot */}
                   <div 
-                    className="w-48 h-6 bg-black/20 rounded-[100%] filter blur-md mt-4"
+                    className="w-56 h-6 bg-black/20 rounded-[100%] filter blur-md mt-4"
                     style={{ animation: 'mascotShadow 4s ease-in-out infinite' }}
                   />
                 </div>
@@ -207,6 +174,7 @@ export default function Home() {
           </p>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   );
 }
