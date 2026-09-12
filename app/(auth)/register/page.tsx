@@ -240,6 +240,7 @@ export default function RegisterPage() {
                                     />
                                     <button
                                         type="button"
+                                        suppressHydrationWarning
                                         onClick={() => setShowPassword(!showPassword)}
                                         className="absolute right-0 top-0 h-12 px-4 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
                                     >
@@ -272,6 +273,7 @@ export default function RegisterPage() {
                                     />
                                     <button
                                         type="button"
+                                        suppressHydrationWarning
                                         onClick={() => setShowPassword(!showPassword)}
                                         className="absolute right-0 top-0 h-12 px-4 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
                                     >
@@ -298,7 +300,7 @@ export default function RegisterPage() {
                                     className="h-5 w-5 rounded border-2 border-brand-primary/40 data-checked:border-brand-primary data-checked:bg-brand-primary [&>span>svg]:size-4"
                                 />
                                 <label htmlFor="termsAccepted" className="text-sm font-medium text-primary cursor-pointer">
-                                    Saya setuju dengan <button type="button" onClick={() => setIsTermsOpen(true)} className="text-brand-primary hover:underline font-heading">Syarat & Ketentuan</button> Dinosaku.
+                                    Saya setuju dengan <button type="button" suppressHydrationWarning onClick={() => setIsTermsOpen(true)} className="text-brand-primary hover:underline font-heading">Syarat & Ketentuan</button> Dinosaku.
                                 </label>
                             </div>
                             {errors.termsAccepted && (
