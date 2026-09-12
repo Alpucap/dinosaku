@@ -52,16 +52,24 @@ export default function LoginPage() {
 
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // Verifikasi dengan data dummy
-            const user = DUMMY_USERS.find(u => u.email === formData.email && u.password === formData.password);
+            // Verifikasi dengan data dummy (email atau username)
+            const user = DUMMY_USERS.find(u => 
+                (u.email === formData.email || u.username === formData.email) && 
+                u.password === formData.password
+            );
 
             // Jika login berhasil
             if (user) {
                 setIsRedirecting(true);
+                
+                // Set cookie untuk simulasi session
+                document.cookie = `dinosaku_session=${user.id}; path=/; max-age=86400`; // 1 hari
+
                 toast.add({
                     title: "Login Berhasil",
                     description: `Selamat datang kembali, ${user.fullName}!`,
-                    type: "success"
+                    type: "success",
+                    timeout: 3000
                 });
                 setTimeout(() => {
                     router.push('/dashboard');
@@ -111,16 +119,16 @@ export default function LoginPage() {
                         {/* Email Input */}
                         <Field orientation="vertical" data-invalid={!!errors.email}>
                             <FieldLabel htmlFor="email" className="text-base font-heading text-primary">
-                                Alamat Email <span className="text-destructive">*</span>
+                                Email atau Username <span className="text-destructive">*</span>
                             </FieldLabel>
                             <Input
                                 id="email"
                                 name="email"
-                                type="email"
+                                type="text"
                                 suppressHydrationWarning
-                                autoComplete="email"
+                                autoComplete="username"
                                 required
-                                placeholder="nama@email.com"
+                                placeholder="nama@email.com atau username"
                                 value={formData.email}
                                 onChange={handleChange}
                                 className={`h-12 rounded-lg border-2 focus-visible:ring-0 px-4 text-base shadow-sm transition-colors ${errors.email

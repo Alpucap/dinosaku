@@ -57,27 +57,26 @@ export const validateRegistrationForm = (formData: any) => {
     return newErrors;
 };
 
+// Validasi form forget password
 export const validateForgotPasswordForm = (email: string) => {
     const newErrors: Record<string, string> = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     if (!email) {
         newErrors.email = 'Email wajib diisi.';
     } else if (!emailRegex.test(email)) {
         newErrors.email = 'Format email tidak valid (contoh: teks@domain.com).';
     }
-    
+
     return newErrors;
 };
 
+// Validasi form login
 export const validateLoginForm = (formData: any) => {
     const newErrors: Record<string, string> = {};
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email) {
-        newErrors.email = 'Email wajib diisi.';
-    } else if (!emailRegex.test(formData.email)) {
-        newErrors.email = 'Format email tidak valid (contoh: teks@domain.com).';
+        newErrors.email = 'Email atau Username wajib diisi.';
     }
 
     if (!formData.password) {
