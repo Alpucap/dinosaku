@@ -1,3 +1,5 @@
+import { DUMMY_USERS } from "@/lib/data/dummy-users";
+
 export const validateRegistrationForm = (formData: any) => {
     const newErrors: Record<string, string> = {};
 
@@ -19,7 +21,7 @@ export const validateRegistrationForm = (formData: any) => {
         newErrors.username = 'Username tidak boleh mengandung spasi.';
     } else if (!/^[a-zA-Z0-9_.]+$/.test(formData.username)) {
         newErrors.username = 'Hanya mengizinkan huruf, angka, underscore (_), atau titik (.).';
-    } else if (formData.username.toLowerCase() === 'admin') {
+    } else if (DUMMY_USERS.some(u => u.username.toLowerCase() === formData.username.toLowerCase())) {
         newErrors.username = 'Username ini sudah dipakai oleh orang lain.';
     }
 
@@ -29,7 +31,7 @@ export const validateRegistrationForm = (formData: any) => {
         newErrors.email = 'Email wajib diisi.';
     } else if (!emailRegex.test(formData.email)) {
         newErrors.email = 'Format email tidak valid (contoh: teks@domain.com).';
-    } else if (formData.email.toLowerCase() === 'test@test.com') {
+    } else if (DUMMY_USERS.some(u => u.email.toLowerCase() === formData.email.toLowerCase())) {
         newErrors.email = 'Email ini sudah terdaftar di database.';
     }
 
@@ -50,6 +52,23 @@ export const validateRegistrationForm = (formData: any) => {
     // 5. Syarat & Ketentuan
     if (!formData.termsAccepted) {
         newErrors.termsAccepted = 'Kamu harus mencentang persetujuan ini ya!';
+    }
+
+    return newErrors;
+};
+
+export const validateLoginForm = (formData: any) => {
+    const newErrors: Record<string, string> = {};
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email) {
+        newErrors.email = 'Email wajib diisi.';
+    } else if (!emailRegex.test(formData.email)) {
+        newErrors.email = 'Format email tidak valid (contoh: teks@domain.com).';
+    }
+
+    if (!formData.password) {
+        newErrors.password = 'Password wajib diisi.';
     }
 
     return newErrors;
