@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "@/components/ui/toast";
 
 // Icon
 import { Eye, EyeOff } from "lucide-react";
@@ -29,6 +30,7 @@ export default function LoginPage() {
 
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,17 +51,23 @@ export default function LoginPage() {
             setIsSubmitting(true);
 
             await new Promise(resolve => setTimeout(resolve, 1000));
-            setIsSubmitting(false);
 
             // Verifikasi dengan data dummy
             const user = DUMMY_USERS.find(u => u.email === formData.email && u.password === formData.password);
 
+            // Jika login berhasil
             if (user) {
-                // Berhasil login
-                alert(`Login berhasil sebagai ${user.fullName} (${user.role})`);
-                // Redirect ke dashboard
-                router.push('/dashboard');
+                setIsRedirecting(true);
+                toast.add({
+                    title: "Login Berhasil",
+                    description: `Selamat datang kembali, ${user.fullName}!`,
+                    type: "success"
+                });
+                setTimeout(() => {
+                    router.push('/dashboard');
+                }, 1500);
             } else {
+                setIsSubmitting(false);
                 setErrors({ root: 'Email atau kata sandi yang Anda masukkan salah.' });
             }
         } else {
@@ -185,20 +193,20 @@ export default function LoginPage() {
                     <div className="!mt-6">
                         <button
                             type="submit"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || isRedirecting}
                             suppressHydrationWarning
                             className="w-full h-14 text-lg flex justify-center items-center rounded-xl bg-brand-primary text-white hover:bg-brand-primary-hover font-heading shadow-card hover:-translate-y-1 transform duration-200 disabled:opacity-70 disabled:hover:translate-y-0 transition-all"
                         >
-                            {isSubmitting ? (
+                            {(isSubmitting || isRedirecting) ? (
                                 <span className="flex items-center gap-2">
                                     <svg className="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Sedang Masuk...
+                                    {isRedirecting ? 'Mengarahkan...' : 'Memeriksa...'}
                                 </span>
                             ) : (
-                                'Masuk Sekarang!'
+                                'Masuk Sekarang'
                             )}
                         </button>
                     </div>
