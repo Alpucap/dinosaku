@@ -57,6 +57,19 @@ export const validateRegistrationForm = (formData: any) => {
     return newErrors;
 };
 
+export const validateForgotPasswordForm = (email: string) => {
+    const newErrors: Record<string, string> = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!email) {
+        newErrors.email = 'Email wajib diisi.';
+    } else if (!emailRegex.test(email)) {
+        newErrors.email = 'Format email tidak valid (contoh: teks@domain.com).';
+    }
+    
+    return newErrors;
+};
+
 export const validateLoginForm = (formData: any) => {
     const newErrors: Record<string, string> = {};
 

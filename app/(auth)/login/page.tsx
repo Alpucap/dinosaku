@@ -174,8 +174,7 @@ export default function LoginPage() {
                             </label>
                         </div>
                         <Link
-                            href="#"
-                            onClick={(e) => { e.preventDefault(); alert('Fitur resend/forgot password segera hadir!'); }}
+                            href="/forgot-password"
                             className="text-sm font-heading text-brand-primary hover:text-brand-primary-hover transition-colors"
                         >
                             Lupa kata sandi?
