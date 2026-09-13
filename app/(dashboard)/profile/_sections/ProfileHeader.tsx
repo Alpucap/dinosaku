@@ -6,12 +6,15 @@ import { buttonVariants } from '@/components/ui/button';
 import { User } from '@/lib/data/dummy-users';
 
 const ADULT_AVATAR_OPTIONS = [
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Siti",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Kelluny",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Cattelyaa",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Steva",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=AAbiiiW",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Petro"
+    "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=wuwu1oq7",
+    "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=p5d7w2b6",
+    "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=fonb5yf0",
+    "https://api.dicebear.com/10.x/avataaars/svg?seed=fooskqu5",
+    "https://api.dicebear.com/10.x/avataaars/svg?seed=n2wiknjj",
+    "https://api.dicebear.com/10.x/avataaars/svg?seed=laheishi",
+    "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
+    "https://api.dicebear.com/10.x/avataaars/svg?seed=Eapeaaa",
+    "https://api.dicebear.com/10.x/avataaars/svg?seed=HeAFAFAOF"
 ];
 
 const CHILD_AVATAR_OPTIONS = [

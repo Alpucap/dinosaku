@@ -142,7 +142,7 @@ export const DUMMY_USERS: User[] = [
         fullName: "Siti Aminah, S.Pd",
         role: "teacher",
         status: "active",
-        avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Siti",
+        avatarUrl: "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=wuwu1oq7",
         createdAt: "2024-08-01T07:15:00Z",
         preferences: { notificationsEnabled: true },
         schoolId: "sch_001",
