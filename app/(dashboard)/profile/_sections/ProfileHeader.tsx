@@ -77,7 +77,7 @@ export function ProfileHeader({ user, formData, isChild, isAvatarOpen, setIsAvat
                                     <button
                                         key={idx}
                                         onClick={() => handleAvatarChange(url)}
-                                        className={`h-24 w-24 rounded-full overflow-hidden border-4 transition-all hover:scale-105 mx-auto focus:outline-none focus:ring-2 focus:ring-brand-primary ${formData.avatarUrl === url ? 'border-brand-accent scale-110 shadow-md' : 'border-transparent hover:border-brand-secondary/50'}`}
+                                        className={`h-24 w-24 rounded-full overflow-hidden border-4 transition-all hover:scale-105 mx-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${formData.avatarUrl === url ? 'border-brand-accent scale-110 shadow-md' : 'border-transparent hover:border-brand-secondary/50'}`}
                                     >
                                         <img src={url} alt={`Avatar ${idx}`} className="h-full w-full object-cover" />
                                     </button>
