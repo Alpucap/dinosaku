@@ -241,6 +241,17 @@
     will-change: transform;
     transform: translateZ(0);
   }
+
+  .float-slow {
+    animation: floatMascot 6s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .float-slow {
+      animation: none;
+    }
+  }
 }
 
 /* COMPONENT */
@@ -569,5 +580,17 @@
   50% {
     transform: translateX(-50%) scale(0.9);
     opacity: 0.1;
+  }
+}
+
+@keyframes floatParticle {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(15px, -10px) rotate(15deg);
+  }
+  66% {
+    transform: translate(-10px, 15px) rotate(-10deg);
   }
 }
