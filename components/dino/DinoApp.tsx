@@ -1,14 +1,17 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Loader2, PlayCircle, BookOpen, ImageIcon, Sparkles, Compass, Rocket } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { Loader2, BookOpen, ImageIcon, Sparkles, Rocket, Zap } from 'lucide-react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import ComicViewer from './ComicViewer';
 import QuizViewer from './QuizViewer';
+import { takeEnergy, returnEnergy } from '@/lib/progress';
+import { useProgress } from '@/lib/use-progress';
 
 export type StoryPanel = {
   text: string;
   imagePrompt: string;
+  imageUrl?: string;
 };
 
 export type QuizQuestion = {
@@ -24,7 +27,21 @@ export type StoryData = {
   quiz: QuizQuestion[];
 };
 
+function isStoryData(value: unknown): value is StoryData {
+  if (!value || typeof value !== 'object') return false;
+  const story = value as StoryData;
+  return typeof story.title === 'string' && story.title.trim().length > 0
+    && Array.isArray(story.panels) && story.panels.length === 4
+    && story.panels.every(panel => panel && typeof panel.text === 'string' && typeof panel.imagePrompt === 'string' && (!panel.imageUrl || typeof panel.imageUrl === 'string'))
+    && Array.isArray(story.quiz) && story.quiz.length === 5
+    && story.quiz.every(question => question && typeof question.question === 'string' && typeof question.insight === 'string' && typeof question.correctAnswer === 'string'
+      && Array.isArray(question.options) && question.options.length === 3 && question.options.every(option => typeof option === 'string' && option.trim())
+      && new Set(question.options.map(option => option.trim().toLowerCase())).size === 3
+      && question.options.some(option => option.trim().toLowerCase() === question.correctAnswer.trim().toLowerCase()));
+}
+
 export default function DinoApp() {
+  const reduceMotion = useReducedMotion();
   const [materi, setMateri] = useState('Menabung (Saving)');
   const [temaMode, setTemaMode] = useState<'preset' | 'custom'>('preset');
   const [presetTema, setPresetTema] = useState('Luar Angkasa');
@@ -33,6 +50,12 @@ export default function DinoApp() {
   const [loading, setLoading] = useState(false);
   const [storyData, setStoryData] = useState<StoryData | null>(null);
   const [mode, setMode] = useState<'form' | 'comic' | 'quiz'>('form');
+  const [storyId, setStoryId] = useState('');
+  const [generatedImages, setGeneratedImages] = useState<Record<number, string>>({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState('');
+  const busy = useRef(false);
+  const { energy, ready } = useProgress();
 
   const materiList = [
     { id: 'Menabung (Saving)', label: 'Menabung', desc: 'Menyisihkan uang untuk masa depan' },
@@ -55,19 +78,23 @@ export default function DinoApp() {
   const isFormValid = materi !== '' && activeTema.trim() !== '';
 
   const executeGeneration = async (targetMateri: string, targetTema: string) => {
+    if (busy.current) return;
+    busy.current = true;
+    setError('');
     setLoading(true);
     setMode('form');
     setStoryData(null);
+    let reservation: string | undefined;
     try {
       if (targetMateri === 'Demo POC (Tanpa API)') {
         await new Promise(r => setTimeout(r, 1500)); 
         setStoryData({
           title: `Petualangan Purba di ${targetTema}`,
           panels: [
-            { text: `Purba sedang menjelajahi ${targetTema} yang sangat indah. Di sana, ia melihat mainan yang sangat bagus!`, imagePrompt: `Purba in ${targetTema}` },
-            { text: "Namun, Purba ingat pelajaran tentang menabung. Ia memutuskan untuk tidak langsung membeli.", imagePrompt: `Purba saving money in ${targetTema}` },
-            { text: "Purba bekerja keras membersihkan tempat itu setiap hari dan menyimpan koinnya.", imagePrompt: `Purba working in ${targetTema}` },
-            { text: "Akhirnya tabungannya penuh! Purba bangga bisa membeli mainannya dengan hasil keringat sendiri.", imagePrompt: `Purba happy in ${targetTema}` }
+            { text: `Purba sedang menjelajahi ${targetTema} yang sangat indah. Di sana, ia melihat mainan yang sangat bagus!`, imagePrompt: '[MOCK]', imageUrl: '/mascot/dino.png' },
+            { text: "Namun, Purba ingat pelajaran tentang menabung. Ia memutuskan untuk tidak langsung membeli.", imagePrompt: '[MOCK]', imageUrl: '/mascot/dino.png' },
+            { text: "Purba bekerja keras membersihkan tempat itu setiap hari dan menyimpan koinnya.", imagePrompt: '[MOCK]', imageUrl: '/mascot/dino.png' },
+            { text: "Akhirnya tabungannya penuh! Purba bangga bisa membeli mainannya dengan hasil keringat sendiri.", imagePrompt: '[MOCK]', imageUrl: '/mascot/dino.png' }
           ],
           quiz: [
             {
@@ -84,28 +111,57 @@ export default function DinoApp() {
             }
           ]
         });
+        setStoryId('demo-saving');
         setMode('comic');
         setLoading(false);
         return;
       }
 
+      reservation = await takeEnergy();
       const res = await fetch('/api/generate/story', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ materi: targetMateri, tema: targetTema })
+        body: JSON.stringify({ materi: targetMateri, tema: targetTema }),
+        signal: AbortSignal.timeout(90_000),
       });
-      const data = await res.json();
-      if (data.story) {
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(res.status === 429 ? 'Layanan cerita sedang mencapai batas pemakaian. Coba lagi nanti atau gunakan demo.' : 'Cerita belum bisa dibuat. Energi dikembalikan; coba mode demo atau ulangi nanti.');
+      if (isStoryData(data?.story)) {
+        setStoryId(`ai-${reservation}`);
         setStoryData(data.story);
         setMode('comic');
       } else {
-        alert('Gagal membuat cerita, coba lagi ya!');
+        throw new Error('Isi cerita belum lengkap. Coba lagi, ya!');
       }
     } catch (err) {
-      console.error(err);
-      alert('Terjadi kesalahan jaringan.');
+      if (reservation) await returnEnergy(reservation);
+      setError(err instanceof Error && err.name !== 'TimeoutError' && err.name !== 'TypeError' ? err.message : 'Koneksi terputus atau waktu tunggu habis. Energi dikembalikan. Silakan coba lagi.');
+    } finally {
+      busy.current = false;
+      setLoading(false);
     }
-    setLoading(false);
+  };
+
+  const handleSaveToLocal = async () => {
+    if (!storyData) return;
+    setIsSaving(true);
+    try {
+      const res = await fetch('/api/save-preset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ story: storyData, images: generatedImages })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Tersimpan di local! Buka lib/data/generated-stories.json');
+      } else {
+        alert('Gagal: ' + data.error);
+      }
+    } catch (e) {
+      alert('Error saat menyimpan.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleGenerate = () => {
@@ -114,7 +170,7 @@ export default function DinoApp() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-primary py-8 px-4 md:px-12 font-sans selection:bg-brand-accent-soft selection:text-brand-primary">
+    <div className="generator-page min-h-full text-primary py-8 px-4 lg:px-10 font-sans selection:bg-brand-accent-soft selection:text-brand-primary">
       <div className="max-w-7xl mx-auto">
         {mode === 'form' && (
           <motion.header 
@@ -128,7 +184,7 @@ export default function DinoApp() {
             
             <div className="relative shrink-0">
               <motion.div 
-                animate={{ y: [0, -10, 0] }}
+                animate={{ y: reduceMotion ? 0 : [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-brand-accent-soft overflow-hidden flex items-center justify-center border-4 border-surface-green shadow-lg relative z-10"
               >
@@ -156,6 +212,9 @@ export default function DinoApp() {
             </div>
           </motion.header>
         )}
+
+        {mode === 'form' && <div className="energy-banner"><Zap size={25} aria-hidden="true" /><div className="flex-1"><strong>{energy} dari 3 energi tersisa hari ini</strong><p>Satu cerita AI memakai satu energi. Terisi lagi besok; demo dan koleksi cerita selalu gratis.</p></div><span className="energy-cells" aria-hidden="true">{[0, 1, 2].map(index => <i key={index} className={index < energy ? 'filled' : ''} />)}</span></div>}
+        {error && <p role="alert" className="mb-6 rounded-xl border border-danger bg-danger-soft p-4 text-primary">{error}</p>}
 
         <AnimatePresence mode="wait">
           {mode === 'form' && (
@@ -259,6 +318,7 @@ export default function DinoApp() {
                           type="text"
                           placeholder="Masukkan tema..."
                           value={customTema}
+                          maxLength={200}
                           onChange={(e) => setCustomTema(e.target.value)}
                           className="w-full max-w-md px-4 py-3 rounded-xl border-2 border-border bg-background focus:border-brand-primary focus:ring-4 focus:ring-brand-accent-soft transition-all outline-none text-primary"
                         />
@@ -271,7 +331,7 @@ export default function DinoApp() {
               <div className="flex justify-center pt-8 pb-4">
                 <button
                   onClick={handleGenerate}
-                  disabled={loading || !isFormValid}
+                  disabled={!ready || loading || !isFormValid || (energy === 0 && materi !== 'Demo POC (Tanpa API)')}
                   aria-busy={loading}
                   className={`relative group w-full md:w-auto px-12 py-5 text-2xl font-black font-heading rounded-full transition-all flex items-center justify-center gap-4 text-white overflow-hidden
                     ${isFormValid && !loading
@@ -288,7 +348,7 @@ export default function DinoApp() {
                   ) : (
                     <>
                       <Rocket size={28} className={isFormValid ? "animate-pulse" : ""} /> 
-                      <span>Mulai Petualangan!</span>
+                      <span>{energy === 0 && materi !== 'Demo POC (Tanpa API)' ? 'Energi habis hari ini' : 'Mulai Petualangan!'}</span>
                     </>
                   )}
                 </button>
@@ -303,7 +363,7 @@ export default function DinoApp() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.05 }}
             >
-              <ComicViewer title={storyData.title} panels={storyData.panels} onComplete={() => setMode('quiz')} />
+              <ComicViewer title={storyData.title} panels={storyData.panels} onComplete={(images) => { setGeneratedImages(images); setMode('quiz'); }} />
             </motion.div>
           )}
 
@@ -315,6 +375,7 @@ export default function DinoApp() {
               exit={{ opacity: 0, x: -50 }}
             >
               <QuizViewer 
+                storyId={storyId}
                 quiz={storyData.quiz} 
                 onRestart={() => setMode('form')} 
                 onContinue={(lanjutan) => {
@@ -323,6 +384,17 @@ export default function DinoApp() {
                   executeGeneration(materi, lanjutan);
                 }}
               />
+              {process.env.NODE_ENV === 'development' && Object.keys(generatedImages).length > 0 && (
+                <div className="mt-8 flex justify-center">
+                  <button 
+                    onClick={handleSaveToLocal}
+                    disabled={isSaving}
+                    className="button-secondary px-6 py-3 font-bold border-2 border-primary text-primary hover:bg-primary/10 flex gap-2 items-center"
+                  >
+                    {isSaving ? <Loader2 className="animate-spin" /> : '💾'} {isSaving ? 'Menyimpan...' : 'Simpan ke Peta Petualangan (Dev Mode)'}
+                  </button>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

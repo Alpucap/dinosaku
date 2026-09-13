@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     }
 
     const data = await generateStoryAndQuiz(materi, tema);
-    return NextResponse.json(data);
+    return NextResponse.json({ story: data });
   } catch (error) {
     console.error('Error in /api/generate/story:', error);
     return NextResponse.json({ error: 'Failed to generate story' }, { status: 500 });

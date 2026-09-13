@@ -3,12 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StoryPanel } from './DinoApp';
-import { ArrowRight, Loader2, Sparkles, RefreshCw, ImageOff, Zap, Star } from 'lucide-react';
+import { ArrowRight, Loader2, Sparkles, RefreshCw, ImageOff, Zap, Star, Pencil } from 'lucide-react';
 
-export default function ComicViewer({ title, panels, onComplete }: { title: string, panels: StoryPanel[], onComplete: () => void }) {
+export default function ComicViewer({ title, panels, onComplete }: { title: string, panels: StoryPanel[], onComplete: (images: Record<number, string>) => void }) {
   const [images, setImages] = useState<Record<number, string>>({});
   const [loadingIndexes, setLoadingIndexes] = useState<Record<number, boolean>>({});
-  const [hasStartedLoading, setHasStartedLoading] = useState(false);
 
   const totalImages = panels.length;
   // An image is considered "finished processing" if it's in the images dictionary (even if failed '')
@@ -38,12 +37,16 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
     }
   };
 
+  const hasStartedLoading = React.useRef(false);
+
   useEffect(() => {
-    if (hasStartedLoading) return;
-    setHasStartedLoading(true);
+    if (hasStartedLoading.current) return;
+    hasStartedLoading.current = true;
     
     panels.forEach((panel, i) => {
-      if (panel.imagePrompt.startsWith('[MOCK]')) {
+      if (panel.imageUrl) {
+         setImages(prev => ({ ...prev, [i]: panel.imageUrl! }));
+      } else if (panel.imagePrompt.startsWith('[MOCK]')) {
          setImages(prev => ({ ...prev, [i]: 'https://placehold.co/600x600/EAF7ED/064E2B?text=MOCK+IMAGE' }));
       } else {
          generateImageForPanel(panel.imagePrompt, i);
@@ -66,12 +69,16 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-success-soft rounded-full blur-3xl -z-10 -translate-x-1/2 translate-y-1/2 opacity-50" />
         
         <motion.div 
-           animate={{ rotate: 360 }} 
-           transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+           animate={{ 
+             rotate: [-10, 10, -10],
+             x: [-10, 10, -10],
+             y: [0, -15, 0]
+           }} 
+           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
            className="mb-8"
         >
-          <div className="w-24 h-24 bg-brand-accent-soft rounded-full flex items-center justify-center border-4 border-brand-secondary shadow-lg">
-             <Sparkles className="w-12 h-12 text-brand-primary" />
+          <div className="w-24 h-24 bg-brand-accent rounded-full flex items-center justify-center border-4 border-brand-primary shadow-card">
+             <Pencil className="w-12 h-12 text-brand-primary" />
           </div>
         </motion.div>
         
@@ -113,7 +120,7 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
           <span className="leading-tight">{title || "Waktunya Cerita"}</span>
         </h2>
         <button
-          onClick={onComplete}
+          onClick={() => onComplete(images)}
           className="button-primary px-8 py-4 w-full md:w-auto text-xl font-bold flex items-center justify-center gap-3 shadow-card hover:scale-105 transition-transform text-white"
         >
           Lanjut ke Kuis! <ArrowRight size={24} />
@@ -125,17 +132,17 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
           {panels.map((panel, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, scale: 0.9, rotate: i % 2 === 0 ? -2 : 2 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              initial={{ opacity: 0, scale: 0.9, rotate: i % 2 === 0 ? -5 : 5 }}
+              animate={{ opacity: 1, scale: 1, rotate: i % 2 === 0 ? -1.5 : 1.5 }}
               transition={{ delay: i * 0.15, type: 'spring', stiffness: 200, damping: 20 }}
-              className="bg-background rounded-3xl overflow-hidden shadow-card border-4 border-border-strong flex flex-col group relative"
+              className="bg-background rounded-3xl overflow-hidden border-4 border-brand-primary shadow-[8px_8px_0_0_#064E2B] hover:shadow-[12px_12px_0_0_#064E2B] hover:-translate-y-1 transition-all flex flex-col group relative"
             >
               {/* Panel Number Badge */}
               <div className="absolute top-4 left-4 w-12 h-12 bg-brand-primary text-white font-heading font-bold text-2xl flex items-center justify-center rounded-full border-4 border-surface shadow-sm z-20">
                 {i + 1}
               </div>
 
-              <div className="aspect-square bg-border-light relative flex items-center justify-center overflow-hidden border-b-4 border-border-strong">
+              <div className="aspect-square bg-border-light relative flex items-center justify-center overflow-hidden border-b-4 border-brand-primary">
                 {images[i] ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img 
@@ -158,8 +165,9 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
               </div>
               
               {/* Comic Narrator Caption Box Style */}
-              <div className="p-6 md:p-8 bg-warning-soft grow flex items-center justify-center relative shadow-inner">
-                <p className="text-primary font-bold text-xl md:text-2xl text-center leading-relaxed font-heading">
+              <div className="p-6 md:p-8 bg-[#FFF9C4] border-t-4 border-brand-primary grow flex items-center justify-center relative">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 w-12 h-6 bg-[#FFF9C4] border-t-4 border-x-4 border-brand-primary rounded-t-full z-10" />
+                <p className="text-primary font-bold text-xl md:text-2xl text-center leading-relaxed font-heading z-20">
                   {panel.text}
                 </p>
               </div>

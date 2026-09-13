@@ -1,0 +1,82 @@
+[
+  {
+    "title": "Petualangan Purba Menabung di Luar Angkasa",
+    "panels": [
+      {
+        "text": "Purba si dinosaurus kecil sangat ingin membeli helm astronot baru berwarna perak untuk petualangan galaksinya.",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Wearing a mini white astronaut helmet. Looking at a glowing futuristic silver astronaut helmet in a space shop storefront, cosmic background with distant stars.",
+        "imageUrl": "/images/presets/petualangan-purba-menabung-di-luar-angkasa/panel1.jpg"
+      },
+      {
+        "text": "Daripada menghabiskan semua koin bintang luar angkasa untuk mainan, Purba memutuskan untuk memasukkan sebagian koinnya ke dalam celengan roket.",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Wearing a mini white astronaut helmet. Joyfully dropping shiny gold star coins into a cute red rocket-shaped piggy bank on a floating space table.",
+        "imageUrl": "/images/presets/petualangan-purba-menabung-di-luar-angkasa/panel2.jpg"
+      },
+      {
+        "text": "Setiap minggu, Purba selalu menyisihkan sebagian hasil panen kristal bulannya dan tidak pernah lupa memasukkannya ke dalam celengan.",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Wearing a mini white astronaut helmet. Proudly holding a glowing blue moon crystal, standing next to the rocket piggy bank which is now looking fuller.",
+        "imageUrl": "/images/presets/petualangan-purba-menabung-di-luar-angkasa/panel3.jpg"
+      },
+      {
+        "text": "Hore! Berkat rajin menabung, celengan roketnya penuh dan Purba akhirnya bisa membeli helm astronot impiannya tanpa kesulitan!",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Wearing the new shiny silver astronaut helmet, holding the rocket piggy bank, celebrating happily with confetti and colorful nebula in the background.",
+        "imageUrl": "/images/presets/petualangan-purba-menabung-di-luar-angkasa/panel4.jpg"
+      }
+    ],
+    "quiz": [
+      {
+        "question": "Apa barang impian yang ingin dibeli oleh Purba?",
+        "options": [
+          "Helm astronot baru",
+          "Roket mainan besar",
+          "Kristal bulan merah"
+        ],
+        "correctAnswer": "Helm astronot baru",
+        "insight": "Hebat! Purba ingin membeli helm astronot perak baru untuk petualangannya di galaksi."
+      },
+      {
+        "question": "Di mana Purba menyimpan uang atau koin bintangnya?",
+        "options": [
+          "Di dalam laci meja",
+          "Di dalam celengan roket",
+          "Diberikan kepada alien"
+        ],
+        "correctAnswer": "Di dalam celengan roket",
+        "insight": "Benar sekali! Purba menabung koin bintangnya di dalam celengan berbentuk roket."
+      },
+      {
+        "question": "Mengapa Purba harus menyisihkan uangnya setiap minggu?",
+        "options": [
+          "Agar uangnya habis",
+          "Agar bisa membeli barang impiannya di masa depan",
+          "Biar dompetnya berat"
+        ],
+        "correctAnswer": "Agar bisa membeli barang impiannya di masa depan",
+        "insight": "Tepat! Menabung secara teratur membantu kita mengumpulkan uang untuk membeli barang yang kita inginkan."
+      },
+      {
+        "question": "Apa sikap yang ditunjukkan oleh Purba dalam cerita ini?",
+        "options": [
+          "Boros dan suka jajan",
+          "Rajin dan sabar menabung",
+          "Malas bekerja"
+        ],
+        "correctAnswer": "Rajin dan sabar menabung",
+        "insight": "Pintar! Purba adalah contoh anak yang rajin dan sabar menyisihkan uangnya."
+      },
+      {
+        "question": "Apa manfaat utama dari kegiatan menabung seperti yang dilakukan Purba?",
+        "options": [
+          "Melatih diri hidup hemat dan terwujudnya impian",
+          "Membuat kamar menjadi berantakan",
+          "Membuat lelah setiap hari"
+        ],
+        "correctAnswer": "Melatih diri hidup hemat dan terwujudnya impian",
+        "insight": "Luar biasa! Menabung melatih kita hidup hemat sehingga cita-cita atau keinginan kita dapat tercapai."
+      }
+    ],
+    "id": "petualangan-purba-menabung-di-luar-angkasa",
+    "description": "Cerita petualangan tentang Petualangan Purba Menabung di Luar Angkasa",
+    "coverImage": "/images/presets/petualangan-purba-menabung-di-luar-angkasa/panel1.jpg"
+  }
+]

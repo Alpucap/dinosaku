@@ -1,70 +1,79 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { Options } from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
-import { QuizQuestion } from './DinoApp';
-import { CheckCircle2, XCircle, Trophy, RefreshCcw, HelpCircle, Star, Sparkles, Map, Send } from 'lucide-react';
+import type { QuizQuestion } from './DinoApp';
+import { CheckCircle2, XCircle, Trophy, ArrowRight, BookOpen, Map, Send, HelpCircle, Sparkles, Star, RefreshCcw } from 'lucide-react';
+import { BADGES, getBadges, readProgress, recordQuiz } from '@/lib/progress';
+import { useProgress } from '@/lib/use-progress';
+import BadgeMedal from './BadgeMedal';
 
-export default function QuizViewer({ quiz, onRestart, onContinue }: { quiz: QuizQuestion[], onRestart: () => void, onContinue: (tema: string) => void }) {
+export default function QuizViewer({ quiz, storyId, onRestart, onContinue, restartLabel = 'Ganti Topik Baru' }: {
+  quiz: QuizQuestion[];
+  storyId: string;
+  onRestart: () => void;
+  onContinue?: (tema: string) => void;
+  restartLabel?: string;
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [newBadges, setNewBadges] = useState<string[]>([]);
   const [lanjutan, setLanjutan] = useState('');
-
+  const owner = useRef<string | null>(null);
+  const resultSaved = useRef(false);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const { storageUnavailable } = useProgress();
   const question = quiz[currentIndex];
   const isLast = currentIndex === quiz.length - 1;
+  const isOptionCorrect = (option: string) => option.trim().toLowerCase() === question.correctAnswer.trim().toLowerCase();
+  const isCorrect = selectedAnswer !== null && isOptionCorrect(selectedAnswer);
 
-  // Helper for resilient matching in case AI adds extra spaces or case differences
-  const isOptionCorrect = (opt: string) => {
-    return opt.trim().toLowerCase() === question.correctAnswer.trim().toLowerCase();
-  };
+  useEffect(() => { heading.current?.focus(); }, [currentIndex, showResult]);
 
-  const fireConfetti = (options: any) => {
-    import('canvas-confetti').then((module) => {
-      const confetti = module.default || module;
-      confetti(options);
-    }).catch(e => console.error("Confetti failed to load:", e));
-  };
+  function celebrate(options: Options) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    void import('canvas-confetti').then(({ default: confetti }) => confetti({ ...options, disableForReducedMotion: true })).catch(() => {});
+  }
 
-  const handleSelect = (option: string) => {
+  function handleSelect(option: string) {
     if (selectedAnswer !== null) return;
+    owner.current ??= readProgress().activeProfileId;
     setSelectedAnswer(option);
-    
-    const correct = isOptionCorrect(option);
-    setIsCorrect(correct);
-    if (correct) {
-      setScore(s => s + 1);
-      fireConfetti({
+    if (isOptionCorrect(option)) {
+      setScore(value => value + 1);
+      celebrate({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
         colors: ['#16A34A', '#98CE36', '#94D9AA']
       });
     }
-  };
+  }
 
-  const handleNext = () => {
-    if (isLast) {
-      setShowResult(true);
-      if (score + (isCorrect ? 1 : 0) === quiz.length) {
-        // perfect score confetti
-        setTimeout(() => {
-          fireConfetti({ particleCount: 200, spread: 100, origin: { y: 0.3 } });
-        }, 300);
-      }
-    } else {
-      setCurrentIndex(i => i + 1);
+  function handleNext() {
+    if (selectedAnswer === null || resultSaved.current) return;
+    if (!isLast) {
+      setCurrentIndex(value => value + 1);
       setSelectedAnswer(null);
-      setIsCorrect(null);
+      return;
     }
-  };
+    const profileId = owner.current ?? readProgress().activeProfileId;
+    const before = readProgress().profiles.find(p => p.id === profileId)!;
+    recordQuiz(profileId, storyId, score, quiz.length);
+    const after = readProgress().profiles.find(p => p.id === profileId)!;
+    setNewBadges(getBadges(after).filter(id => !getBadges(before).includes(id)));
+    resultSaved.current = true;
+    setShowResult(true);
+    if (score === quiz.length) celebrate({ particleCount: 120, spread: 85, colors: ['#98CE36', '#F5C75E', '#064E2B'] });
+  }
 
   const handleLanjutCerita = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!lanjutan.trim()) return;
-    onContinue("Lanjutan: " + lanjutan);
+    if (!lanjutan.trim() || !onContinue) return;
+    onContinue("Lanjutan: " + lanjutan.trim());
   };
 
   if (showResult) {
@@ -88,37 +97,61 @@ export default function QuizViewer({ quiz, onRestart, onContinue }: { quiz: Quiz
           Skor kamu <span className="font-bold text-3xl text-brand-primary mx-2">{score}</span> dari {quiz.length}
         </p>
 
-        <div className="bg-background rounded-3xl p-6 md:p-8 border-4 border-border-strong shadow-inner text-left mb-8">
-          <h3 className="text-2xl font-bold font-heading flex items-center gap-3 text-brand-primary mb-3">
-            <Map className="text-brand-accent" size={28} /> Mau lanjut ke mana?
-          </h3>
-          <p className="text-secondary font-medium mb-6">
-            Cerita Purba belum berakhir! Ketik ide petualangan selanjutnya berdasarkan apa yang baru saja kamu pelajari.
-          </p>
-          
-          <form onSubmit={handleLanjutCerita} className="flex flex-col md:flex-row gap-4">
-            <input 
-              type="text" 
-              value={lanjutan}
-              onChange={e => setLanjutan(e.target.value)}
-              placeholder="Contoh: Purba membagikan sebagian uang ke teman..." 
-              className="grow p-4 rounded-xl border-2 border-border focus:border-brand-accent focus:ring-4 focus:ring-brand-accent-soft outline-none transition-all font-medium text-lg"
-            />
-            <button 
-              type="submit"
-              disabled={!lanjutan.trim()}
-              className="button-accent px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-card disabled:opacity-50 text-brand-primary whitespace-nowrap"
-            >
-              Lanjut Cerita <Send size={20} />
-            </button>
-          </form>
-        </div>
+        {newBadges.length > 0 && (
+          <section aria-label="Lencana baru" className="mb-10 bg-surface-soft p-6 rounded-3xl border-4 border-border">
+            <h3 className="mb-4 text-2xl font-heading font-bold text-brand-primary">Lencana baru untukmu!</h3>
+            <div className="flex flex-wrap justify-center gap-5">
+              {BADGES.filter(b => newBadges.includes(b.id)).map(badge => (
+                <div key={badge.id} className="w-28 flex flex-col items-center">
+                  <BadgeMedal id={badge.id} unlocked />
+                  <p className="mt-2 text-sm font-bold text-primary">{badge.name}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <p role="status" className="mb-6 text-sm text-secondary font-medium px-4 py-2 bg-surface-soft rounded-lg inline-block border border-border">
+          {storageUnavailable ? 'Penyimpanan browser tidak tersedia. Progres hanya tersimpan selama halaman ini terbuka.' : 'Progres tersimpan. Poinmu memakai nilai terbaik dari setiap cerita.'}
+        </p>
+
+        {onContinue && (
+          <div className="bg-background rounded-3xl p-6 md:p-8 border-4 border-border-strong shadow-inner text-left mb-8 mt-4">
+            <h3 className="text-2xl font-bold font-heading flex items-center gap-3 text-brand-primary mb-3">
+              <Map className="text-brand-accent" size={28} /> Mau lanjut ke mana?
+            </h3>
+            <p className="text-secondary font-medium mb-6">
+              Cerita Purba belum berakhir! Ketik ide petualangan selanjutnya berdasarkan apa yang baru saja kamu pelajari.
+            </p>
+            
+            <form onSubmit={handleLanjutCerita} className="flex flex-col gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <input 
+                  type="text" 
+                  value={lanjutan}
+                  maxLength={200}
+                  onChange={e => setLanjutan(e.target.value)}
+                  placeholder="Contoh: Purba membuka toko kecil..." 
+                  className="grow p-4 rounded-xl border-2 border-border focus:border-brand-accent focus:ring-4 focus:ring-brand-accent-soft outline-none transition-all font-medium text-lg"
+                />
+                <button 
+                  type="submit"
+                  disabled={!lanjutan.trim()}
+                  className="button-accent px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-card disabled:opacity-50 text-brand-primary whitespace-nowrap"
+                >
+                  Lanjut Cerita <Send size={20} />
+                </button>
+              </div>
+              <p className="text-sm text-secondary font-medium">Cerita AI memakai 1 energi. Mode demo tetap gratis.</p>
+            </form>
+          </div>
+        )}
         
         <button
           onClick={onRestart}
           className="button-secondary w-full px-8 py-4 text-lg font-bold rounded-2xl flex items-center justify-center gap-3 hover:scale-105 transition-transform"
         >
-          <RefreshCcw size={24} /> Ganti Topik Baru
+          <RefreshCcw size={24} /> {restartLabel}
         </button>
       </motion.div>
     );
@@ -140,7 +173,7 @@ export default function QuizViewer({ quiz, onRestart, onContinue }: { quiz: Quiz
         </span>
       </div>
 
-      <h3 className="text-3xl font-heading font-bold mb-10 text-primary leading-tight text-center md:text-left">
+      <h3 ref={heading} tabIndex={-1} className="text-3xl font-heading font-bold mb-10 text-primary leading-tight text-center md:text-left outline-none">
         {question.question}
       </h3>
 
@@ -208,9 +241,9 @@ export default function QuizViewer({ quiz, onRestart, onContinue }: { quiz: Quiz
         >
           <button
             onClick={handleNext}
-            className="button-primary px-8 py-4 text-xl font-bold rounded-2xl hover:scale-105 transition-transform shadow-card text-white"
+            className="button-primary px-8 py-4 text-xl font-bold rounded-2xl hover:scale-105 transition-transform shadow-card text-white disabled:opacity-50"
           >
-            {isLast ? 'Lihat Hasil' : 'Pertanyaan Berikutnya'}
+            {isLast ? 'Lihat Hasil' : 'Pertanyaan Berikutnya'} <ArrowRight size={20} className="ml-2 inline" />
           </button>
         </motion.div>
       )}
