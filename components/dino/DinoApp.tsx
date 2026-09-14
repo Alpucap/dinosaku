@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import { Loader2, BookOpen, ImageIcon, Sparkles, Rocket, Zap } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Loader2, BookOpen, ImageIcon, Mic, MicOff, Sparkles, Rocket, Zap } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import ComicViewer from './ComicViewer';
+import HandController from './HandController';
 import QuizViewer from './QuizViewer';
 import { takeEnergy, returnEnergy } from '@/lib/progress';
 import { useProgress } from '@/lib/use-progress';
+import { useSpeech } from '@/lib/use-speech';
 
 export type StoryPanel = {
   text: string;
@@ -23,6 +25,7 @@ export type QuizQuestion = {
 
 export type StoryData = {
   title: string;
+  themeLabel?: string;
   panels: StoryPanel[];
   quiz: QuizQuestion[];
 };
@@ -42,7 +45,13 @@ function isStoryData(value: unknown): value is StoryData {
 
 export default function DinoApp() {
   const reduceMotion = useReducedMotion();
-  const [materi, setMateri] = useState('Menabung (Saving)');
+  const { isListening, transcript, startListening, stopListening, supported, setTranscript } = useSpeech();
+  useEffect(() => {
+    if (transcript && materi === 'custom') setCustomMateri(transcript);
+  }, [transcript]);
+
+  const [materi, setMateri] = useState('');
+  const [customMateri, setCustomMateri] = useState('');
   const [temaMode, setTemaMode] = useState<'preset' | 'custom'>('preset');
   const [presetTema, setPresetTema] = useState('Luar Angkasa');
   const [customTema, setCustomTema] = useState('');
@@ -63,7 +72,6 @@ export default function DinoApp() {
     { id: 'Kebutuhan vs Keinginan', label: 'Kebutuhan vs Keinginan', desc: 'Membedakan yang penting dan yang dimau' },
     { id: 'Investasi Sederhana', label: 'Investasi', desc: 'Membuat uang berkembang' },
     { id: 'Membuat Anggaran (Budgeting)', label: 'Anggaran', desc: 'Merencanakan pengeluaran' },
-    { id: 'Demo POC (Tanpa API)', label: 'Demo POC', desc: 'Coba tanpa kuota API' }
   ];
 
   const temaList = [
@@ -74,8 +82,9 @@ export default function DinoApp() {
     'Kota Robot'
   ];
 
+  const activeMateri = materi === 'custom' ? customMateri : materi;
   const activeTema = temaMode === 'preset' ? presetTema : customTema;
-  const isFormValid = materi !== '' && activeTema.trim() !== '';
+  const isFormValid = activeMateri.trim() !== '' && activeTema.trim() !== '';
 
   const executeGeneration = async (targetMateri: string, targetTema: string) => {
     if (busy.current) return;
@@ -86,37 +95,6 @@ export default function DinoApp() {
     setStoryData(null);
     let reservation: string | undefined;
     try {
-      if (targetMateri === 'Demo POC (Tanpa API)') {
-        await new Promise(r => setTimeout(r, 1500)); 
-        setStoryData({
-          title: `Petualangan Purba di ${targetTema}`,
-          panels: [
-            { text: `Purba sedang menjelajahi ${targetTema} yang sangat indah. Di sana, ia melihat mainan yang sangat bagus!`, imagePrompt: '[MOCK]', imageUrl: '/mascot/dino.png' },
-            { text: "Namun, Purba ingat pelajaran tentang menabung. Ia memutuskan untuk tidak langsung membeli.", imagePrompt: '[MOCK]', imageUrl: '/mascot/dino.png' },
-            { text: "Purba bekerja keras membersihkan tempat itu setiap hari dan menyimpan koinnya.", imagePrompt: '[MOCK]', imageUrl: '/mascot/dino.png' },
-            { text: "Akhirnya tabungannya penuh! Purba bangga bisa membeli mainannya dengan hasil keringat sendiri.", imagePrompt: '[MOCK]', imageUrl: '/mascot/dino.png' }
-          ],
-          quiz: [
-            {
-              question: "Apa yang dilakukan Purba saat melihat mainan?",
-              options: ["Langsung membeli", "Menangis", "Memutuskan untuk menabung"],
-              correctAnswer: "Memutuskan untuk menabung",
-              insight: "Menahan diri dan menabung melatih kesabaran kita!"
-            },
-            {
-              question: "Dari mana Purba mendapatkan uang?",
-              options: ["Bekerja keras", "Minta teman", "Menemukan di jalan"],
-              correctAnswer: "Bekerja keras",
-              insight: "Bekerja keras adalah cara yang baik dan jujur untuk mendapatkan uang."
-            }
-          ]
-        });
-        setStoryId('demo-saving');
-        setMode('comic');
-        setLoading(false);
-        return;
-      }
-
       reservation = await takeEnergy();
       const res = await fetch('/api/generate/story', {
         method: 'POST',
@@ -164,13 +142,28 @@ export default function DinoApp() {
     }
   };
 
+  const handleSaveToCollection = async () => {
+    if (!storyData) return;
+    setIsSaving(true);
+    try {
+      const { saveStoryToCollection } = await import('@/lib/collection');
+      await saveStoryToCollection(storyData, generatedImages);
+      alert('Cerita berhasil disimpan ke Koleksiku!');
+    } catch (e) {
+      alert('Gagal menyimpan cerita.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleGenerate = () => {
     if (!isFormValid) return;
-    executeGeneration(materi, activeTema);
+    executeGeneration(activeMateri, activeTema);
   };
 
   return (
     <div className="generator-page min-h-full text-primary py-8 px-4 lg:px-10 font-sans selection:bg-brand-accent-soft selection:text-brand-primary">
+      {(mode === 'comic' || mode === 'quiz') && <HandController mode={mode} />}
       <div className="max-w-7xl mx-auto">
         {mode === 'form' && (
           <motion.header 
@@ -255,7 +248,59 @@ export default function DinoApp() {
                       </span>
                     </button>
                   ))}
+                  <button
+                    onClick={() => setMateri('custom')}
+                    aria-pressed={materi === 'custom'}
+                    className={`p-5 rounded-2xl border-2 transition-all text-left flex flex-col gap-2 group outline-none focus-visible:ring-2 focus-visible:ring-brand-accent ${
+                      materi === 'custom'
+                        ? 'border-brand-primary bg-surface-green shadow-soft'
+                        : 'border-border bg-background hover:border-brand-secondary hover:bg-surface-soft'
+                    }`}
+                  >
+                    <span className={`font-bold text-lg flex items-center gap-2 ${materi === 'custom' ? 'text-brand-primary' : 'text-primary'}`}>
+                      <Sparkles size={18} /> Topik Lainnya
+                    </span>
+                    <span className={`text-sm ${materi === 'custom' ? 'text-brand-primary/80' : 'text-secondary'}`}>
+                      Ketik materi finansial pilihanmu
+                    </span>
+                  </button>
                 </div>
+                <AnimatePresence>
+                  {materi === 'custom' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden col-span-full"
+                    >
+                      <div className="pt-4">
+                        <label htmlFor="custom-materi" className="block text-sm font-medium text-secondary mb-2">
+                          Ketik topik finansial yang ingin dipelajari (misal: "Pajak", "Asuransi", "Utang"):
+                        </label>
+                        <div className="flex gap-2 max-w-md">
+                          <input
+                            id="custom-materi"
+                            type="text"
+                            placeholder="Masukkan topik..."
+                            value={customMateri}
+                            maxLength={200}
+                            onChange={(e) => { setCustomMateri(e.target.value); setTranscript(e.target.value); }}
+                            className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-brand-primary focus:!outline-none focus:ring-0 transition-all text-primary"
+                          />
+                          {supported && (
+                            <button
+                              type="button"
+                              onClick={isListening ? stopListening : startListening}
+                              className={`p-3 rounded-xl border-2 transition-all shrink-0 ${isListening ? 'bg-danger text-white border-danger animate-pulse' : 'bg-surface-soft border-border text-secondary hover:text-brand-primary hover:border-brand-primary'}`}
+                              title="Bicara dengan Purba"
+                            >
+                              {isListening ? <MicOff size={24} /> : <Mic size={24} />}
+                            </button>
+                          )}
+                        </div></div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </section>
 
               <section className="bg-surface p-8 md:p-10 rounded-[2rem] shadow-card border border-border">
@@ -313,15 +358,17 @@ export default function DinoApp() {
                         <label htmlFor="custom-tema" className="block text-sm font-medium text-secondary mb-2">
                           Ketik tema kesukaanmu (contoh: Dinosaurus, Super hero, Memasak):
                         </label>
-                        <input
-                          id="custom-tema"
-                          type="text"
-                          placeholder="Masukkan tema..."
-                          value={customTema}
-                          maxLength={200}
-                          onChange={(e) => setCustomTema(e.target.value)}
-                          className="w-full max-w-md px-4 py-3 rounded-xl border-2 border-border bg-background focus:border-brand-primary focus:ring-4 focus:ring-brand-accent-soft transition-all outline-none text-primary"
-                        />
+                        <div className="flex gap-2 max-w-md">
+                          <input
+                            id="custom-tema"
+                            type="text"
+                            placeholder="Masukkan tema..."
+                            value={customTema}
+                            maxLength={200}
+                            onChange={(e) => setCustomTema(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-brand-primary focus:!outline-none focus:ring-0 transition-all text-primary"
+                          />
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -384,8 +431,15 @@ export default function DinoApp() {
                   executeGeneration(materi, lanjutan);
                 }}
               />
-              {process.env.NODE_ENV === 'development' && Object.keys(generatedImages).length > 0 && (
-                <div className="mt-8 flex justify-center">
+              <div className="mt-8 flex flex-wrap gap-4 justify-center">
+                <button 
+                  onClick={handleSaveToCollection}
+                  disabled={isSaving}
+                  className="button-primary px-6 py-3 font-bold flex gap-2 items-center"
+                >
+                  {isSaving ? <Loader2 className="animate-spin" /> : '📚'} {isSaving ? 'Menyimpan...' : 'Simpan ke Koleksiku'}
+                </button>
+                {process.env.NODE_ENV === 'development' && Object.keys(generatedImages).length > 0 && (
                   <button 
                     onClick={handleSaveToLocal}
                     disabled={isSaving}
@@ -393,8 +447,8 @@ export default function DinoApp() {
                   >
                     {isSaving ? <Loader2 className="animate-spin" /> : '💾'} {isSaving ? 'Menyimpan...' : 'Simpan ke Peta Petualangan (Dev Mode)'}
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

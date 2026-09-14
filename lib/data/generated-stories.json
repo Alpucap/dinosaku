@@ -77,6 +77,169 @@
     ],
     "id": "petualangan-purba-menabung-di-luar-angkasa",
     "description": "Cerita petualangan tentang Petualangan Purba Menabung di Luar Angkasa",
-    "coverImage": "/images/presets/petualangan-purba-menabung-di-luar-angkasa/panel1.jpg"
+    "coverImage": "/images/presets/petualangan-purba-menabung-di-luar-angkasa/panel1.jpg",
+    "themeLabel": "Luar Angkasa"
+  },
+  {
+    "title": "Purba dan Buah Ajaib di Hutan",
+    "panels": [
+      {
+        "text": "Di Hutan Ajaib yang indah, Purba si dino kecil ingin membeli mainan baru yang berkilau atau buah beri ajaib untuk dimakan.",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Purba standing in a magical forest with glowing plants and mushrooms, looking at a glittering toy and sweet berries.",
+        "imageUrl": "/images/presets/purba-dan-buah-ajaib-di-hutan/panel1.jpg"
+      },
+      {
+        "text": "Ibu Peri Hutan berkata, 'Purba, ingat perbedaannya ya. Makanan adalah kebutuhan agar tubuhmu sehat, sedangkan mainan berkilau itu hanya keinginan.'",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Purba talking to a friendly glowing fairy in the magical forest, pointing at healthy fruits and a shiny toy.",
+        "imageUrl": "/images/presets/purba-dan-buah-ajaib-di-hutan/panel2.jpg"
+      },
+      {
+        "text": "Purba berpikir sejenak. Jika ia membeli mainan, ia akan lapar nanti. Jadi, Purba memutuskan untuk membeli buah beri ajaib yang lebih penting.",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Purba looking thoughtfully at a basket of fruits, holding some coins in a magical forest setting.",
+        "imageUrl": "/images/presets/purba-dan-buah-ajaib-di-hutan/panel3.jpg"
+      },
+      {
+        "text": "Purba senang sekali! Memilih kebutuhan daripada keinginan membuat perutnya kenyang dan tabungannya tetap aman untuk hal penting di masa depan.",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Purba joyfully eating delicious magical berries in the forest, smiling happily with a full tummy and a small coin pouch nearby.",
+        "imageUrl": "/images/presets/purba-dan-buah-ajaib-di-hutan/panel4.jpg"
+      }
+    ],
+    "quiz": [
+      {
+        "question": "Apa yang dimaksud dengan 'kebutuhan' menurut cerita Purba?",
+        "options": [
+          "Sesuatu yang harus dipenuhi agar kita bisa hidup sehat dan bertahan",
+          "Barang mewah yang sangat berkilau",
+          "Mainan baru yang sedang trend"
+        ],
+        "correctAnswer": "Sesuatu yang harus dipenuhi agar kita bisa hidup sehat dan bertahan",
+        "insight": "Hebat! Kebutuhan adalah hal utama seperti makanan yang membuat tubuh kita sehat."
+      },
+      {
+        "question": "Manakah yang merupakan contoh 'keinginan' dalam cerita?",
+        "options": [
+          "Buah beri ajaib untuk makan",
+          "Mainan baru yang berkilau",
+          "Air minum segar"
+        ],
+        "correctAnswer": "Mainan baru yang berkilau",
+        "insight": "Benar sekali! Mainan baru adalah keinginan yang bisa ditunda jika belum mendesak."
+      },
+      {
+        "question": "Mengapa Purba memilih membeli buah beri daripada mainan?",
+        "options": [
+          "Karena buah beri adalah kebutuhan agar tidak lapar",
+          "Karena mainan terlalu murah",
+          "Karena Ibu Peri menyuruhnya membuang uang"
+        ],
+        "correctAnswer": "Karena buah beri adalah kebutuhan agar tidak lapar",
+        "insight": "Pintar! Memilih kebutuhan pokok adalah keputusan keuangan yang sangat bijak."
+      },
+      {
+        "question": "Apa manfaat mendahulukan kebutuhan daripada keinginan?",
+        "options": [
+          "Membuat kita cepat miskin",
+          "Membuat tubuh sehat dan tabungan aman",
+          "Membuat kita sedih"
+        ],
+        "correctAnswer": "Membuat tubuh sehat dan tabungan aman",
+        "insight": "Tepat! Kita bisa menjaga kesehatan sekaligus menyimpan uang untuk masa depan."
+      },
+      {
+        "question": "Siapa yang menasihati Purba tentang perbedaan kebutuhan dan keinginan?",
+        "options": [
+          "Ibu Peri Hutan",
+          "Raksasa Hutan",
+          "Kelinci Lompat"
+        ],
+        "correctAnswer": "Ibu Peri Hutan",
+        "insight": "Keren! Ibu Peri memberikan nasihat yang sangat berguna untuk keuangan Purba."
+      }
+    ],
+    "id": "purba-dan-buah-ajaib-di-hutan",
+    "description": "Bantu Purba membedakan kebutuhan dan keinginan saat menemukan buah ajaib di hutan.",
+    "coverImage": "/images/presets/purba-dan-buah-ajaib-di-hutan/panel1.jpg",
+    "themeLabel": "Hutan Ajaib"
+  },
+  {
+    "title": "Purba dan Mainan Baru",
+    "panels": [
+      {
+        "text": "Setelah membeli buah segar yang sehat, Purba si dinosaurus kecil melihat mainan robot baru di toko sebelah. Wah, lucunya!",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Purba is standing in front of a toy store looking excitedly at a robot toy in the window, holding a bag of fruits.",
+        "imageUrl": "/images/presets/purba-dan-mainan-baru/panel1.jpg"
+      },
+      {
+        "text": "Purba berkata dalam hati, Aku sudah beli buah untuk makan sehatku. Tapi aku juga ingin sekali robot itu! Apakah aku harus membelinya?",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Purba is thoughtfully touching his chin, looking at a shiny robot toy on a shelf, with a small thought bubble showing a question mark.",
+        "imageUrl": "/images/presets/purba-dan-mainan-baru/panel2.jpg"
+      },
+      {
+        "text": "Ibu berkata, Ingat Purba, buah adalah kebutuhan karena kita butuh makan agar sehat. Robot itu adalah keinginan, barang yang kita suka tapi tidak wajib ada sekarang.",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Purba is talking to a friendly mother dinosaur who is gently pointing at a basket of fruit and a toy.",
+        "imageUrl": "/images/presets/purba-dan-mainan-baru/panel3.jpg"
+      },
+      {
+        "text": "Purba mengerti! Dia memutuskan menabung dulu jika ingin mainan itu, dan menikmati buah sehatnya sekarang. Keputusan yang bijak!",
+        "imagePrompt": "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines. Purba is happily eating a slice of apple while putting a coin into a cute piggy bank.",
+        "imageUrl": "/images/presets/purba-dan-mainan-baru/panel4.jpg"
+      }
+    ],
+    "quiz": [
+      {
+        "question": "Apa yang dibeli Purba sebelum melihat mainan?",
+        "options": [
+          "Buah segar",
+          "Sepatu baru",
+          "Buku cerita"
+        ],
+        "correctAnswer": "Buah segar",
+        "insight": "Benar! Purba membeli buah segar terlebih dahulu untuk memenuhi kebutuhan makan sehatnya."
+      },
+      {
+        "question": "Mengapa buah disebut sebagai kebutuhan?",
+        "options": [
+          "Karena rasanya manis",
+          "Karena kita butuh untuk kesehatan",
+          "Karena warnanya bagus"
+        ],
+        "correctAnswer": "Karena kita butuh untuk kesehatan",
+        "insight": "Hebat! Makanan sehat seperti buah adalah kebutuhan pokok tubuh kita."
+      },
+      {
+        "question": "Apa status dari mainan robot bagi Purba?",
+        "options": [
+          "Kebutuhan",
+          "Keinginan",
+          "Kewajiban"
+        ],
+        "correctAnswer": "Keinginan",
+        "insight": "Tepat sekali! Mainan adalah keinginan, yaitu barang yang kita sukai tetapi tidak harus segera dimiliki."
+      },
+      {
+        "question": "Apa yang diputuskan Purba untuk mendapatkan mainannya?",
+        "options": [
+          "Meminta uang tambahan",
+          "Menabung lebih dulu",
+          "Menangis di toko"
+        ],
+        "correctAnswer": "Menabung lebih dulu",
+        "insight": "Pintar! Menabung adalah cara bijak untuk membeli barang yang kita inginkan."
+      },
+      {
+        "question": "Apa pelajaran keuangan yang bisa diambil dari cerita ini?",
+        "options": [
+          "Mendahulukan kebutuhan daripada keinginan",
+          "Menghabiskan semua uang untuk mainan",
+          "Tidak boleh membeli mainan selamanya"
+        ],
+        "correctAnswer": "Mendahulukan kebutuhan daripada keinginan",
+        "insight": "Luar biasa! Kita harus selalu mendahulukan kebutuhan penting sebelum membeli keinginan."
+      }
+    ],
+    "id": "purba-dan-mainan-baru",
+    "description": "Cerita petualangan tentang Purba dan Mainan Baru",
+    "coverImage": "/images/presets/purba-dan-mainan-baru/panel1.jpg",
+    "themeLabel": "Toko Mainan"
   }
 ]

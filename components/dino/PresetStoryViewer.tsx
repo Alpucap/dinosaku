@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import ComicViewer from '@/components/dino/ComicViewer';
+import HandController from '@/components/dino/HandController';
 import QuizViewer from '@/components/dino/QuizViewer';
 import { StoryData } from '@/components/dino/DinoApp';
 import Link from 'next/link';
@@ -19,16 +20,17 @@ export default function PresetStoryViewer({ story, storyId }: { story: StoryData
   const unlocked = index <= 0 || profile.completedStories.includes(PRESET_STORIES[index - 1].id);
 
   const handleQuizFinish = () => {
-    router.push('/learn/stories');
+    router.push('/learn');
   };
 
   if (!ready) return <p role="status" className="p-8">Membuka cerita...</p>;
-  if (!unlocked) return <div className="p-8"><h1>Petualangan ini masih terkunci</h1><p className="my-4">Selesaikan cerita sebelumnya di peta untuk melanjutkan.</p><Link className="button-primary p-3" href="/learn/stories">Kembali ke Peta</Link></div>;
+  if (!unlocked) return <div className="p-8"><h1>Petualangan ini masih terkunci</h1><p className="my-4">Selesaikan cerita sebelumnya di peta untuk melanjutkan.</p><Link className="button-primary p-3" href="/learn">Kembali ke Peta</Link></div>;
 
   return (
     <div className="min-h-full text-primary py-8 px-4 lg:px-10">
+      <HandController mode={mode} />
       <div className="max-w-5xl mx-auto">
-        <Link href="/learn/stories" className="inline-flex items-center gap-2 text-secondary hover:text-brand-primary mb-8 font-medium transition-colors">
+        <Link href="/learn" className="inline-flex items-center gap-2 text-secondary hover:text-brand-primary mb-8 font-medium transition-colors">
           <ArrowLeft size={20} />
           Kembali ke Peta
         </Link>

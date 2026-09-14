@@ -43,7 +43,7 @@ export default function LeaderboardPage() {
           <div className="text-right"><strong className="text-xl text-brand-primary">{points}</strong><small className="block text-secondary">poin</small></div>
         </li>;
       })}</ol>}
-      {data.profiles.every(p => !p.results.length) && <div className="ranking-empty"><p>Belum ada kuis yang selesai. Petualangan pertamamu menunggu!</p><Link href="/learn/stories" className="button-primary mt-3 px-5 py-3">Mulai kumpulkan poin</Link></div>}
+      {data.profiles.every(p => !p.results.length) && <div className="ranking-empty"><p>Belum ada kuis yang selesai. Petualangan pertamamu menunggu!</p><Link href="/learn" className="button-primary mt-3 px-5 py-3">Mulai kumpulkan poin</Link></div>}
     </section>
     <section id="profiles" className="profile-section">
       <div className="section-heading"><h2>Siapa yang belajar?</h2><span>{data.profiles.length} / 8 profil</span></div>

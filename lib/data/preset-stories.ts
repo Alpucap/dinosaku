@@ -70,4 +70,4 @@ const DEFAULT_PRESET_STORIES: PresetStory[] = [
   }
 ];
 
-export const PRESET_STORIES: PresetStory[] = [...(generatedStories as PresetStory[]), ...DEFAULT_PRESET_STORIES];
+export const PRESET_STORIES: PresetStory[] = [...(generatedStories as PresetStory[])];

@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import type { Options } from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { QuizQuestion } from './DinoApp';
+import { Gesture } from '@/components/dino/HandController';
 import { CheckCircle2, XCircle, Trophy, ArrowRight, BookOpen, Map, Send, HelpCircle, Sparkles, Star, RefreshCcw } from 'lucide-react';
 import { BADGES, getBadges, readProgress, recordQuiz } from '@/lib/progress';
 import { useProgress } from '@/lib/use-progress';
@@ -37,6 +38,24 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     void import('canvas-confetti').then(({ default: confetti }) => confetti({ ...options, disableForReducedMotion: true })).catch(() => {});
   }
+
+  const handleGesture = useCallback((gesture: Gesture) => {
+    if (showResult) return;
+    if (selectedAnswer !== null) {
+      if (gesture === 'Thumb_Up') handleNext();
+      return;
+    }
+    const question = quiz[currentIndex];
+    if (gesture === 'Pointing_Up' && question.options[0]) handleSelect(question.options[0]);
+    if (gesture === 'Open_Palm' && question.options[1]) handleSelect(question.options[1]);
+    if (gesture === 'Closed_Fist' && question.options[2]) handleSelect(question.options[2]);
+  }, [showResult, selectedAnswer, currentIndex, quiz]);
+
+  useEffect(() => {
+    const handle = (e: any) => handleGesture(e.detail);
+    window.addEventListener('dino-gesture', handle);
+    return () => window.removeEventListener('dino-gesture', handle);
+  }, [handleGesture]);
 
   function handleSelect(option: string) {
     if (selectedAnswer !== null) return;
@@ -247,6 +266,7 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
           </button>
         </motion.div>
       )}
+          
     </div>
   );
 }

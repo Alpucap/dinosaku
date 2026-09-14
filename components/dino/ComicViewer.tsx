@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StoryPanel } from './DinoApp';
-import { ArrowRight, Loader2, Sparkles, RefreshCw, ImageOff, Zap, Star, Pencil } from 'lucide-react';
+import { Gesture } from '@/components/dino/HandController';
+import { ArrowRight, Loader2, Sparkles, RefreshCw, ImageOff, Zap, Star, Pencil, Volume2 } from 'lucide-react';
 
 export default function ComicViewer({ title, panels, onComplete }: { title: string, panels: StoryPanel[], onComplete: (images: Record<number, string>) => void }) {
   const [images, setImages] = useState<Record<number, string>>({});
@@ -13,6 +14,32 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
   // An image is considered "finished processing" if it's in the images dictionary (even if failed '')
   const loadedCount = Object.keys(images).length;
   const isFullyLoaded = loadedCount === totalImages;
+
+  const speakText = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      
+      // Coba cari suara bahasa Indonesia jika ada
+      const voices = window.speechSynthesis.getVoices();
+      const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
+      if (idVoice) utterance.voice = idVoice;
+      else utterance.lang = 'id-ID';
+      
+      utterance.rate = 0.9;
+      utterance.pitch = 1.1;
+      
+      utterance.onerror = (e) => {
+        console.error("Speech error:", e);
+        alert("Gagal memutar suara. Pastikan browser/OS kamu mendukung Text-to-Speech.");
+      };
+      
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("Browser kamu tidak mendukung fitur suara.");
+    }
+  };
 
   const generateImageForPanel = async (prompt: string, index: number) => {
     setLoadingIndexes(prev => ({ ...prev, [index]: true }));
@@ -36,6 +63,18 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
       setLoadingIndexes(prev => ({ ...prev, [index]: false }));
     }
   };
+
+  const handleGesture = useCallback((gesture: Gesture) => {
+    if (gesture === 'Thumb_Up' && isFullyLoaded) {
+      onComplete(images);
+    }
+  }, [isFullyLoaded, images, onComplete]);
+
+  useEffect(() => {
+    const handle = (e: any) => handleGesture(e.detail);
+    window.addEventListener('dino-gesture', handle);
+    return () => window.removeEventListener('dino-gesture', handle);
+  }, [handleGesture]);
 
   const hasStartedLoading = React.useRef(false);
 
@@ -165,9 +204,16 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
               </div>
               
               {/* Comic Narrator Caption Box Style */}
-              <div className="p-6 md:p-8 bg-[#FFF9C4] border-t-4 border-brand-primary grow flex items-center justify-center relative">
+              <div className="p-6 md:p-8 bg-[#FFF9C4] border-t-4 border-brand-primary grow flex flex-col items-center justify-center relative">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 w-12 h-6 bg-[#FFF9C4] border-t-4 border-x-4 border-brand-primary rounded-t-full z-10" />
-                <p className="text-primary font-bold text-xl md:text-2xl text-center leading-relaxed font-heading z-20">
+                <button 
+                  onClick={() => speakText(panel.text)}
+                  className="absolute top-4 right-4 p-2 bg-white/50 hover:bg-white rounded-full text-brand-primary transition-colors z-20"
+                  aria-label="Bacakan cerita"
+                >
+                  <Volume2 size={24} />
+                </button>
+                <p className="text-primary font-bold text-xl md:text-2xl text-center leading-relaxed font-heading z-20 mt-2">
                   {panel.text}
                 </p>
               </div>
@@ -175,6 +221,7 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
           ))}
         </AnimatePresence>
       </div>
+          
     </div>
   );
 }

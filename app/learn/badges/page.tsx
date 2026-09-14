@@ -17,6 +17,6 @@ export default function BadgesPage() {
       const earned = badges.includes(badge.id);
       return <article key={badge.id} className={`badge-card ${earned ? 'badge-card-earned' : ''}`}><span className="badge-number">0{index + 1}</span><BadgeMedal id={badge.id} unlocked={earned} /><h2>{badge.name}</h2><p>{badge.description}</p><span className="badge-status">{earned ? <><Check size={16} /> Sudah diraih</> : <><LockKeyhole size={14} /> Belum terbuka</>}</span></article>;
     })}</div>}
-    <div className="learning-callout"><div><h2>Satu cerita, satu kesempatan baru.</h2><p>Ulangi kuis untuk memperbaiki nilaimu. Skor terbaikmu tetap tersimpan.</p></div><Link href="/learn/stories" className="button-primary px-6 py-3">Buka peta petualangan</Link></div>
+    <div className="learning-callout"><div><h2>Satu cerita, satu kesempatan baru.</h2><p>Ulangi kuis untuk memperbaiki nilaimu. Skor terbaikmu tetap tersimpan.</p></div><Link href="/learn" className="button-primary px-6 py-3">Buka peta petualangan</Link></div>
   </div>;
 }

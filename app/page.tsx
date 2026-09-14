@@ -34,11 +34,11 @@ export default function Home() {
 
               
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-                <Link href="/learn/stories" className="button-primary px-8 py-4 w-full sm:w-auto text-lg shadow-card">
+                <Link href="/learn" className="button-primary px-8 py-4 w-full sm:w-auto text-lg shadow-card">
                   Baca Koleksi Cerita
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </Link>
-                <Link href="/learn" className="button-secondary px-8 py-4 w-full sm:w-auto text-lg">
+                <Link href="/learn/create" className="button-secondary px-8 py-4 w-full sm:w-auto text-lg">
                   Buat Cerita AI Baru
                 </Link>
               </div>

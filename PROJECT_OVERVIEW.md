@@ -1,45 +1,46 @@
-# Dinosaku - Panduan & Konsep Proyek
+# Dinosaku - Project Overview
 
-## 1. Konsep Utama
-**Dinosaku** adalah aplikasi edukasi interaktif gamifikasi yang bertujuan mengajarkan literasi keuangan kepada anak-anak. Aplikasi ini menggunakan cerita komik bergambar dan kuis untuk mengajarkan konsep-konsep seperti menabung, anggaran, dan bekerja keras. 
+Dinosaku adalah platform pembelajaran finansial dan petualangan interaktif yang ditujukan untuk anak-anak (rentang usia TK - SD). Aplikasi ini menggabungkan pembelajaran literasi keuangan dasar (seperti menabung, membedakan kebutuhan dan keinginan) dengan teknologi AI generatif (Gemini API) untuk membuat cerita komik yang dipersonalisasi.
 
-Aplikasi menggunakan AI (saat ini Gemini, direncanakan pindah ke **GPT-6 Astra**) untuk merancang cerita dinamis (gambar & teks) berdasarkan topik yang dipilih pengguna, sehingga setiap petualangan terasa baru dan unik.
+## 🎯 Tujuan Proyek
+Mengubah proses belajar mengelola uang menjadi pengalaman bermain (*gamification*) melalui cerita bercabang, kuis interaktif, dan sistem pencapaian (*badges*).
 
-## 2. Fitur yang Sudah Dibuat
-* **Landing Page (`/`)**: Halaman utama yang responsif dengan tombol Call-to-Action.
-* **Dashboard & Sidebar (`/learn/layout.tsx`)**: Navigasi responsif dengan profil aktif dan streak dari aktivitas kuis yang nyata.
-* **Generator Cerita AI (`/learn`)**: Formulir untuk memilih materi (misal: Menabung) dan tema (misal: Luar Angkasa) untuk membuat cerita baru via API AI.
-* **Comic & Quiz Viewer**: Komponen interaktif (`ComicViewer` & `QuizViewer`) untuk membaca panel komik dan menjawab pertanyaan pilihan ganda dengan animasi, *feedback* langsung, dan *confetti*.
-* **Peta Petualangan / Koleksi Cerita (`/learn/stories`)**: Fitur gamifikasi ala Duolingo. Cerita statis (Preset) disusun dalam bentuk jalur (*path*).
-* **Sistem Progress Lokal**: Menyimpan cerita yang sudah diselesaikan di `localStorage` browser. Menyelesaikan kuis di suatu cerita akan membuka gembok cerita berikutnya.
-* **Profil & Peringkat Lokal (`/learn/leaderboard`)**: Hingga delapan nama panggilan dalam browser yang sama, tambah/ubah nama dan ganti profil. Poin merupakan jumlah nilai terbaik setiap cerita (maksimal 100 per cerita), sehingga mengulang kuis tidak menggandakan poin. Poin sama mendapat peringkat sama.
-* **Lencana (`/learn/badges`)**: Langkah Pertama, Bintang Kuis, Penabung Ulung, Pembeli Cermat, dan Rajin Belajar. Lencana diberikan dari hasil kuis; koleksi menampilkan syarat dan status setiap lencana.
-* **Streak Harian**: Satu hari dihitung ketika sebuah kuis selesai, memakai tanggal lokal perangkat. Mengulang di hari sama tidak menambah streak; melewatkan satu hari memutus streak. Lencana yang pernah diraih tetap dimiliki.
-* **Energi Lokal**: Tiga pembuatan cerita AI berhasil per hari, dibagi semua profil dalam browser. Reservasi diambil sebelum permintaan dan dikembalikan jika gagal. Demo serta koleksi cerita tidak memakai energi. Hari baru mengisi ulang.
-* **Hasil Kuis & Pembaca Komik**: Skor otomatis disimpan saat hasil tampil; form lanjutan hanya ada untuk generator. Teks dapat dibaca ketika gambar masih dibuat; gambar yang gagal dapat dicoba lagi. Demo memakai aset lokal tanpa panggilan API.
+## 🛠️ Tech Stack & Teknologi Utama
+- **Framework:** Next.js 14+ (App Router, React Server Components)
+- **Styling:** Tailwind CSS (dikustomisasi dengan *border* tebal ala desain anak-anak)
+- **AI Engine:** Google Gemini API (`@google/genai` atau REST via Edge API)
+  - `gemini-3.5-flash-lite`: Digunakan untuk menghasilkan konten cerita dan kuis berformat JSON terstruktur.
+  - `gemini-3.1-flash-lite-image`: Digunakan untuk menghasilkan ilustrasi komik bergaya 2D vektor (*flat cartoon*) yang aman untuk anak-anak.
+- **Penyimpanan (Storage):** 
+  - *Local/Development*: Menyimpan hasil generate AI sebagai JSON & Base64 langsung ke proyek lokal (CMS *Dev Mode*).
+  - *End User*: `IndexedDB` (via `localforage`) untuk fitur "Koleksi Ceritaku", dan `localStorage` untuk menyimpan profil, lencana, skor kuis, dan poin.
+- **Animasi & Icon:** Framer Motion (Transisi halus & *micro-interactions*) dan Lucide React.
+- **Aksesibilitas (A11y):** Web Speech API untuk fitur *Text-to-Speech* (suara narator komik berbahasa Indonesia).
 
-## 3. Sedang Dirancang (Tahap Desain)
-* **Peta Petualangan responsif**: Navigasi di atas pada ponsel, sidebar pada tablet/desktop, jalur satu kolom di layar kecil dan kartu berselang-seling pada desktop. Layout diperiksa pada lebar 320, 768, 1024, dan 1440 px.
+## 🚀 Fitur Utama
 
-## 4. Pengembangan Berikutnya untuk Produksi
-* **Papan Peringkat Lintas Perangkat**: Memerlukan akun dan database; versi sekarang hanya membandingkan profil lokal, tanpa data teman fiktif.
-* **Proteksi Biaya di Server**: Energi lokal merupakan aturan penggunaan antarmuka, bukan batas keamanan API. Menghapus data browser dapat meresetnya; endpoint gambar dan retry belum dibatasi server. Produksi memerlukan autentikasi serta pembatasan atomik yang persisten di server.
-* **Penyimpanan & Sinkronisasi**: Progres tersimpan di `dinosaku_progress_v1`; progres lama dimigrasikan saat dibaca. Jika penyimpanan diblokir, progres sementara tetap berjalan dengan pemberitahuan. Menutup tab saat pembuatan cerita belum selesai dapat tetap memakai satu energi hari itu.
+### 1. Peta Petualangan (Story Map)
+Pemain dipandu melalui *roadmap* misi (cerita) yang harus diselesaikan secara berurutan. Setiap misi yang selesai akan membuka ( *unlock*) misi berikutnya.
 
-## 5. Daftar Bug & Isu Saat Ini
-* **Perbaikan integrasi lokal**: Respons `/api/generate/story` kini berbentuk `{ story: ... }` sesuai pembacaan di `DinoApp`. Tes regresi: `node --test tests/story-route.test.mjs` (penyedia AI dimock, tidak menguji kuota/ketersediaan Gemini).
-* **Perbaikan halaman cerita**: Parameter rute dinamis ditunggu dengan `await params` sesuai Next.js 16; dua error TypeScript pada pembacaan gambar dan perpindahan ke kuis juga diperbaiki.
-* **Bug Generate Cerita (Error 500 / Localhost Error)**:
-  * **Gejala**: Saat menekan tombol "Buat Cerita", sering kali gagal dan muncul *alert* "Terjadi kesalahan jaringan" atau melempar Error 500 dari server `localhost`.
-  * **Penyebab**: 
-    1. Kegagalan dari *endpoint* API Gemini (baik karena kuota limit habis, model yang dipanggil tidak tersedia seperti kasus `gemini-3.5-flash-lite` 404, atau masalah jaringan internal aplikasi).
-    2. Waktu tunggu (*timeout*) dari Serverless Function Vercel/Next.js karena proses *generate* cerita + *generate* gambar membutuhkan waktu terlalu lama.
-  * **Solusi Sementara**: Mode demo (Tanpa API) telah disediakan di opsi Materi ("Demo POC") untuk *bypass* pemanggilan API jaringan demi keperluan *testing* UI.
-  * **Solusi Jangka Panjang**: Migrasi ke **GPT-6 Astra** dengan *error handling* yang lebih baik, sistem antrean (*queue*) jika *generate* lama, dan memisahkan proses *generate* teks dengan *generate* gambar agar tidak ke-banned *timeout*.
+### 2. Generator Cerita & Komik AI (Buat Cerita)
+- **Kustomisasi:** Anak dapat memilih topik (misal: "Menabung") dan tema (misal: "Planet Asing" atau tema bebas yang diketik sendiri).
+- **Proses AI:** Gemini merancang alur cerita yang terdiri dari 4 panel komik beserta 3 soal kuis pilihan ganda yang menguji pemahaman finansial dari cerita tersebut.
+- **Prompt Gambar:** Di belakang layar, sistem menambahkan instruksi ketat ke Imagen API agar selalu membuat gambar berformat `2d flat vector cartoon, clean lines, child-friendly, no text` untuk menjaga konsistensi agar tidak menjadi 3D / realistis.
 
-## 6. Pemeriksaan Pengembangan
-* Unit/regresi: `npm test`.
-* Build: `npm run build`.
-* Lint area belajar: `npx eslint app/learn components/dino lib/progress.ts lib/use-progress.ts tests`.
-* Browser: setelah `npx playwright install chromium`, jalankan server `npm run start -- --port 3102`, kemudian `npm run test:browser`. Tes memakai browser terisolasi dan memock API AI agar tidak memakai kuota. Screenshot tersimpan di `/tmp/dinosaku-gamification`.
-* Skenario: layout 320/768/1024/1440 px; skor terbaik; lencana; profil terpisah; tautan cerita terkunci; demo gratis; refund energi; kuota lintas profil; validasi nama dan navigasi keyboard. Pengujian ini tidak membuktikan ketersediaan model/kuota Gemini yang nyata.
+### 3. Comic Viewer & Pembaca Suara
+Menampilkan cerita panel demi panel seperti presentasi interaktif. Dilengkapi dengan fitur **Text-to-Speech** (ikon *Speaker*) agar anak yang belum lancar membaca dapat mendengarkan narasi cerita (bahasa Indonesia).
+
+### 4. Kuis Interaktif & Lencana (Gamification)
+- Setelah komik selesai, anak diuji dengan kuis.
+- Skor yang didapat akan dikonversi menjadi **Poin** dan menduduki peringkat di **Papan Peringkat** (*Leaderboard*) lokal.
+- Anak juga bisa mendapatkan berbagai **Lencana (Badges)** seperti "Bintang Kuis" (skor sempurna), "Langkah Pertama", atau lencana spesifik untuk cerita tertentu. Notifikasi lencana baru akan muncul di akhir kuis.
+
+### 5. Koleksi Ceritaku
+Setiap cerita unik yang di-*generate* secara khusus oleh AI akan langsung disimpan ke `IndexedDB` perangkat pengguna. Anak bisa melihat kembali cerita dan komik ciptaan mereka di halaman "Rak Buku".
+
+## 📁 Struktur Folder Penting
+- `/app`: Rute utama Next.js (Halaman Landing, Map `/learn`, Buat Cerita `/learn/create`, dll).
+- `/app/api`: Endpoint API internal untuk memanggil Gemini Text & Imagen secara aman dari *server-side*. Terdapat endpoint khusus `/api/save-preset` untuk fitur CMS lokal.
+- `/components/dino`: Komponen UI spesifik (DinoApp, ComicViewer, QuizViewer, Sidebar, dll).
+- `/lib/progress.ts` & `use-progress.ts`: Logika *state management* untuk Profil, Poin, Lencana, dan sinkronisasi ke `localStorage`.
+- `/lib/collection.ts`: Logika integrasi `localforage` untuk membaca/menyimpan objek cerita besar (berikut Base64 gambarnya) ke IndexedDB.

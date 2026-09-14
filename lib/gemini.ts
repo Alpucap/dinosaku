@@ -6,13 +6,19 @@ import path from 'path';
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function generateStoryAndQuiz(materi: string, tema: string) {
-  const prompt = `You are a creative children's book author. Write a 4-panel educational comic story for kids. 
-The educational topic (materi) is: "${materi}".
-The theme/setting (tema) of the story is: "${tema}".
-The main character is Purba, a friendly dinosaur. Make sure to weave the educational topic naturally into the theme.
+const prompt = `You are a creative children's book author. Write a 4-panel educational comic story for kids. 
+The educational topic (materi) requested is: "${materi}".
+The theme/setting (tema) requested is: "${tema}".
+
+CRITICAL GUARDRAIL INSTRUCTIONS:
+1. FINANCE TOPIC ENFORCEMENT: The story MUST teach a financial literacy lesson (e.g., saving money, needs vs wants, earning, budgeting, delayed gratification, wise spending). If the requested 'materi' is NOT related to finance or economics, you MUST ignore the specific 'materi' request and instead write a story about "Menabung (Saving Money)".
+2. SAFE THEME ENFORCEMENT: The story is for young children. The theme must be safe, positive, and age-appropriate. If the requested 'tema' contains violence, inappropriate content, adult themes, or anything negative, you MUST ignore the requested 'tema' and instead use "Taman Bermain (Playground)" as the theme.
+
+The main character is Purba, a friendly dinosaur. Make sure to weave the financial educational topic naturally into the theme.
   
-Output the story in JSON format with three keys:
-1. 'title': A catchy, fun title for the comic story (in Indonesian).
+Output the story in JSON format with four keys:
+1. 'themeLabel': A short 1-2 words label representing the setting/theme of the story (e.g. 'Luar Angkasa', 'Hutan Ajaib', 'Toko Mainan').
+2. 'title': A catchy, fun title for the comic story (in Indonesian).
 2. 'panels': an array of exactly 4 objects. Each object should have:
   - 'text': The narrative text for the panel (in Indonesian).
   - 'imagePrompt': A detailed image generation prompt (in English) for an AI image generator to create the panel. Include descriptions of the scene based on the theme. IMPORTANT: To ensure consistency, ALWAYS describe Purba exactly like this in every prompt: "A cute, chibi baby dinosaur mascot, flat vector art style. Bright lime green body, pale yellow belly, darker forest green triangular dorsal spikes down its back and tail. Big round glossy eyes, happy expression, no black outlines." Add thematic outfits (e.g. astronaut suit, safari hat) if it fits the theme.
@@ -31,6 +37,7 @@ Output the story in JSON format with three keys:
         responseSchema: {
           type: Type.OBJECT,
           properties: {
+            themeLabel: { type: Type.STRING },
             title: { type: Type.STRING },
             panels: {
               type: Type.ARRAY,
@@ -60,7 +67,7 @@ Output the story in JSON format with three keys:
               }
             }
           },
-          required: ['title', 'panels', 'quiz']
+          required: ['themeLabel', 'title', 'panels', 'quiz']
         }
       }
     });
