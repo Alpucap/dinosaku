@@ -1,0 +1,151 @@
+import { Role } from "@/lib/constants/roles";
+
+export type UserStatus = 'active' | 'inactive' | 'suspended';
+export type SubscriptionPlan = 'free' | 'premium';
+
+export interface UserBadge {
+    id: string;
+    icon: string;
+    title: string;
+    description: string;
+    unlocked: boolean;
+}
+
+export interface User {
+    id: string;
+    email: string;
+    password: string;
+    fullName: string;
+    username: string;
+    role: Role;
+    avatarUrl?: string;
+    status: UserStatus;
+    plan?: SubscriptionPlan;
+    classCode?: string;
+    createdAt: string;
+    lastLoginAt?: string;
+    preferences: {
+        notificationsEnabled: boolean;
+    };
+    childrenIds?: string[];
+    parentId?: string;
+
+    // FK dari School
+    schoolId?: string;
+
+    // Data gamifikasi anak
+    gamification?: {
+        totalPoints: number;
+        currentStreak: number;
+        totalBadges: number;
+        badges: UserBadge[];
+    };
+}
+
+export const DUMMY_USERS: User[] = [
+    // 1. ADMINISTRATOR
+    {
+        id: "usr_admin_001",
+        email: "admin@dinosaku.com",
+        username: "superadmin",
+        password: "password123",
+        fullName: "Administrator Dinosaku",
+        role: "admin",
+        status: "active",
+        avatarUrl: "/mascot/dino.png",
+        createdAt: "2024-01-01T00:00:00Z",
+        lastLoginAt: "2026-09-12T08:00:00Z",
+        preferences: { notificationsEnabled: true }
+    },
+
+    // 2. ORANG TUA
+    {
+        id: "usr_parent_001",
+        email: "ortu@dinosaku.com",
+        username: "budi_ortu",
+        password: "password123",
+        fullName: "Budi Santoso",
+        role: "parents",
+        status: "active",
+        avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
+        createdAt: "2024-05-10T10:30:00Z",
+        preferences: { notificationsEnabled: true },
+        childrenIds: ["usr_child_001", "usr_child_002", "usr_child_003"]
+    },
+
+    // 3. ANAK PERTAMA (Terhubung ke Budi)
+    {
+        id: "usr_child_001",
+        email: "anak1@dinosaku.com",
+        username: "charlotte_s",
+        password: "password123",
+        fullName: "Charlotte Santoso",
+        role: "children",
+        status: "active",
+        plan: "premium",
+        avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Charlotte",
+        createdAt: "2024-05-10T10:35:00Z",
+        preferences: { notificationsEnabled: false },
+        parentId: "usr_parent_001",
+        classCode: "DINO-4A"
+    },
+
+    // 4. ANAK KEDUA (Terhubung ke Budi)
+    {
+        id: "usr_child_002",
+        email: "anak2@dinosaku.com",
+        username: "dina_s",
+        password: "password123",
+        fullName: "Dina Santoso",
+        role: "children",
+        status: "active",
+        plan: "premium",
+        avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Dina",
+        createdAt: "2024-05-10T10:40:00Z",
+        preferences: { notificationsEnabled: false },
+        parentId: "usr_parent_001"
+    },
+
+    // 4. ANAK KETIGA (Terhubung ke Budi - Free Plan)
+    {
+        id: "usr_child_003",
+        email: "anak3@dinosaku.com",
+        username: "bagas_s",
+        password: "password123",
+        fullName: "Bagas Santoso",
+        role: "children",
+        status: "active",
+        plan: "free",
+        avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Bagas",
+        createdAt: "2024-05-10T10:45:00Z",
+        preferences: { notificationsEnabled: false },
+        parentId: "usr_parent_001",
+        gamification: {
+            totalPoints: 1250,
+            currentStreak: 12,
+            totalBadges: 2,
+            badges: [
+                { id: "b1", icon: "🌱", title: "Penabung Pemula", description: "Mencatat pengeluaran pertama", unlocked: true },
+                { id: "b2", icon: "🔥", title: "Si Paling Tahu", description: "Nilai kuis 100", unlocked: true },
+                { id: "b3", icon: "⭐", title: "Bintang Kelas", description: "Lencana Masih Terkunci", unlocked: false },
+                { id: "b4", icon: "🏆", title: "Sang Juara", description: "Lencana Masih Terkunci", unlocked: false }
+            ]
+        }
+    },
+
+    // 5. GURU
+    {
+        id: "usr_teacher_001",
+        email: "guru@dinosaku.com",
+        username: "bu_siti",
+        password: "password123",
+        fullName: "Siti Aminah, S.Pd",
+        role: "teacher",
+        status: "active",
+        avatarUrl: "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=wuwu1oq7",
+        createdAt: "2024-08-01T07:15:00Z",
+        preferences: { notificationsEnabled: true },
+        schoolId: "sch_001",
+        classCode: "DINO-4A"
+    }
+];

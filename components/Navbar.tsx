@@ -3,15 +3,15 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-default bg-surface/80 backdrop-blur-md">
-      <div className="container-main flex h-20 items-center justify-between">
+    <header className="fixed inset-x-0 top-4 z-50 px-4 md:top-6">
+      <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between gap-4 rounded-full border border-surface/60 bg-surface/70 pl-5 pr-2 shadow-card backdrop-blur-xl sm:pl-7">
         <Link href="/" className="flex items-center">
-          <Image 
-            src="/logo/dinosaku.svg" 
-            alt="Dinosaku Logo" 
-            width={140} 
-            height={48} 
-            className="object-contain"
+          <Image
+            src="/logo/dinosaku.svg"
+            alt="Dinosaku Logo"
+            width={140}
+            height={48}
+            className="w-28 md:w-[132px] object-contain"
             priority
           />
         </Link>
@@ -24,7 +24,10 @@ export default function Navbar() {
           <Link href="/login" className="text-label font-semibold text-secondary hover:text-primary transition-colors hidden sm:block">
             Masuk
           </Link>
-          <Link href="/subscribe" className="button-primary px-5 py-2.5 text-sm">
+          <Link
+            href="/subscribe"
+            className="button-primary rounded-full px-5 py-2.5 text-sm"
+          >
             Berlangganan
           </Link>
         </div>

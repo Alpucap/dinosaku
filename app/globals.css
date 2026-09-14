@@ -241,6 +241,17 @@
     will-change: transform;
     transform: translateZ(0);
   }
+
+  .float-slow {
+    animation: floatMascot 6s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .float-slow {
+      animation: none;
+    }
+  }
 }
 
 /* COMPONENT */
@@ -793,3 +804,15 @@
 .comic-image-state { display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; height: 100%; padding: 20px; text-align: center; color: #4a5c50; }
 @media (max-width: 1023px) { .comic-grid { grid-template-columns: 1fr; } }
 @media (max-width: 767px) { .comic-caption { padding: 20px; font-size: 16px; } }
+
+@keyframes floatParticle {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(15px, -10px) rotate(15deg);
+  }
+  66% {
+    transform: translate(-10px, 15px) rotate(-10deg);
+  }
+}
