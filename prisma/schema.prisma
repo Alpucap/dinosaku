@@ -51,6 +51,14 @@ model User {
   // Preferences
   notificationsEnabled Boolean @default(true)
 
+  // Assignments
+  givenAssignments Assignment[] @relation("Assigner")
+  receivedAssignments Assignment[] @relation("Assignee")
+
+  // Activities & Savings
+  activities    ActivityHistory[]
+  savingGoals   SavingGoal[]
+
   // Gamification & Progress
   gamification  Gamification?
   userBadges    UserBadge[]
@@ -109,3 +117,56 @@ model Story {
   user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
 
+
+// ==========================================
+// Fitur Pembimbing & Literasi Finansial
+// ==========================================
+
+model ActivityHistory {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type        String   // "STORY_READ", "QUIZ_COMPLETED", "SAVING_DEPOSIT"
+  title       String   // Judul cerita atau aktivitas
+  score       Int?     // Skor kuis jika ada
+  pointsEarned Int     @default(0) // Poin yang didapatkan dari aktivitas ini
+  
+  createdAt   DateTime @default(now())
+}
+
+model SavingGoal {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title         String   // Contoh: "Mainan Dinosaurus"
+  targetAmount  Int      // Target tabungan (misal 50000)
+  currentAmount Int      @default(0) // Tabungan terkumpul
+  isCompleted   Boolean  @default(false)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum AssignmentStatus {
+  PENDING
+  COMPLETED
+}
+
+model Assignment {
+  id          String   @id @default(uuid())
+  
+  assignerId  String
+  assigner    User     @relation("Assigner", fields: [assignerId], references: [id], onDelete: Cascade)
+  
+  assigneeId  String
+  assignee    User     @relation("Assignee", fields: [assigneeId], references: [id], onDelete: Cascade)
+
+  topic       String
+  theme       String
+  status      AssignmentStatus @default(PENDING)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -9,15 +9,15 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 import { useProgress } from '@/lib/use-progress';
-import { PRESET_STORIES } from '@/lib/data/preset-stories';
+
 import { useRouter } from 'next/navigation';
 
 export default function PresetStoryViewer({ story, storyId }: { story: StoryData, storyId: string }) {
   const [mode, setMode] = useState<'comic' | 'quiz'>('comic');
   const router = useRouter();
   const { profile, ready } = useProgress();
-  const index = PRESET_STORIES.findIndex(item => item.id === storyId);
-  const unlocked = index <= 0 || profile.completedStories.includes(PRESET_STORIES[index - 1].id);
+  const unlocked = true; // Temporarily unlock all if reached via URL
+  // Removed strict locked check
 
   const handleQuizFinish = () => {
     router.push('/learn');

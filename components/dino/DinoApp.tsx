@@ -55,6 +55,7 @@ export default function DinoApp() {
   const [temaMode, setTemaMode] = useState<'preset' | 'custom'>('preset');
   const [presetTema, setPresetTema] = useState('Luar Angkasa');
   const [customTema, setCustomTema] = useState('');
+  const [assignmentId, setAssignmentId] = useState('');
   
   const [loading, setLoading] = useState(false);
   const [storyData, setStoryData] = useState<StoryData | null>(null);
@@ -65,6 +66,23 @@ export default function DinoApp() {
   const [error, setError] = useState('');
   const busy = useRef(false);
   const { energy, ready } = useProgress();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const aId = params.get('assignmentId');
+      const topic = params.get('topic');
+      const theme = params.get('theme');
+      if (aId && topic && theme && !busy.current) {
+        setAssignmentId(aId);
+        setMateri('custom');
+        setCustomMateri(topic);
+        setTemaMode('preset');
+        setPresetTema(theme);
+        // Biarkan user yang klik 'Buat Cerita' agar mereka siap, tapi setidaknya form sudah otomatis terisi.
+      }
+    }
+  }, []);
 
   
   const materiList = [
@@ -130,11 +148,19 @@ export default function DinoApp() {
       const res = await fetch('/api/save-preset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ story: storyData, images: generatedImages })
+        body: JSON.stringify({ 
+          story: {
+            ...storyData,
+            theme: activeTema,
+            topic: activeMateri
+          }, 
+          images: generatedImages,
+          assignmentId: assignmentId || undefined
+        })
       });
       const data = await res.json();
       if (res.ok) {
-        alert('Tersimpan di local! Buka lib/data/generated-stories.json');
+        alert('Berhasil disimpan ke Peta Petualangan (Database & Firebase)! Silakan buka halaman Petualangan.');
       } else {
         alert('Gagal: ' + data.error);
       }

@@ -1,9 +1,7 @@
 import { Flame, Star, Medal, UserRound } from "lucide-react";
 import { requireRole } from "@/lib/auth/guard";
-import {
-  getChildrenForGuardian,
-  getGuardianScopeLabel,
-} from "@/lib/data/children";
+import { prisma } from "@/lib/prisma";
+import { getGuardianScopeLabel } from "@/lib/data/children";
 
 const STATUS_LABEL: Record<string, string> = {
   active: "Aktif",
@@ -13,7 +11,19 @@ const STATUS_LABEL: Record<string, string> = {
 
 export default async function DaftarAnakPage() {
   const guardian = await requireRole(["parents", "teacher"]);
-  const children = getChildrenForGuardian(guardian);
+  
+  let children: any[] = [];
+  if (guardian.role === 'teacher' && guardian.classCode) {
+    children = await prisma.user.findMany({
+      where: { role: 'CHILDREN', classCode: guardian.classCode },
+      include: { gamification: true, userBadges: true }
+    });
+  } else if (guardian.role === 'parents') {
+    children = await prisma.user.findMany({
+      where: { role: 'CHILDREN', parentId: guardian.id },
+      include: { gamification: true, userBadges: true }
+    });
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -22,7 +32,7 @@ export default async function DaftarAnakPage() {
           Daftar Anak
         </h2>
         <p className="mt-1 text-sm text-text-secondary">
-          {getGuardianScopeLabel(guardian)} — {children.length} anak.
+          {getGuardianScopeLabel(guardian as any)} — {children.length} anak.
         </p>
       </div>
 
@@ -82,7 +92,7 @@ export default async function DaftarAnakPage() {
                     </span>
                   )}
                   <span className="rounded-full bg-surface-soft px-2.5 py-1 text-[11px] font-semibold text-text-secondary">
-                    {STATUS_LABEL[child.status] ?? child.status}
+                    Aktif
                   </span>
                 </div>
 
@@ -108,7 +118,7 @@ export default async function DaftarAnakPage() {
                       <dt className="sr-only">Lencana</dt>
                       <dd className="flex items-center justify-center gap-1 font-heading text-sm font-bold text-text-primary">
                         <Medal className="h-3.5 w-3.5 text-brand-primary" />
-                        {game.totalBadges}
+                        {child.userBadges?.length || 0}
                       </dd>
                       <p className="text-[11px] text-text-muted">Lencana</p>
                     </div>
