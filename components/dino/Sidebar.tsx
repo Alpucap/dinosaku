@@ -1,32 +1,51 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { BookOpen, Map, Medal, Trophy, Flame, ChevronRight, Pencil } from 'lucide-react';
-import { useProgress } from '@/lib/use-progress';
+import Link from "next/link";
+import { Flame, ChevronRight } from "lucide-react";
+import { useProgress } from "@/lib/use-progress";
 
-const links = [
-  { href: '/learn', label: 'Petualangan', icon: Map },
-  { href: '/learn/create', label: 'Buat Cerita', icon: Pencil },
-  { href: '/learn/collection', label: 'Koleksi', icon: BookOpen },
-  { href: '/learn/badges', label: 'Lencana', icon: Medal },
-  { href: '/learn/leaderboard', label: 'Peringkat', icon: Trophy },
-];
-
-export default function Sidebar() {
-  const pathname = usePathname();
+export function LearnSidebarFooter() {
   const { profile, ready, streak } = useProgress();
-  return <aside className="learning-sidebar" data-ready={ready}>
-    <a href="#learning-content" className="skip-link">Lewati ke isi</a>
-    <div className="sidebar-brand"><Link href="/" aria-label="Dinosaku, beranda"><Image src="/logo/dinosaku.svg" alt="Dinosaku" width={144} height={48} priority /></Link><span className="hidden md:block text-sm text-secondary">Kecil langkahnya. Besar mimpinya.</span></div>
-    <nav aria-label="Navigasi belajar" className="learning-nav">{links.map(({ href, label, icon: Icon }) => {
-      const active = href === '/learn' ? (pathname === href || pathname.startsWith('/learn/stories')) : pathname.startsWith(href);
-      return <Link key={href} href={href} aria-current={active ? 'page' : undefined} className={active ? 'is-active' : ''}><Icon size={21} aria-hidden="true" /><span>{label}</span>{active && <span className="nav-active-dot" aria-hidden="true" />}</Link>;
-    })}</nav>
-    <div className="sidebar-bottom">
-      <div className="streak-note"><Flame size={25} aria-hidden="true" /><div><strong>{ready ? streak : 0} hari berturut-turut</strong><p>{streak ? 'Satu kuis hari ini, jaga semangatmu!' : 'Mulai dari satu kuis hari ini.'}</p></div></div>
-      <Link href="/learn/leaderboard#profiles" className="profile-link"><span className="profile-avatar" aria-hidden="true">{profile.name.slice(0, 1).toUpperCase()}</span><span className="min-w-0 flex-1"><strong className="block truncate">{profile.name}</strong><small>Profil di perangkat ini</small></span><ChevronRight size={18} /></Link>
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-start gap-3 rounded-lg bg-surface-soft px-3 py-2.5">
+        <Flame size={22} aria-hidden="true" className="shrink-0 text-brand-primary" />
+        <div className="min-w-0">
+          <strong className="block text-xs font-bold text-text-primary">
+            {ready ? streak : 0} hari berturut-turut
+          </strong>
+          <p className="text-[11px] leading-tight text-text-secondary">
+            {streak
+              ? "Satu kuis hari ini, jaga semangatmu!"
+              : "Mulai dari satu kuis hari ini."}
+          </p>
+        </div>
+      </div>
+
+      <Link
+        href="/learn/leaderboard#profiles"
+        className="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-brand-primary/10"
+      >
+        <span
+          aria-hidden="true"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white"
+        >
+          {profile.name.slice(0, 1).toUpperCase()}
+        </span>
+        <span className="min-w-0 flex-1">
+          <strong className="block truncate text-xs font-bold text-text-primary">
+            {profile.name}
+          </strong>
+          <small className="text-[11px] text-text-muted">
+            Profil di perangkat ini
+          </small>
+        </span>
+        <ChevronRight
+          size={18}
+          className="shrink-0 text-text-muted group-hover:text-brand-primary"
+        />
+      </Link>
     </div>
-  </aside>;
+  );
 }

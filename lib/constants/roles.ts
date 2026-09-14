@@ -8,3 +8,14 @@ export const REGISTER_ROLES = [
     { id: 'teacher' as Role, label: 'Guru', icon: React.createElement(GraduationCap, { size: 32 }) },
     { id: 'children' as Role, label: 'Anak', icon: React.createElement(Gamepad2, { size: 32 }) },
 ];
+
+export const ROLE_DASHBOARD: Record<Role, string> = {
+    admin: '/admin',
+    children: '/learn',
+    parents: '/pembimbing',
+    teacher: '/pembimbing',
+};
+
+export function getDashboardPath(role: Role): string {
+    return ROLE_DASHBOARD[role] ?? '/dashboard';
+}

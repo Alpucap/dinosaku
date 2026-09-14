@@ -25,9 +25,10 @@ export interface SidebarMenuSection {
 interface AppSidebarProps {
   menuSections: SidebarMenuSection[];
   rootHrefs?: string[];
+  footer?: React.ReactNode;
 }
 
-export function AppSidebar({ menuSections, rootHrefs = [] }: AppSidebarProps) {
+export function AppSidebar({ menuSections, rootHrefs = [], footer }: AppSidebarProps) {
   const pathname = usePathname();
   const { isOpen, setIsOpen, isDesktopExpanded, toggleDesktop, isMounted } = useSidebar();
 
@@ -135,6 +136,9 @@ export function AppSidebar({ menuSections, rootHrefs = [] }: AppSidebarProps) {
         </nav>
       </div>
 
+      {footer && isExpanded && (
+        <div className="shrink-0 border-t border-default p-3">{footer}</div>
+      )}
     </>
   );
 

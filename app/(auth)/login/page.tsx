@@ -18,6 +18,7 @@ import { Eye, EyeOff } from "lucide-react";
 // Lib
 import { validateLoginForm } from "@/lib/validations/auth";
 import { DUMMY_USERS } from "@/lib/data/dummy-users";
+import { getDashboardPath } from "@/lib/constants/roles";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -72,7 +73,7 @@ export default function LoginPage() {
                     timeout: 3000
                 });
                 setTimeout(() => {
-                    router.push('/dashboard');
+                    router.push(getDashboardPath(user.role));
                 }, 1500);
             } else {
                 setIsSubmitting(false);
