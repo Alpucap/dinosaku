@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Loader2, BookOpen, ImageIcon, Mic, MicOff, Sparkles, Rocket, Zap } from 'lucide-react';
+import { Loader2, BookOpen, ImageIcon, Mic, MicOff, Sparkles, Rocket, Zap, PiggyBank, Coins, Scale, TrendingUp, Wallet, Palette, Wand2 } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import ComicViewer from './ComicViewer';
 import HandController from './HandController';
@@ -66,21 +66,24 @@ export default function DinoApp() {
   const busy = useRef(false);
   const { energy, ready } = useProgress();
 
+  
   const materiList = [
-    { id: 'Menabung (Saving)', label: 'Menabung', desc: 'Menyisihkan uang untuk masa depan' },
-    { id: 'Mendapatkan Uang (Earning)', label: 'Mendapat Uang', desc: 'Cara menghasilkan uang dengan baik' },
-    { id: 'Kebutuhan vs Keinginan', label: 'Kebutuhan vs Keinginan', desc: 'Membedakan yang penting dan yang dimau' },
-    { id: 'Investasi Sederhana', label: 'Investasi', desc: 'Membuat uang berkembang' },
-    { id: 'Membuat Anggaran (Budgeting)', label: 'Anggaran', desc: 'Merencanakan pengeluaran' },
+    { id: 'Menabung (Saving)', label: 'Menabung', desc: 'Menyisihkan uang untuk masa depan', icon: <PiggyBank size={24} /> },
+    { id: 'Mendapatkan Uang (Earning)', label: 'Mendapat Uang', desc: 'Cara menghasilkan uang dengan baik', icon: <Coins size={24} /> },
+    { id: 'Kebutuhan vs Keinginan', label: 'Kebutuhan vs Keinginan', desc: 'Membedakan yang penting dan yang dimau', icon: <Scale size={24} /> },
+    { id: 'Investasi Sederhana', label: 'Investasi', desc: 'Membuat uang berkembang', icon: <TrendingUp size={24} /> },
+    { id: 'Membuat Anggaran (Budgeting)', label: 'Anggaran', desc: 'Merencanakan pengeluaran', icon: <Wallet size={24} /> },
   ];
 
   const temaList = [
-    'Luar Angkasa',
-    'Kebun Binatang',
-    'Bawah Laut',
-    'Hutan Ajaib',
-    'Kota Robot'
+    { id: 'Luar Angkasa', label: 'Luar Angkasa', emoji: '🚀' },
+    { id: 'Kebun Binatang', label: 'Kebun Binatang', emoji: '🦁' },
+    { id: 'Bawah Laut', label: 'Bawah Laut', emoji: '🌊' },
+    { id: 'Hutan Ajaib', label: 'Hutan Ajaib', emoji: '🌲' },
+    { id: 'Kota Robot', label: 'Kota Robot', emoji: '🤖' }
   ];
+
+  
 
   const activeMateri = materi === 'custom' ? customMateri : materi;
   const activeTema = temaMode === 'preset' ? presetTema : customTema;
@@ -228,43 +231,55 @@ export default function DinoApp() {
                   </h2>
                 </div>
                 
+                
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {materiList.map(m => (
                     <button
                       key={m.id}
                       onClick={() => setMateri(m.id)}
                       aria-pressed={materi === m.id}
-                      className={`p-5 rounded-2xl border-2 transition-all text-left flex flex-col gap-2 group outline-none focus-visible:ring-2 focus-visible:ring-brand-accent ${
+                      className={`p-5 rounded-3xl border-[3px] transition-all text-left flex flex-col gap-3 group outline-none focus-visible:ring-4 focus-visible:ring-brand-accent/50 ${
                         materi === m.id
-                          ? 'border-brand-primary bg-surface-green shadow-soft'
-                          : 'border-border bg-background hover:border-brand-secondary hover:bg-surface-soft'
+                          ? 'border-brand-primary bg-surface-green shadow-[0_6px_0_0_#064e2b] translate-y-[-4px]'
+                          : 'border-border bg-white shadow-[0_4px_0_0_rgba(203,213,225,1)] hover:border-brand-secondary hover:translate-y-[-2px] hover:shadow-[0_6px_0_0_rgba(203,213,225,1)]'
                       }`}
                     >
-                      <span className={`font-bold text-lg ${materi === m.id ? 'text-brand-primary' : 'text-primary'}`}>
-                        {m.label}
-                      </span>
-                      <span className={`text-sm ${materi === m.id ? 'text-brand-primary/80' : 'text-secondary'}`}>
-                        {m.desc}
-                      </span>
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${materi === m.id ? 'bg-brand-primary text-white' : 'bg-surface-soft text-brand-primary group-hover:bg-brand-accent-soft'}`}>
+                        {m.icon}
+                      </div>
+                      <div>
+                        <span className={`block font-bold text-lg mb-1 ${materi === m.id ? 'text-brand-primary' : 'text-primary'}`}>
+                          {m.label}
+                        </span>
+                        <span className={`block text-sm leading-snug ${materi === m.id ? 'text-brand-primary/80' : 'text-secondary'}`}>
+                          {m.desc}
+                        </span>
+                      </div>
                     </button>
                   ))}
                   <button
                     onClick={() => setMateri('custom')}
                     aria-pressed={materi === 'custom'}
-                    className={`p-5 rounded-2xl border-2 transition-all text-left flex flex-col gap-2 group outline-none focus-visible:ring-2 focus-visible:ring-brand-accent ${
+                    className={`p-5 rounded-3xl border-[3px] transition-all text-left flex flex-col gap-3 group outline-none focus-visible:ring-4 focus-visible:ring-brand-accent/50 ${
                       materi === 'custom'
-                        ? 'border-brand-primary bg-surface-green shadow-soft'
-                        : 'border-border bg-background hover:border-brand-secondary hover:bg-surface-soft'
+                        ? 'border-brand-primary bg-surface-green shadow-[0_6px_0_0_#064e2b] translate-y-[-4px]'
+                        : 'border-border bg-white shadow-[0_4px_0_0_rgba(203,213,225,1)] hover:border-brand-secondary hover:translate-y-[-2px] hover:shadow-[0_6px_0_0_rgba(203,213,225,1)]'
                     }`}
                   >
-                    <span className={`font-bold text-lg flex items-center gap-2 ${materi === 'custom' ? 'text-brand-primary' : 'text-primary'}`}>
-                      <Sparkles size={18} /> Topik Lainnya
-                    </span>
-                    <span className={`text-sm ${materi === 'custom' ? 'text-brand-primary/80' : 'text-secondary'}`}>
-                      Ketik materi finansial pilihanmu
-                    </span>
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${materi === 'custom' ? 'bg-brand-primary text-white' : 'bg-surface-soft text-brand-primary group-hover:bg-brand-accent-soft'}`}>
+                      <Sparkles size={24} />
+                    </div>
+                    <div>
+                      <span className={`block font-bold text-lg mb-1 ${materi === 'custom' ? 'text-brand-primary' : 'text-primary'}`}>
+                        Topik Lainnya
+                      </span>
+                      <span className={`block text-sm leading-snug ${materi === 'custom' ? 'text-brand-primary/80' : 'text-secondary'}`}>
+                        Ketik materi finansial pilihanmu
+                      </span>
+                    </div>
                   </button>
                 </div>
+
                 <AnimatePresence>
                   {materi === 'custom' && (
                     <motion.div
@@ -313,22 +328,24 @@ export default function DinoApp() {
                   </h2>
                 </div>
 
-                <div className="flex flex-wrap gap-3 mb-6">
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
                   {temaList.map(t => (
                     <button
-                      key={t}
+                      key={t.id}
                       onClick={() => {
                         setTemaMode('preset');
-                        setPresetTema(t);
+                        setPresetTema(t.id);
                       }}
-                      aria-pressed={temaMode === 'preset' && presetTema === t}
-                      className={`px-5 py-3 rounded-xl border-2 font-medium transition-all outline-none focus-visible:ring-2 focus-visible:ring-brand-accent ${
-                        temaMode === 'preset' && presetTema === t
-                          ? 'border-brand-primary bg-surface-green text-brand-primary shadow-sm'
-                          : 'border-border bg-background text-secondary hover:border-brand-secondary hover:bg-surface-soft'
+                      aria-pressed={temaMode === 'preset' && presetTema === t.id}
+                      className={`px-4 py-4 rounded-2xl border-[3px] font-bold text-lg transition-all flex flex-col items-center justify-center gap-2 outline-none focus-visible:ring-4 focus-visible:ring-brand-accent/50 ${
+                        temaMode === 'preset' && presetTema === t.id
+                          ? 'border-brand-primary bg-surface-green text-brand-primary shadow-[0_4px_0_0_#064e2b] translate-y-[-2px]'
+                          : 'border-border bg-white text-secondary shadow-[0_2px_0_0_rgba(203,213,225,1)] hover:border-brand-secondary hover:translate-y-[-2px] hover:shadow-[0_4px_0_0_rgba(203,213,225,1)]'
                       }`}
                     >
-                      {t}
+                      <span className="text-3xl">{t.emoji}</span>
+                      <span>{t.label}</span>
                     </button>
                   ))}
                   <button
@@ -336,15 +353,19 @@ export default function DinoApp() {
                       setTemaMode('custom');
                     }}
                     aria-pressed={temaMode === 'custom'}
-                    className={`px-5 py-3 rounded-xl border-2 font-medium transition-all flex items-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-brand-accent ${
+                    className={`px-4 py-4 rounded-2xl border-[3px] font-bold text-lg transition-all flex flex-col items-center justify-center gap-2 outline-none focus-visible:ring-4 focus-visible:ring-brand-accent/50 ${
                       temaMode === 'custom'
-                        ? 'border-brand-primary bg-surface-green text-brand-primary shadow-sm'
-                        : 'border-border bg-background text-secondary hover:border-brand-secondary hover:bg-surface-soft'
+                        ? 'border-brand-primary bg-surface-green text-brand-primary shadow-[0_4px_0_0_#064e2b] translate-y-[-2px]'
+                        : 'border-border bg-white text-secondary shadow-[0_2px_0_0_rgba(203,213,225,1)] hover:border-brand-secondary hover:translate-y-[-2px] hover:shadow-[0_4px_0_0_rgba(203,213,225,1)]'
                     }`}
                   >
-                    <Sparkles size={18} /> Tema Lainnya
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center ${temaMode === 'custom' ? 'bg-brand-primary text-white' : 'bg-surface-soft text-secondary'}`}>
+                      <Palette size={20} />
+                    </div>
+                    <span>Tema Lain</span>
                   </button>
                 </div>
+
 
                 <AnimatePresence>
                   {temaMode === 'custom' && (

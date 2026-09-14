@@ -171,17 +171,18 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
           {panels.map((panel, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, scale: 0.9, rotate: i % 2 === 0 ? -5 : 5 }}
-              animate={{ opacity: 1, scale: 1, rotate: i % 2 === 0 ? -1.5 : 1.5 }}
+              initial={{ opacity: 0, scale: 0.9, rotate: i % 2 === 0 ? -4 : 4, y: 50 }}
+              animate={{ opacity: 1, scale: 1, rotate: i % 2 === 0 ? -2 : 2, y: 0 }}
               transition={{ delay: i * 0.15, type: 'spring', stiffness: 200, damping: 20 }}
-              className="bg-background rounded-3xl overflow-hidden border-4 border-brand-primary shadow-[8px_8px_0_0_#064E2B] hover:shadow-[12px_12px_0_0_#064E2B] hover:-translate-y-1 transition-all flex flex-col group relative"
+              className="bg-white rounded-[2rem] p-4 md:p-5 border-[4px] border-primary shadow-[8px_8px_0_0_#022c22] hover:shadow-[12px_12px_0_0_#022c22] hover:-translate-y-2 transition-all flex flex-col group relative"
             >
               {/* Panel Number Badge */}
-              <div className="absolute top-4 left-4 w-12 h-12 bg-brand-primary text-white font-heading font-bold text-2xl flex items-center justify-center rounded-full border-4 border-surface shadow-sm z-20">
+              <div className="absolute -top-5 -left-5 w-12 h-12 bg-brand-accent text-primary font-black font-heading text-2xl flex items-center justify-center rounded-full border-[4px] border-primary shadow-[4px_4px_0_0_#022c22] z-30 transform -rotate-12 group-hover:rotate-0 transition-transform">
                 {i + 1}
               </div>
 
-              <div className="aspect-square bg-border-light relative flex items-center justify-center overflow-hidden border-b-4 border-brand-primary">
+              {/* Image Container */}
+              <div className="w-full aspect-square rounded-2xl overflow-hidden border-[4px] border-primary relative z-10 bg-surface-soft shadow-inner">
                 {images[i] ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img 
@@ -195,7 +196,7 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
                      <p className="text-danger font-bold mb-4 font-heading text-lg">Gagal memuat gambar</p>
                      <button 
                        onClick={() => generateImageForPanel(panel.imagePrompt, i)}
-                       className="px-4 py-2 bg-white rounded-lg border-2 border-border text-primary font-medium hover:border-brand-primary flex items-center gap-2 shadow-sm"
+                       className="px-4 py-2 bg-white rounded-lg border-2 border-border text-primary font-medium hover:border-primary flex items-center gap-2 shadow-[2px_2px_0_0_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1 transition-all"
                      >
                        <RefreshCw size={16} /> Coba Lagi
                      </button>
@@ -204,18 +205,20 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
               </div>
               
               {/* Comic Narrator Caption Box Style */}
-              <div className="p-6 md:p-8 bg-[#FFF9C4] border-t-4 border-brand-primary grow flex flex-col items-center justify-center relative">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 w-12 h-6 bg-[#FFF9C4] border-t-4 border-x-4 border-brand-primary rounded-t-full z-10" />
-                <button 
-                  onClick={() => speakText(panel.text)}
-                  className="absolute top-4 right-4 p-2 bg-white/50 hover:bg-white rounded-full text-brand-primary transition-colors z-20"
-                  aria-label="Bacakan cerita"
-                >
-                  <Volume2 size={24} />
-                </button>
-                <p className="text-primary font-bold text-xl md:text-2xl text-center leading-relaxed font-heading z-20 mt-2">
-                  {panel.text}
-                </p>
+              <div className="mt-[-2rem] relative z-20 mx-2 md:mx-6">
+                <div className="bg-[#FFF9C4] border-[4px] border-primary rounded-2xl p-5 md:p-6 shadow-[4px_4px_0_0_#022c22] flex flex-col items-center text-center relative group-hover:translate-y-[-4px] transition-transform duration-300">
+                  <button 
+                    onClick={() => speakText(panel.text)}
+                    className="absolute -top-4 -right-4 w-11 h-11 bg-brand-primary text-white rounded-full border-[3px] border-primary flex items-center justify-center hover:bg-brand-secondary transition-colors shadow-[2px_2px_0_0_#022c22] z-30"
+                    aria-label="Bacakan cerita"
+                    title="Bacakan cerita"
+                  >
+                    <Volume2 size={20} />
+                  </button>
+                  <p className="text-primary font-black text-lg md:text-xl leading-snug font-heading tracking-wide uppercase">
+                    {panel.text}
+                  </p>
+                </div>
               </div>
             </motion.div>
           ))}
