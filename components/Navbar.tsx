@@ -17,6 +17,12 @@ export default function Navbar() {
         </Link>
         <div className="flex items-center gap-3 sm:gap-4">
           <Link
+            href="/tracker"
+            className="text-label font-semibold text-secondary hover:text-primary transition-colors hidden sm:block"
+          >
+            Tracker
+          </Link>
+          <Link
             href="/login"
             className="text-label font-semibold text-secondary hover:text-primary transition-colors hidden sm:block"
           >
