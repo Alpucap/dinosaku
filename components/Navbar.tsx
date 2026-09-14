@@ -15,11 +15,13 @@ export default function Navbar() {
             priority
           />
         </Link>
-        <div className="flex items-center gap-3 sm:gap-4">
-          <Link
-            href="/login"
-            className="text-label font-semibold text-secondary hover:text-primary transition-colors hidden sm:block"
-          >
+        <nav className="hidden md:flex items-center gap-8 text-label text-secondary">
+          <Link href="/learn" className="hover:text-primary transition-colors">Learn</Link>
+          <Link href="#about" className="hover:text-primary transition-colors">About Us</Link>
+          <Link href="#contact" className="hover:text-primary transition-colors">Contact</Link>
+        </nav>
+        <div className="flex items-center gap-4">
+          <Link href="/login" className="text-label font-semibold text-secondary hover:text-primary transition-colors hidden sm:block">
             Masuk
           </Link>
           <Link
