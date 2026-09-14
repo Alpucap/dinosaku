@@ -7,8 +7,15 @@ import { AppSidebar } from "@/components/layout/AppSidebar";
 import { DashboardHeader } from "@/components/layout/DashboardHeader";
 import { learnMenuSections, learnRootHrefs } from "@/lib/menu/learn";
 import { LearnSidebarFooter } from "@/components/dino/Sidebar";
+import type { ProfileUser } from "@/components/layout/ProfileAvatar";
 
-export function LearnShell({ children }: { children: React.ReactNode }) {
+export function LearnShell({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user?: ProfileUser | null;
+}) {
   return (
     <SidebarProvider>
       <TooltipProvider>
@@ -24,7 +31,7 @@ export function LearnShell({ children }: { children: React.ReactNode }) {
           />
 
           <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-            <DashboardHeader title="Petualangan Belajar" />
+            <DashboardHeader title="Petualangan Belajar" user={user} />
             <main
               id="learning-content"
               tabIndex={-1}

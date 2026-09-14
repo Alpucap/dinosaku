@@ -8,12 +8,14 @@ import {
   SidebarMenuSection,
 } from "@/components/layout/AppSidebar";
 import { DashboardHeader } from "@/components/layout/DashboardHeader";
+import type { ProfileUser } from "@/components/layout/ProfileAvatar";
 
 interface DashboardShellProps {
   children: React.ReactNode;
   menuSections: SidebarMenuSection[];
   rootHrefs?: string[];
   title?: string;
+  user?: ProfileUser | null;
 }
 
 export function DashboardShell({
@@ -21,6 +23,7 @@ export function DashboardShell({
   menuSections,
   rootHrefs,
   title,
+  user,
 }: DashboardShellProps) {
   return (
     <SidebarProvider>
@@ -29,7 +32,7 @@ export function DashboardShell({
           <AppSidebar menuSections={menuSections} rootHrefs={rootHrefs} />
 
           <div className="flex flex-1 flex-col overflow-hidden">
-            <DashboardHeader title={title} />
+            <DashboardHeader title={title} user={user} />
             <main className="flex-1 overflow-y-auto p-4 sm:p-6">
               {children}
             </main>
