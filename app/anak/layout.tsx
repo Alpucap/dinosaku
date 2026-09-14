@@ -3,7 +3,11 @@ import { AnakShell } from "@/components/layout/AnakShell";
 import { requireRole } from "@/lib/auth/guard";
 
 export default async function AnakLayout({ children }: { children: ReactNode }) {
-  await requireRole(["children"]);
+  const user = await requireRole(["children"]);
 
-  return <AnakShell>{children}</AnakShell>;
+  return (
+    <AnakShell user={{ fullName: user.fullName, avatarUrl: user.avatarUrl }}>
+      {children}
+    </AnakShell>
+  );
 }

@@ -3,10 +3,10 @@ import Image from 'next/image';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
     return (
-        <div className="min-h-screen md:h-screen md:overflow-hidden bg-app flex flex-col md:flex-row font-sans">
+        <div className="flex-1 min-h-dvh bg-app flex flex-col lg:flex-row font-sans">
 
             {/* Bagian 1: Desain & Maskot (Desktop Only) */}
-            <div className="hidden lg:flex lg:w-1/2 lg:shrink-0 bg-brand-primary flex-col justify-center items-center p-12 relative overflow-hidden h-full">
+            <div className="hidden lg:flex lg:w-1/2 lg:shrink-0 lg:sticky lg:top-0 lg:h-dvh bg-brand-primary flex-col justify-center items-center p-12 relative overflow-hidden">
                 <div className="absolute top-10 left-10 w-64 h-64 bg-brand-secondary rounded-full blur-[80px] opacity-30 pointer-events-none"></div>
                 <div className="absolute bottom-10 right-10 w-64 h-64 bg-brand-accent rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
 
@@ -37,7 +37,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             </div>
 
             {/* Bagian 2: Content (Register/Login Form) */}
-            <div className="flex-1 overflow-y-auto flex flex-col p-4 sm:p-8 md:p-12 lg:py-16 lg:px-24 bg-gradient-to-br from-surface-soft to-white relative">
+            <div className="flex-1 flex flex-col p-4 sm:p-8 md:p-12 lg:py-16 lg:px-24 bg-gradient-to-br from-surface-soft to-white relative">
                 <div className="w-full max-w-lg mx-auto my-auto py-4">
                     {children}
                 </div>

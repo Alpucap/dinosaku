@@ -1,10 +1,15 @@
 import React from 'react';
 import { LearnShell } from '@/components/dino/LearnShell';
 import StorageNotice from '@/components/dino/StorageNotice';
+import { getSessionUser } from '@/lib/auth/session';
 
-export default function LearnLayout({ children }: { children: React.ReactNode }) {
+export default async function LearnLayout({ children }: { children: React.ReactNode }) {
+  const user = await getSessionUser();
+
   return (
-    <LearnShell>
+    <LearnShell
+      user={user ? { fullName: user.fullName, avatarUrl: user.avatarUrl } : null}
+    >
       <StorageNotice />
       {children}
     </LearnShell>

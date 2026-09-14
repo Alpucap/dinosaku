@@ -9,9 +9,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useSidebar } from "@/components/layout/SidebarProvider";
+import { ProfileAvatar, type ProfileUser } from "@/components/layout/ProfileAvatar";
 
 interface DashboardHeaderProps {
   title?: string;
+  user?: ProfileUser | null;
 }
 
 function LiveHeaderClock() {
@@ -80,7 +82,7 @@ function LiveHeaderClock() {
   );
 }
 
-export function DashboardHeader({ title }: DashboardHeaderProps) {
+export function DashboardHeader({ title, user }: DashboardHeaderProps) {
   const { toggleMobile } = useSidebar();
 
   return (
@@ -104,9 +106,10 @@ export function DashboardHeader({ title }: DashboardHeaderProps) {
         )}
       </div>
 
-      {/* Right Section: Live Clock */}
-      <div className="flex items-center gap-2">
+      {/* Right Section: Live Clock + Profil */}
+      <div className="flex items-center gap-2 sm:gap-3">
         <LiveHeaderClock />
+        {user && <ProfileAvatar user={user} />}
       </div>
     </header>
   );

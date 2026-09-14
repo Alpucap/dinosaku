@@ -3,7 +3,11 @@ import { AdminShell } from "@/components/layout/AdminShell";
 import { requireRole } from "@/lib/auth/guard";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  await requireRole(["admin"]);
+  const user = await requireRole(["admin"]);
 
-  return <AdminShell>{children}</AdminShell>;
+  return (
+    <AdminShell user={{ fullName: user.fullName, avatarUrl: user.avatarUrl }}>
+      {children}
+    </AdminShell>
+  );
 }
