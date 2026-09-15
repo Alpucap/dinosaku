@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { ChevronLeft } from 'lucide-react';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
     return (
@@ -10,8 +12,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
                 <div className="absolute top-10 left-10 w-64 h-64 bg-brand-secondary rounded-full blur-[80px] opacity-30 pointer-events-none"></div>
                 <div className="absolute bottom-10 right-10 w-64 h-64 bg-brand-accent rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
 
-                {/* Maskot */}
-                <div className="relative z-10 w-32 h-32 md:w-40 md:h-40 animate-[floatMascot_4s_ease-in-out_infinite]">
+                {/* Maskot - Bisa diklik untuk ke Beranda */}
+                <Link href="/" className="relative z-10 w-32 h-32 md:w-40 md:h-40 animate-[floatMascot_4s_ease-in-out_infinite] hover:scale-105 transition-transform cursor-pointer" title="Kembali ke Beranda">
                     <Image
                         src="/mascot/dino.png"
                         alt="Mascot Dinosaku"
@@ -19,7 +21,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
                         priority
                         className="object-contain drop-shadow-xl"
                     />
-                </div>
+                </Link>
 
                 {/* Bayangan Maskot */}
                 <div className="relative w-full h-4 mt-2">
@@ -38,6 +40,10 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
             {/* Bagian 2: Content (Register/Login Form) */}
             <div className="flex-1 flex flex-col p-4 sm:p-8 md:p-12 lg:py-16 lg:px-24 bg-gradient-to-br from-surface-soft to-white relative">
+                {/* Tombol Back untuk Mobile (karena maskot disembunyikan di mobile) */}
+                <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-text-secondary hover:text-brand-primary font-medium text-sm self-start mb-6 -ml-2 p-2 rounded-lg hover:bg-surface transition-colors">
+                    <ChevronLeft size={18} /> Beranda
+                </Link>
                 <div className="w-full max-w-lg mx-auto my-auto py-4">
                     {children}
                 </div>
