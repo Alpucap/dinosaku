@@ -84,8 +84,8 @@ model Gamification {
   updatedAt     DateTime         @updatedAt
   
   // Subscription & Gamification
-  aiCoins        Int              @default(2) // Free tier gets 2 coins
-  dailyCoinLimit Int?             // Optional limit set by parent/teacher
+  energy        Int              @default(1) // Free tier gets 1 energy/week
+  maxEnergy     Int?             // Limit set by parent/teacher
 }
 
 model Badge {

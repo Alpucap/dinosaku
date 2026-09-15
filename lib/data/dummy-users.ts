@@ -37,8 +37,8 @@ export interface User {
     gamification?: {
         totalPoints: number;
         currentStreak: number;
-        aiCoins?: number;
-        dailyCoinLimit?: number;
+        energy?: number;
+        maxEnergy?: number;
         totalBadges: number;
         badges: UserBadge[];
     };
@@ -76,13 +76,14 @@ export const DUMMY_USERS: User[] = [
         gamification: {
             totalPoints: 0,
             currentStreak: 0,
-            aiCoins: 30,
+            energy: 0,
+            maxEnergy: 0,
             totalBadges: 0,
             badges: []
         }
     },
 
-    // 3. ANAK PERTAMA (Terhubung ke Budi)
+    // 3. ANAK PERTAMA (Terhubung ke Budi - Free Plan)
     {
         id: "usr_child_001",
         email: "anak1@dinosaku.com",
@@ -91,12 +92,20 @@ export const DUMMY_USERS: User[] = [
         fullName: "Charlotte Santoso",
         role: "children",
         status: "active",
-        plan: "premium",
+        plan: "free",
         avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Charlotte",
         createdAt: "2024-05-10T10:35:00Z",
         preferences: { notificationsEnabled: false },
         parentId: "usr_parent_001",
-        classCode: "DINO-4A"
+        classCode: "DINO-4A",
+        gamification: {
+            totalPoints: 200,
+            currentStreak: 1,
+            energy: 1,
+            maxEnergy: 1,
+            totalBadges: 0,
+            badges: []
+        }
     },
 
     // 4. ANAK KEDUA (Terhubung ke Budi)
@@ -112,10 +121,18 @@ export const DUMMY_USERS: User[] = [
         avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Dina",
         createdAt: "2024-05-10T10:40:00Z",
         preferences: { notificationsEnabled: false },
-        parentId: "usr_parent_001"
+        parentId: "usr_parent_001",
+        gamification: {
+            totalPoints: 500,
+            currentStreak: 3,
+            energy: 3,
+            maxEnergy: 3,
+            totalBadges: 1,
+            badges: []
+        }
     },
 
-    // 4. ANAK KETIGA (Terhubung ke Budi - Free Plan)
+    // 5. ANAK KETIGA (Terhubung ke Budi - Premium Plan)
     {
         id: "usr_child_003",
         email: "anak3@dinosaku.com",
@@ -124,7 +141,7 @@ export const DUMMY_USERS: User[] = [
         fullName: "Bagas Santoso",
         role: "children",
         status: "active",
-        plan: "free",
+        plan: "premium",
         avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Bagas",
         createdAt: "2024-05-10T10:45:00Z",
         preferences: { notificationsEnabled: false },
@@ -132,8 +149,8 @@ export const DUMMY_USERS: User[] = [
         gamification: {
             totalPoints: 1250,
             currentStreak: 12,
-            aiCoins: 15,
-            dailyCoinLimit: 2,
+            energy: 3,
+            maxEnergy: 3,
             totalBadges: 2,
             badges: [
                 { id: "b1", icon: "🌱", title: "Penabung Pemula", description: "Mencatat pengeluaran pertama", unlocked: true },
@@ -161,7 +178,8 @@ export const DUMMY_USERS: User[] = [
         gamification: {
             totalPoints: 0,
             currentStreak: 0,
-            aiCoins: 250,
+            energy: 60,
+            maxEnergy: 60,
             totalBadges: 0,
             badges: []
         }
