@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getSessionUser } from '@/lib/auth/session';
 
 export async function GET() {
   try {
@@ -22,7 +23,10 @@ export async function GET() {
       ...(story.pagesData as any) // Include panels, quiz, etc.
     }));
 
-    return NextResponse.json({ stories: formattedStories });
+    const user = await getSessionUser();
+    const isPremium = user?.plan === 'premium';
+
+    return NextResponse.json({ stories: formattedStories, isPremium });
   } catch (error) {
     console.error('Error fetching preset stories:', error);
     return NextResponse.json({ error: 'Failed to fetch stories' }, { status: 500 });

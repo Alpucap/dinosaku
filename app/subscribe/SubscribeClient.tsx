@@ -8,7 +8,7 @@ export default function SubscribeClient() {
   const [planType, setPlanType] = useState<'b2c' | 'b2b'>('b2c');
 
   return (
-    <main className="flex-1 max-w-6xl mx-auto px-6 py-16 w-full">
+    <main className="flex-1 max-w-6xl mx-auto px-6 pt-32 pb-16 w-full">
       <div className="text-center max-w-2xl mx-auto mb-16">
         <h1 className="font-heading text-4xl font-bold text-text-primary mb-4">
           Investasi Terbaik untuk <span className="text-brand-primary">Masa Depan Finansial</span>
@@ -52,7 +52,7 @@ export default function SubscribeClient() {
             </div>
             
             <ul className="space-y-4 mb-8 flex-1">
-              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Akses 2 Misi Petualangan Pertama</span></li>
+              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">⚡ 1 Energi (Bonus Sambutan)</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Dasbor Pembimbing (Dasar)</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">1 Profil Anak</span></li>
               <li className="flex items-start gap-3 opacity-50"><X className="text-error shrink-0" size={20} /> <span className="text-text-secondary">Generate Cerita AI Tak Terbatas</span></li>
@@ -71,17 +71,17 @@ export default function SubscribeClient() {
             <div className="mb-8">
               <h3 className="font-bold text-brand-primary text-xl mb-2">Keluarga Premium</h3>
               <div className="flex items-baseline gap-1">
-                <span className="font-heading text-4xl font-bold text-text-primary">Rp 149.000</span>
+                <span className="font-heading text-4xl font-bold text-text-primary">Rp 99.000</span>
                 <span className="text-text-secondary font-semibold">/ bulan</span>
               </div>
               <p className="text-sm text-text-secondary mt-3">Investasi ideal untuk mengasah literasi finansial anak sejak dini.</p>
             </div>
             
             <ul className="space-y-4 mb-8 flex-1">
-              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary font-bold">30 Koin Petualangan AI / Bulan</span></li>
-              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Ortu bisa atur jatah koin harian anak</span></li>
+              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary font-bold">⚡ 3 Energi / Bulan (Maks 3 Anak = 9 Energi)</span></li>
+              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Ortu bisa atur jatah mingguan anak</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Fitur Target Tabungan & Penugasan Lengkap</span></li>
-              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Laporan Belajar AI Mingguan</span></li>
+              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Laporan Belajar AI Bulanan</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Hingga 3 Profil Anak</span></li>
             </ul>
             
@@ -96,14 +96,14 @@ export default function SubscribeClient() {
             <div className="mb-8">
               <h3 className="font-bold text-text-secondary text-xl mb-2 flex items-center gap-2"><GraduationCap size={24} /> Paket Kelas</h3>
               <div className="flex items-baseline gap-1">
-                <span className="font-heading text-4xl font-bold text-text-primary">Rp 990.000</span>
+                <span className="font-heading text-4xl font-bold text-text-primary">Rp 499.000</span>
                 <span className="text-text-secondary font-semibold">/ bulan</span>
               </div>
               <p className="text-sm text-text-secondary mt-3">Sempurna untuk guru yang ingin memantau literasi satu kelas.</p>
             </div>
             
             <ul className="space-y-4 mb-8 flex-1">
-              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary font-bold">250 Koin AI (Sistem Jatah per Murid)</span></li>
+              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary font-bold">⚡ 60 Energi / Bulan (Sistem Jatah)</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Lisensi Premium hingga 30 Murid</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Dasbor Guru (Analitik Kelas Lengkap)</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Beri Tugas (Misi Khusus) Serentak</span></li>
@@ -139,6 +139,37 @@ export default function SubscribeClient() {
           </div>
         </div>
       )}
+
+      {/* ADD ON SECTION */}
+      <div className="max-w-4xl mx-auto mt-20 pt-16 border-t border-border-light text-center">
+        <h2 className="font-heading text-2xl font-bold text-text-primary mb-2">Kehabisan Energi? Beli Tambahan (Top-Up)</h2>
+        <p className="text-text-secondary mb-10 max-w-xl mx-auto">
+          Tidak perlu *upgrade* langganan bulanan jika Anda hanya butuh membuat beberapa misi komik kustom ekstra bulan ini.
+        </p>
+
+        <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+          <div className="border border-border-strong rounded-2xl p-6 bg-surface flex items-center justify-between hover:shadow-card transition-shadow">
+            <div className="text-left">
+              <h4 className="font-bold text-brand-primary flex items-center gap-1"><Zap size={16} /> 5 Energi</h4>
+              <p className="font-heading text-xl font-bold text-text-primary mt-1">Rp 49.000</p>
+            </div>
+            <button className="bg-surface-soft border-2 border-brand-primary text-brand-primary px-5 py-2.5 rounded-xl font-bold hover:bg-brand-primary hover:text-white transition-colors">
+              Beli
+            </button>
+          </div>
+
+          <div className="border border-brand-accent rounded-2xl p-6 bg-[#fffaf0] flex items-center justify-between relative overflow-hidden hover:shadow-card transition-shadow">
+            <div className="absolute top-0 right-0 bg-brand-accent text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">Hemat 20%</div>
+            <div className="text-left">
+              <h4 className="font-bold text-brand-accent flex items-center gap-1"><Zap size={16} /> 15 Energi</h4>
+              <p className="font-heading text-xl font-bold text-text-primary mt-1">Rp 119.000</p>
+            </div>
+            <button className="bg-brand-accent text-white px-5 py-2.5 rounded-xl font-bold hover:bg-brand-accent/90 transition-colors shadow-sm">
+              Beli
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

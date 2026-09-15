@@ -84,9 +84,16 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
     
     panels.forEach((panel, i) => {
       if (panel.imageUrl) {
-         setImages(prev => ({ ...prev, [i]: panel.imageUrl! }));
+         const img = new window.Image();
+         img.src = panel.imageUrl;
+         img.onload = () => setImages(prev => ({ ...prev, [i]: panel.imageUrl! }));
+         img.onerror = () => setImages(prev => ({ ...prev, [i]: panel.imageUrl! })); // fallback agar tidak stuck
       } else if (panel.imagePrompt.startsWith('[MOCK]')) {
-         setImages(prev => ({ ...prev, [i]: 'https://placehold.co/600x600/EAF7ED/064E2B?text=MOCK+IMAGE' }));
+         const url = 'https://placehold.co/600x600/EAF7ED/064E2B?text=MOCK+IMAGE';
+         const img = new window.Image();
+         img.src = url;
+         img.onload = () => setImages(prev => ({ ...prev, [i]: url }));
+         img.onerror = () => setImages(prev => ({ ...prev, [i]: url }));
       } else {
          generateImageForPanel(panel.imagePrompt, i);
       }

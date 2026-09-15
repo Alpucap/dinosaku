@@ -96,13 +96,21 @@ export async function generateComicImage(prompt: string): Promise<string> {
 
     const inlineData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData;
     const base64Image = inlineData?.data;
-    const mimeType = inlineData?.mimeType || 'image/jpeg';
     
     if (!base64Image) {
       throw new Error("No image generated");
     }
     
-    return `data:${mimeType};base64,${base64Image}`;
+    // Konversi ke WEBP menggunakan sharp untuk mengompresi ukuran secara drastis!
+    const sharp = (await import('sharp')).default;
+    const buffer = Buffer.from(base64Image, 'base64');
+    const webpBuffer = await sharp(buffer)
+      .webp({ quality: 75 }) // Quality 75% for webp is very lightweight
+      .toBuffer();
+    
+    const webpBase64 = webpBuffer.toString('base64');
+    
+    return `data:image/webp;base64,${webpBase64}`;
   } catch (error) {
     console.error("Error generating image:", error);
     // Return a fallback or throw

@@ -103,9 +103,14 @@ export function applyQuizResult(profile: Profile, storyId: string, score: number
   if (!validResult(result)) throw new Error('Hasil kuis tidak valid.');
   const previous = profile.results.find(r => r.storyId === storyId);
   const best = previous && previous.score / previous.total >= score / total ? previous : result;
+  
+  // Syarat lulus: harus benar minimal 60% (misal 3 dari 5 soal)
+  const isPassed = score / total >= 0.6;
+  const newCompletedStories = isPassed ? [...new Set([...profile.completedStories, storyId])] : profile.completedStories;
+
   return {
     ...profile,
-    completedStories: [...new Set([...profile.completedStories, storyId])],
+    completedStories: newCompletedStories,
     results: [...profile.results.filter(r => r.storyId !== storyId), best],
     studyDays: [...new Set([...profile.studyDays, day])],
   };

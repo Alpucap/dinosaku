@@ -22,3 +22,22 @@ export async function GET() {
     return NextResponse.json({ error: 'Failed to fetch assignments' }, { status: 500 });
   }
 }
+
+export async function PATCH(req: Request) {
+  try {
+    const user = await getSessionUser();
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const { assignmentId, status } = await req.json();
+
+    const updated = await prisma.assignment.update({
+      where: { id: assignmentId, assigneeId: user.id },
+      data: { status }
+    });
+
+    return NextResponse.json({ assignment: updated });
+  } catch (error) {
+    console.error('Error updating assignment:', error);
+    return NextResponse.json({ error: 'Failed to update assignment' }, { status: 500 });
+  }
+}

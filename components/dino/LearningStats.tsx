@@ -22,6 +22,6 @@ export default function LearningStats() {
   return <div className="learning-stats" aria-label="Ringkasan progres">
     <div><span className="stat-icon"><Medal size={21} /></span><span><strong>{ready ? points : '...'}</strong><small>Poin terkumpul</small></span></div>
     <div><span className="stat-icon stat-icon-warm"><Flame size={21} /></span><span><strong>{ready ? streak : '...'} hari</strong><small>Streak belajar</small></span></div>
-    <div onDoubleClick={handleResetEnergy} title="Klik 2x untuk cheat reset energi (Developer)" className="cursor-pointer hover:bg-surface-soft transition-colors rounded-xl p-1 -m-1"><span className="stat-icon"><Zap size={21} /></span><span><strong>{ready ? energy : '...'} / 3</strong><small>Energi minggu ini</small></span></div>
+    <div onDoubleClick={handleResetEnergy} title="Klik 2x untuk cheat reset energi (Developer)" className="cursor-pointer hover:bg-surface-soft transition-colors rounded-xl p-1 -m-1"><span className="stat-icon"><Zap size={21} /></span><span><strong>{ready ? energy : '...'}</strong><small>Energi bulan ini</small></span></div>
   </div>;
 }

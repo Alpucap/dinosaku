@@ -74,7 +74,7 @@ export default async function PembimbingDashboardPage() {
         <div className="flex flex-col justify-center rounded-xl border border-warning/30 bg-warning-soft/30 p-5">
           <div className="flex items-center gap-2 text-warning">
             <span className="text-lg leading-none">⚡</span>
-            <span className="text-xs font-bold uppercase tracking-wider">Energi Mingguan</span>
+            <span className="text-xs font-bold uppercase tracking-wider">Energi Bulanan</span>
           </div>
           <p className="mt-2 font-heading text-3xl font-bold text-warning">{user.gamification?.energy || 0}</p>
         </div>

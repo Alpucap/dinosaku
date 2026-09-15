@@ -11,6 +11,7 @@ export default function StoriesLibraryPage() {
   const { profile, ready } = useProgress();
   const [presetStories, setPresetStories] = useState<any[]>([]);
   const [assignments, setAssignments] = useState<any[]>([]);
+  const [isPremium, setIsPremium] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function StoriesLibraryPage() {
         
         const storiesData = await storiesRes.json();
         if (storiesData.stories) setPresetStories(storiesData.stories);
+        if (storiesData.isPremium) setIsPremium(true);
 
         const assignData = await assignRes.json();
         if (assignData.assignments) setAssignments(assignData.assignments);
@@ -45,7 +47,7 @@ export default function StoriesLibraryPage() {
     </header>
 
     {assignments.length > 0 && (
-      <section className="mb-8 rounded-xl border-2 border-brand-primary bg-brand-primary/5 p-6 shadow-sm">
+      <section className="mt-8 mb-8 rounded-xl border-2 border-brand-primary bg-brand-primary/5 p-6 shadow-sm">
         <div className="flex items-start sm:items-center gap-4 flex-col sm:flex-row justify-between">
           <div>
             <h2 className="font-heading text-lg font-bold text-brand-primary flex items-center gap-2">
@@ -68,14 +70,17 @@ export default function StoriesLibraryPage() {
       <progress className="learning-progress mb-8" value={completed} max={Math.max(1, presetStories.length)} aria-label="Cerita selesai" />
       {(!ready || isLoading) ? <p role="status" className="py-10">Membuka peta petualangan...</p> : presetStories.length === 0 ? <p role="status">Cerita baru sedang disiapkan. Coba buat cerita sendiri dulu, ya!</p> : <ol className="adventure-path">{presetStories.map((story, index) => {
         const done = profile.completedStories.includes(story.id);
-        const unlocked = index === 0 || profile.completedStories.includes(presetStories[index - 1].id);
+        const isPaywalled = !isPremium && index >= 2;
+        const unlocked = (index === 0 || profile.completedStories.includes(presetStories[index - 1].id)) && !isPaywalled;
         const result = profile.results.find(r => r.storyId === story.id);
         return <li key={story.id} className={`adventure-stop ${done ? 'stop-done' : unlocked ? 'stop-current' : 'stop-locked'}`}>
           <span className="path-checkpoint" aria-hidden="true">{done ? <Check size={23} /> : unlocked ? index + 1 : <LockKeyhole size={21} />}</span>
           <article className="story-stop-card">
             <div className={`story-scene ${index % 2 ? 'scene-forest' : 'scene-space'}`} aria-hidden="true"><span className="scene-orbit" /><span className="scene-world" /><Image src="/mascot/dino.png" alt="" width={130} height={130} /><span className="scene-label">{story.themeLabel || (index % 2 ? 'Hutan Ajaib' : 'Luar Angkasa')}</span></div>
             <div className="story-stop-copy"><p className="eyebrow">Misi 0{index + 1} · {story.quiz?.length || 0} pertanyaan</p><h3>{story.title}</h3><p>{story.description}</p>
-              {unlocked ? <><Link href={`/learn/stories/${story.id}`} className={`mt-4 w-full px-4 py-3 ${done ? 'button-secondary' : 'button-primary'}`}><Play size={17} />{done ? 'Mainkan lagi' : 'Mainkan'}</Link>{result && <p className="mt-3 text-sm text-brand-primary">Nilai terbaik: {result.score} / {result.total}</p>}</> : <div className="locked-message"><LockKeyhole size={16} className="shrink-0" /><span>Selesaikan misi sebelumnya untuk membuka.</span></div>}
+              {unlocked ? <><Link href={`/learn/stories/${story.id}`} className={`mt-4 w-full px-4 py-3 ${done ? 'button-secondary' : 'button-primary'}`}><Play size={17} />{done ? 'Mainkan lagi' : 'Mainkan'}</Link>{result && <p className="mt-3 text-sm text-brand-primary">Nilai terbaik: {result.score} / {result.total}</p>}</> : 
+               isPaywalled ? <div className="locked-message bg-brand-accent-soft text-brand-accent-strong border border-brand-accent-soft rounded-lg p-3 flex gap-2 text-sm mt-3"><LockKeyhole size={16} className="shrink-0 mt-0.5" /><span>Berlangganan Premium untuk membuka misi ini dan misi selanjutnya!</span></div> :
+               <div className="locked-message"><LockKeyhole size={16} className="shrink-0" /><span>Selesaikan misi sebelumnya untuk membuka.</span></div>}
             </div>
           </article>
         </li>;

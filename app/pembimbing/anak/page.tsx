@@ -2,6 +2,7 @@ import { Flame, Star, Medal, UserRound } from "lucide-react";
 import { requireRole } from "@/lib/auth/guard";
 import { prisma } from "@/lib/prisma";
 import { getGuardianScopeLabel } from "@/lib/data/children";
+import UnlinkButton from "@/components/dino/UnlinkButton";
 
 const STATUS_LABEL: Record<string, string> = {
   active: "Aktif",
@@ -16,12 +17,12 @@ export default async function DaftarAnakPage() {
   if (guardian.role === 'teacher' && guardian.classCode) {
     children = await prisma.user.findMany({
       where: { role: 'CHILDREN', classCode: guardian.classCode },
-      include: { gamification: true, userBadges: true }
+      include: { gamification: true, userBadges: true, activities: { take: 1, orderBy: { createdAt: 'desc' } } }
     });
   } else if (guardian.role === 'parents') {
     children = await prisma.user.findMany({
       where: { role: 'CHILDREN', parentId: guardian.id },
-      include: { gamification: true, userBadges: true }
+      include: { gamification: true, userBadges: true, activities: { take: 1, orderBy: { createdAt: 'desc' } } }
     });
   }
 
@@ -96,9 +97,7 @@ export default async function DaftarAnakPage() {
                       Aktif
                     </span>
                   </div>
-                  <button className="text-red-600 hover:bg-red-50 rounded-lg px-2 py-1 text-[11px] font-bold transition-colors">
-                    {guardian.role === 'teacher' ? 'Keluarkan' : 'Putuskan'}
-                  </button>
+                  <UnlinkButton role={guardian.role} childName={child.fullName} childId={child.id} />
                 </div>
 
                 {game ? (
@@ -132,6 +131,15 @@ export default async function DaftarAnakPage() {
                   <p className="border-t border-border-light pt-3 text-xs text-text-muted">
                     Belum ada aktivitas belajar yang tercatat.
                   </p>
+                )}
+
+                {child.activities && child.activities.length > 0 && (
+                  <div className="border-t border-border-light pt-3">
+                    <p className="text-[10px] font-bold text-text-muted uppercase mb-1">Aktivitas Terakhir</p>
+                    <p className="text-xs text-brand-primary font-semibold truncate bg-brand-primary/5 px-2 py-1 rounded-md">
+                      {child.activities[0].title}
+                    </p>
+                  </div>
                 )}
               </li>
             );

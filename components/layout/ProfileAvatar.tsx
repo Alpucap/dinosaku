@@ -6,7 +6,7 @@ export type ProfileUser = {
   avatarUrl?: string;
   gamification?: {
     totalPoints?: number;
-    aiCoins?: number;
+    energy?: number;
   };
 };
 

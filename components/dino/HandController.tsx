@@ -5,7 +5,7 @@ import { initHandLandmarker } from '@/lib/gesture-control';
 import { HandLandmarker } from '@mediapipe/tasks-vision';
 import { Camera, CameraOff, Info } from 'lucide-react';
 
-export type Gesture = 'Open_Palm' | 'Closed_Fist' | 'Pointing_Up' | 'Thumb_Up' | 'Thumb_Down' | 'None';
+export type Gesture = 'One_Finger' | 'Two_Fingers' | 'Three_Fingers' | 'Thumb_Up' | 'Thumb_Down' | 'None';
 
 interface Props {
   onGesture?: (gesture: Gesture) => void;
@@ -107,28 +107,30 @@ export default function HandController({ onGesture, mode = 'quiz' }: Props) {
           const pinkyTip = landmarks[20];
           const pinkyMcp = landmarks[17];
 
-          const indexFolded = indexTip.y > indexMcp.y;
-          const middleFolded = middleTip.y > middleMcp.y;
-          const ringFolded = ringTip.y > ringMcp.y;
-          const pinkyFolded = pinkyTip.y > pinkyMcp.y;
           
-          const indexUp = indexTip.y < indexMcp.y;
-          const middleUp = middleTip.y < middleMcp.y;
+          const indexUp = landmarks[8].y < landmarks[6].y;
+          const middleUp = landmarks[12].y < landmarks[10].y;
+          const ringUp = landmarks[16].y < landmarks[14].y;
+          const pinkyUp = landmarks[20].y < landmarks[18].y;
 
           let gesture: Gesture = 'None';
+          
+          let fingersUp = 0;
+          if (indexUp) fingersUp++;
+          if (middleUp) fingersUp++;
+          if (ringUp) fingersUp++;
+          if (pinkyUp) fingersUp++;
 
-          if (indexUp && !middleUp && ringFolded && pinkyFolded) {
-            gesture = 'Pointing_Up';
-          } else if (indexUp && middleUp && !ringFolded && !pinkyFolded) {
-            gesture = 'Open_Palm';
-          } else if (indexFolded && middleFolded && ringFolded && pinkyFolded) {
-            // Check for thumb up: thumb is pointing up significantly, and it's higher than its IP
-            const isThumbUp = thumbTip.y < thumbIp.y && thumbTip.y < indexMcp.y;
-            if (isThumbUp) {
-              gesture = 'Thumb_Up';
-            } else {
-              gesture = 'Closed_Fist';
-            }
+          const isThumbUp = landmarks[4].y < landmarks[3].y && landmarks[4].y < landmarks[5].y;
+
+          if (fingersUp === 1 && indexUp) {
+            gesture = 'One_Finger';
+          } else if (fingersUp === 2 && indexUp && middleUp) {
+            gesture = 'Two_Fingers';
+          } else if (fingersUp === 3 && indexUp && middleUp && ringUp) {
+            gesture = 'Three_Fingers';
+          } else if (fingersUp === 0 && isThumbUp) {
+            gesture = 'Thumb_Up';
           }
 
           gestureHistory.current.push(gesture);
@@ -152,7 +154,7 @@ export default function HandController({ onGesture, mode = 'quiz' }: Props) {
              } else {
                  if (lastFiredGesture.current !== mostFrequent) {
                      const elapsed = now - gestureStartTime.current;
-                     const progress = Math.min((elapsed / 1500) * 100, 100);
+                     const progress = Math.min((elapsed / 1000) * 100, 100);
                      setHoldProgress(progress);
                      if (progress === 100) {
                          lastFiredGesture.current = mostFrequent;
@@ -194,9 +196,9 @@ export default function HandController({ onGesture, mode = 'quiz' }: Props) {
           <h4 className="font-bold text-primary mb-2 flex items-center gap-2"><Info size={16} /> Cara Main</h4>
           {mode === 'quiz' ? (
             <ul className="space-y-2">
-              <li>☝️ <b>Tunjuk:</b> Pilih A</li>
-              <li>✋ <b>Buka Tangan:</b> Pilih B</li>
-              <li>✊ <b>Genggam:</b> Pilih C</li>
+              <li>☝️ <b>Satu Jari:</b> Pilih A</li>
+              <li>✌️ <b>Dua Jari:</b> Pilih B</li>
+              <li>🤟 <b>Tiga Jari:</b> Pilih C</li>
               <li>👍 <b>Jempol:</b> Lanjut Soal</li>
             </ul>
           ) : (
@@ -234,9 +236,9 @@ export default function HandController({ onGesture, mode = 'quiz' }: Props) {
           {isEnabled && isReady && (
             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-xl shadow-md text-xs font-bold text-primary border-2 border-border whitespace-nowrap flex flex-col items-center gap-1 min-w-[80px]">
               <div>
-                {currentGesture === 'Pointing_Up' ? '☝️ Opsi A' :
-                 currentGesture === 'Open_Palm' ? '✋ Opsi B' :
-                 currentGesture === 'Closed_Fist' ? '✊ Opsi C' :
+                {currentGesture === 'One_Finger' ? '☝️ Opsi A' :
+                 currentGesture === 'Two_Fingers' ? '✌️ Opsi B' :
+                 currentGesture === 'Three_Fingers' ? '🤟 Opsi C' :
                  currentGesture === 'Thumb_Up' ? '👍 Lanjut' : '👀 Cari...'}
               </div>
               {holdProgress > 0 && holdProgress < 100 && (

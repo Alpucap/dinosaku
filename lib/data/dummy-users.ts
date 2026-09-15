@@ -187,6 +187,20 @@ export const DUMMY_USERS: User[] = [
         }
     },
 
+    
+    {
+        id: "usr_child_005", email: "murid2@dinosaku.com", username: "rara_m", password: "password123", fullName: "Rara Maharani", role: "children", status: "active", plan: "free", avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Rara", createdAt: "2024-06-15T08:00:00Z", preferences: { notificationsEnabled: false }, classCode: "DINO-4A", gamification: { totalPoints: 850, currentStreak: 5, energy: 1, maxEnergy: 1, totalBadges: 2, badges: [] }
+    },
+    {
+        id: "usr_child_006", email: "murid3@dinosaku.com", username: "dewa_k", password: "password123", fullName: "Dewa Kusuma", role: "children", status: "active", plan: "free", avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Dewa", createdAt: "2024-06-15T08:00:00Z", preferences: { notificationsEnabled: false }, classCode: "DINO-4A", gamification: { totalPoints: 1050, currentStreak: 7, energy: 1, maxEnergy: 1, totalBadges: 3, badges: [] }
+    },
+    {
+        id: "usr_child_007", email: "murid4@dinosaku.com", username: "sinta_p", password: "password123", fullName: "Sinta Permata", role: "children", status: "active", plan: "free", avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Sinta", createdAt: "2024-06-15T08:00:00Z", preferences: { notificationsEnabled: false }, classCode: "DINO-4A", gamification: { totalPoints: 420, currentStreak: 1, energy: 1, maxEnergy: 1, totalBadges: 1, badges: [] }
+    },
+    {
+        id: "usr_child_008", email: "murid5@dinosaku.com", username: "bima_w", password: "password123", fullName: "Bima Wijaya", role: "children", status: "active", plan: "free", avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Bima", createdAt: "2024-06-15T08:00:00Z", preferences: { notificationsEnabled: false }, classCode: "DINO-4A", gamification: { totalPoints: 1300, currentStreak: 10, energy: 1, maxEnergy: 1, totalBadges: 4, badges: [] }
+    },
+
     // 5. GURU
     {
         id: "usr_teacher_001",

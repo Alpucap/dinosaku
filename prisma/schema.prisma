@@ -84,7 +84,7 @@ model Gamification {
   updatedAt     DateTime         @updatedAt
   
   // Subscription & Gamification
-  energy        Int              @default(1) // Free tier gets 1 energy/week
+  energy        Int              @default(2) // Free tier gets 2 energy/month
   maxEnergy     Int?             // Limit set by parent/teacher
 }
 

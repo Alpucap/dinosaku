@@ -128,6 +128,16 @@ export default function DinoApp() {
       if (isStoryData(data?.story)) {
         setStoryId(`ai-${reservation}`);
         setStoryData(data.story);
+        
+        // JIKA INI MISI KHUSUS, UPDATE STATUS JADI COMPLETED (SINKRONISASI KE DASHBOARD GURU/ORTU)
+        if (assignmentId) {
+          fetch('/api/assignments', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ assignmentId, status: 'COMPLETED' }),
+          }).catch(console.error);
+        }
+
         setMode('comic');
       } else {
         throw new Error('Isi cerita belum lengkap. Coba lagi, ya!');
@@ -141,35 +151,6 @@ export default function DinoApp() {
     }
   };
 
-  const handleSaveToLocal = async () => {
-    if (!storyData) return;
-    setIsSaving(true);
-    try {
-      const res = await fetch('/api/save-preset', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          story: {
-            ...storyData,
-            theme: activeTema,
-            topic: activeMateri
-          }, 
-          images: generatedImages,
-          assignmentId: assignmentId || undefined
-        })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        alert('Berhasil disimpan ke Peta Petualangan (Database & Firebase)! Silakan buka halaman Petualangan.');
-      } else {
-        alert('Gagal: ' + data.error);
-      }
-    } catch (e) {
-      alert('Error saat menyimpan.');
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
   const handleSaveToCollection = async () => {
     if (!storyData) return;
@@ -486,15 +467,6 @@ export default function DinoApp() {
                 >
                   {isSaving ? <Loader2 className="animate-spin" /> : '📚'} {isSaving ? 'Menyimpan...' : 'Simpan ke Koleksiku'}
                 </button>
-                {process.env.NODE_ENV === 'development' && Object.keys(generatedImages).length > 0 && (
-                  <button 
-                    onClick={handleSaveToLocal}
-                    disabled={isSaving}
-                    className="button-secondary px-6 py-3 font-bold border-2 border-primary text-primary hover:bg-primary/10 flex gap-2 items-center"
-                  >
-                    {isSaving ? <Loader2 className="animate-spin" /> : '💾'} {isSaving ? 'Menyimpan...' : 'Simpan ke Peta Petualangan (Dev Mode)'}
-                  </button>
-                )}
               </div>
             </motion.div>
           )}

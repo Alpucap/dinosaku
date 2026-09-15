@@ -46,9 +46,9 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
       return;
     }
     const question = quiz[currentIndex];
-    if (gesture === 'Pointing_Up' && question.options[0]) handleSelect(question.options[0]);
-    if (gesture === 'Open_Palm' && question.options[1]) handleSelect(question.options[1]);
-    if (gesture === 'Closed_Fist' && question.options[2]) handleSelect(question.options[2]);
+    if (gesture === 'One_Finger' && question.options[0]) handleSelect(question.options[0]);
+    if (gesture === 'Two_Fingers' && question.options[1]) handleSelect(question.options[1]);
+    if (gesture === 'Three_Fingers' && question.options[2]) handleSelect(question.options[2]);
   }, [showResult, selectedAnswer, currentIndex, quiz]);
 
   useEffect(() => {
@@ -83,9 +83,30 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
     const before = readProgress().profiles.find(p => p.id === profileId)!;
     recordQuiz(profileId, storyId, score, quiz.length);
     const after = readProgress().profiles.find(p => p.id === profileId)!;
-    setNewBadges(getBadges(after).filter(id => !getBadges(before).includes(id)));
+    const currentBadges = getBadges(after);
+    setNewBadges(currentBadges.filter(id => !getBadges(before).includes(id)));
     resultSaved.current = true;
     setShowResult(true);
+
+    // SINKRONISASI KE DATABASE NEON
+    import('@/lib/progress').then(({ getPoints, getStreak }) => {
+      fetch('/api/progress/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          totalPoints: getPoints(after), 
+          badges: currentBadges,
+          currentStreak: getStreak(after.studyDays),
+          recentActivity: {
+            type: 'QUIZ_COMPLETED',
+            title: `Menyelesaikan Misi`,
+            score: score,
+            pointsEarned: 50 // Asumsi dasar penambahan poin kuis
+          }
+        })
+      }).catch(console.error);
+    });
+
     if (score === quiz.length) celebrate({ particleCount: 120, spread: 85, colors: ['#98CE36', '#F5C75E', '#064E2B'] });
   }
 
@@ -112,9 +133,14 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
         </div>
         
         <h2 className="text-4xl font-heading font-bold mb-3 text-brand-primary">Kuis Selesai!</h2>
-        <p className="text-xl text-secondary mb-10 font-medium">
+        <p className="text-xl text-secondary mb-2 font-medium">
           Skor kamu <span className="font-bold text-3xl text-brand-primary mx-2">{score}</span> dari {quiz.length}
         </p>
+        {score / quiz.length >= 0.6 ? (
+          <p className="text-success font-bold text-xl mb-10 flex items-center justify-center gap-2">🎉 Selamat, kamu LULUS Misi ini!</p>
+        ) : (
+          <p className="text-danger font-bold text-xl mb-10 flex items-center justify-center gap-2">❌ Belum lulus, ayo coba lagi!</p>
+        )}
 
         {newBadges.length > 0 && (
           <section aria-label="Lencana baru" className="mb-10 bg-surface-soft p-6 rounded-3xl border-4 border-border">
