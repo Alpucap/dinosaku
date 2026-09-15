@@ -1,4 +1,4 @@
-import { BookOpen, Map, Medal, Trophy, Pencil } from "lucide-react";
+import { BookOpen, Map, Medal, Trophy, Pencil, Wallet } from "lucide-react";
 import type { SidebarMenuSection } from "@/components/layout/AppSidebar";
 
 export const learnMenuSections: SidebarMenuSection[] = [
@@ -9,6 +9,7 @@ export const learnMenuSections: SidebarMenuSection[] = [
       { name: "Koleksi", href: "/learn/collection", icon: BookOpen },
       { name: "Lencana", href: "/learn/badges", icon: Medal },
       { name: "Peringkat", href: "/learn/leaderboard", icon: Trophy },
+      { name: "Dompet", href: "/learn/tracker", icon: Wallet },
     ],
   },
 ];

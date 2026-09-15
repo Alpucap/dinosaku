@@ -41,9 +41,9 @@ export default function GoalCard({
     };
 
     return (
-        <div className={`p-5 rounded-[24px] border-2 transition-all duration-300 transform hover:-translate-y-1 ${isPrimary
-                ? 'bg-emerald-50/90 border-emerald-400 shadow-[0_6px_0_0_#34D399]'
-                : 'bg-white border-emerald-100 hover:shadow-lg'
+        <div className={`p-5 rounded-2xl border transition-all duration-300 transform hover:-translate-y-1 ${isPrimary
+                ? 'bg-surface-green border-brand-primary shadow-sm'
+                : 'bg-surface border-border hover:shadow-md'
             }`}>
             <div className="flex justify-between items-start mb-3">
                 <div>
@@ -51,16 +51,16 @@ export default function GoalCard({
                         {isPrimary && (
                             <Image src="/mascot/dino.png" alt="Dino" width={24} height={24} className="object-contain drop-shadow-sm" />
                         )}
-                        <h4 className="font-extrabold text-lg text-[var(--color-brand-primary)]">{goal.title}</h4>
+                        <h4 className="font-heading font-bold text-lg text-brand-primary">{goal.title}</h4>
                         {isPrimary && (
-                            <span className="px-3 py-1 rounded-full text-xs font-black bg-[#98CE36] text-[#064E2B] uppercase tracking-wider shadow-sm flex items-center gap-1">
+                            <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-brand-accent text-brand-primary uppercase tracking-wider shadow-sm flex items-center gap-1">
                                 Target Utama
                             </span>
                         )}
                     </div>
                     {goal.deadline && (
-                        <p className="text-sm font-semibold text-gray-400 mt-1 flex items-center gap-1">
-                            Beli sebelum: <span className="text-gray-600">{goal.deadline}</span>
+                        <p className="text-sm font-medium text-text-muted mt-1 flex items-center gap-1">
+                            Beli sebelum: <span className="text-text-primary">{goal.deadline}</span>
                         </p>
                     )}
                 </div>
@@ -69,14 +69,14 @@ export default function GoalCard({
                     {!isPrimary && goal.status !== 'completed' && onSetPrimary && (
                         <button
                             onClick={() => onSetPrimary(goal.id)}
-                            className="text-xs font-bold text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-3 py-1.5 rounded-xl transition-colors shadow-sm"
+                            className="text-xs font-bold text-brand-primary hover:text-brand-primary-hover bg-brand-secondary/30 hover:bg-brand-secondary/50 px-3 py-1.5 rounded-lg transition-colors shadow-sm"
                         >
                             Jadikan Utama
                         </button>
                     )}
-                    <span className={`px-3 py-1.5 rounded-xl text-sm font-black border-2 ${progressPercent === 100
-                            ? 'bg-emerald-100 text-emerald-700 border-emerald-300'
-                            : 'bg-sky-100 text-sky-700 border-sky-300'
+                    <span className={`px-3 py-1.5 rounded-lg text-sm font-bold border ${progressPercent === 100
+                            ? 'bg-success-soft text-success border-success/30'
+                            : 'bg-info-soft text-info border-info/30'
                         }`}>
                         {progressPercent === 100 ? 'Hore Selesai!' : `${progressPercent}%`}
                     </span>
@@ -85,53 +85,52 @@ export default function GoalCard({
 
             {/* Progress Bar */}
             <div className="space-y-1 mt-4">
-                <div className="w-full bg-gray-100 rounded-full h-5 overflow-hidden border-2 border-gray-200 relative">
+                <div className="w-full bg-surface-soft rounded-full h-4 overflow-hidden border border-border relative">
                     <div
-                        className="bg-gradient-to-r from-[var(--color-brand-accent)] to-[#86B92F] h-full transition-all duration-1000 rounded-full relative"
+                        className="bg-brand-primary h-full transition-all duration-1000 rounded-full relative"
                         style={{ width: `${progressPercent}%` }}
                     >
-                        {/* Removed running emoji to clean up UI */}
                     </div>
                 </div>
-                <div className="flex justify-between text-sm font-bold text-gray-500 pt-1 px-1">
-                    <span>Terkumpul: <span className="text-emerald-600">{formatRupiah(goal.currentAmount)}</span></span>
+                <div className="flex justify-between text-sm font-medium text-text-secondary pt-1 px-1">
+                    <span>Terkumpul: <span className="text-brand-primary font-bold">{formatRupiah(goal.currentAmount)}</span></span>
                     <span>Target: {formatRupiah(goal.targetAmount)}</span>
                 </div>
             </div>
 
             {/* Action Input: Tambah Alokasi Tabungan */}
             {goal.status !== 'completed' && (
-                <div className="pt-4 border-t-2 border-dashed border-emerald-100 mt-3">
+                <div className="pt-4 border-t border-dashed border-border mt-3">
                     {!showAllocateInput ? (
                         <button
                             onClick={() => setShowAllocateInput(true)}
                             disabled={unallocatedBalance <= 0}
-                            className="w-full py-2.5 text-sm font-extrabold text-[#064E2B] bg-[#98CE36] hover:bg-[#86B92F] rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_4px_0_0_#75A625] active:translate-y-[2px] active:shadow-[0_2px_0_0_#75A625] flex items-center justify-center gap-2"
+                            className="w-full py-2.5 text-sm font-bold text-brand-primary bg-brand-accent hover:bg-brand-accent-hover rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:translate-y-0.5 flex items-center justify-center gap-2"
                         >
                             Masukkan Tabungan ke Sini!
                         </button>
                     ) : (
-                        <form onSubmit={handleAllocateSubmit} className="flex gap-2 items-center bg-gray-50 p-2 rounded-2xl border-2 border-gray-100">
-                            <span className="pl-2 font-bold text-gray-400">Rp</span>
+                        <form onSubmit={handleAllocateSubmit} className="flex gap-2 items-center bg-surface-soft p-2 rounded-xl border border-border">
+                            <span className="pl-2 font-bold text-text-muted">Rp</span>
                             <input
                                 type="number"
                                 placeholder={`Maks: ${unallocatedBalance}`}
                                 value={allocateAmount}
                                 onChange={(e) => setAllocateAmount(e.target.value)}
                                 max={unallocatedBalance}
-                                className="w-full bg-transparent outline-none font-bold text-emerald-700"
+                                className="w-full bg-transparent outline-none font-bold text-brand-primary"
                                 autoFocus
                             />
                             <button
                                 type="submit"
-                                className="px-4 py-2 bg-[var(--color-brand-primary)] text-white rounded-xl text-sm font-extrabold hover:bg-emerald-900 shadow-sm"
+                                className="px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-primary-hover shadow-sm"
                             >
                                 Nabung!
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setShowAllocateInput(false)}
-                                className="px-3 py-2 bg-gray-200 text-gray-600 rounded-xl text-sm font-bold hover:bg-gray-300"
+                                className="px-3 py-2 bg-surface text-text-secondary rounded-lg text-sm font-bold hover:bg-surface-soft border border-border"
                             >
                                 Batal
                             </button>

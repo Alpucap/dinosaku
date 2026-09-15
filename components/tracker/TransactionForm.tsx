@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { TransactionType, Category } from '@/types/tracker';
-import Image from 'next/image';
 
 interface TransactionFormProps {
     onSubmit: (data: { type: TransactionType; amount: number; category: Category; description: string; date: string }) => void;
@@ -33,18 +32,18 @@ export default function TransactionForm({ onSubmit }: TransactionFormProps) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-5 w-full">
-            <h3 className="text-xl font-extrabold text-[var(--color-brand-primary)] flex items-center gap-3">
+            <h3 className="text-xl font-heading font-bold text-brand-primary flex items-center gap-3">
                 Catat Uangmu
             </h3>
 
             {/* Selector Tipe Transaksi */}
-            <div className="flex gap-3 bg-gray-50 p-1.5 rounded-2xl border border-gray-100">
+            <div className="flex gap-2 bg-surface-soft p-1.5 rounded-xl border border-border">
                 <button
                     type="button"
                     onClick={() => setType('expense')}
-                    className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all duration-300 ${type === 'expense'
-                            ? 'bg-rose-500 text-white shadow-md transform scale-[1.02]'
-                            : 'bg-transparent text-gray-500 hover:bg-rose-100 hover:text-rose-600'
+                    className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${type === 'expense'
+                            ? 'bg-destructive text-white shadow-sm scale-[1.02]'
+                            : 'bg-transparent text-text-secondary hover:bg-destructive/10 hover:text-destructive'
                         }`}
                 >
                     Uang Keluar
@@ -52,9 +51,9 @@ export default function TransactionForm({ onSubmit }: TransactionFormProps) {
                 <button
                     type="button"
                     onClick={() => setType('income')}
-                    className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all duration-300 ${type === 'income'
-                            ? 'bg-[var(--color-brand-primary)] text-white shadow-md transform scale-[1.02]'
-                            : 'bg-transparent text-gray-500 hover:bg-emerald-100 hover:text-emerald-700'
+                    className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${type === 'income'
+                            ? 'bg-brand-primary text-white shadow-sm scale-[1.02]'
+                            : 'bg-transparent text-text-secondary hover:bg-brand-primary/10 hover:text-brand-primary'
                         }`}
                 >
                     Uang Masuk
@@ -63,15 +62,15 @@ export default function TransactionForm({ onSubmit }: TransactionFormProps) {
 
             {/* Input Nominal */}
             <div className="space-y-1.5">
-                <label className="text-sm font-bold text-gray-700 block">Jumlah Uang (Rp)</label>
+                <label className="text-sm font-semibold text-text-primary block">Jumlah Uang (Rp)</label>
                 <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-400">Rp</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-semibold text-text-muted">Rp</span>
                     <input
                         type="number"
                         placeholder="0"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
-                        className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-[var(--color-brand-accent)] focus:ring-4 focus:ring-emerald-50 outline-none transition-all font-bold text-lg"
+                        className="w-full pl-11 pr-4 py-3 bg-surface border-2 border-border rounded-xl focus:bg-surface focus:border-brand-primary outline-none transition-all font-semibold text-lg"
                         required
                     />
                 </div>
@@ -79,12 +78,12 @@ export default function TransactionForm({ onSubmit }: TransactionFormProps) {
 
             {/* Input Kategori */}
             <div className="space-y-1.5">
-                <label className="text-sm font-bold text-gray-700 block">Untuk Apa?</label>
+                <label className="text-sm font-semibold text-text-primary block">Kategori</label>
                 <div className="relative">
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value as Category)}
-                        className="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-[var(--color-brand-accent)] focus:ring-4 focus:ring-emerald-50 outline-none transition-all font-semibold appearance-none"
+                        className="w-full px-4 py-3 bg-surface border-2 border-border rounded-xl focus:bg-surface focus:border-brand-primary outline-none transition-all font-medium appearance-none text-text-primary"
                     >
                         {type === 'expense' ? (
                             <>
@@ -103,37 +102,41 @@ export default function TransactionForm({ onSubmit }: TransactionFormProps) {
                             </>
                         )}
                     </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted">
                         ▼
                     </div>
                 </div>
             </div>
 
-            {/* Input Deskripsi */}
+            {/* Keterangan */}
             <div className="space-y-1.5">
-                <label className="text-sm font-bold text-gray-700 block">Catatan Kecil</label>
+                <label className="text-sm font-semibold text-text-primary block">Catatan Pendek (Opsional)</label>
                 <input
                     type="text"
-                    placeholder="Misal: Beli es krim, Hadiah dari Nenek"
+                    placeholder="Beli es krim..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-[var(--color-brand-accent)] focus:ring-4 focus:ring-emerald-50 outline-none transition-all font-medium text-sm"
+                    className="w-full px-4 py-3 bg-surface border-2 border-border rounded-xl focus:bg-surface focus:border-brand-primary outline-none transition-all font-medium"
                 />
             </div>
 
-            {/* Input Tanggal */}
+            {/* Tanggal */}
             <div className="space-y-1.5">
-                <label className="text-sm font-bold text-gray-700 block">Tanggal Berapa?</label>
+                <label className="text-sm font-semibold text-text-primary block">Tanggal</label>
                 <input
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-[var(--color-brand-accent)] focus:ring-4 focus:ring-emerald-50 outline-none transition-all font-medium text-sm"
+                    className="w-full px-4 py-3 bg-surface border-2 border-border rounded-xl focus:bg-surface focus:border-brand-primary outline-none transition-all font-medium text-text-primary"
+                    required
                 />
             </div>
 
-            <button type="submit" className="w-full py-4 mt-2 bg-[var(--color-brand-accent)] hover:bg-[#86B92F] text-[var(--color-brand-primary)] font-extrabold text-lg rounded-2xl shadow-[0_4px_0_0_#75A625] hover:shadow-[0_2px_0_0_#75A625] hover:translate-y-[2px] transition-all active:shadow-none active:translate-y-[4px]">
-                {type === 'expense' ? 'Keluarkan Uang' : 'Simpan Uang'}
+            <button
+                type="submit"
+                className="w-full py-3.5 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold shadow-md hover:-translate-y-0.5 transition-all active:translate-y-0"
+            >
+                Simpan Catatan
             </button>
         </form>
     );
