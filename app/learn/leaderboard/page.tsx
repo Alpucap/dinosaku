@@ -12,6 +12,7 @@ export default async function LeaderboardPage() {
 
   // 1. Ambil Leaderboard Global (Top 10)
   const globalGamifications = await prisma.gamification.findMany({
+    where: { user: { role: 'CHILDREN' } },
     orderBy: { totalPoints: 'desc' },
     take: 10,
     include: { user: { select: { id: true, fullName: true, classCode: true, avatarUrl: true } } }
@@ -21,7 +22,7 @@ export default async function LeaderboardPage() {
   let classGamifications: any[] = [];
   if (user.classCode) {
     classGamifications = await prisma.gamification.findMany({
-      where: { user: { classCode: user.classCode } },
+      where: { user: { classCode: user.classCode, role: 'CHILDREN' } },
       orderBy: { totalPoints: 'desc' },
       take: 10,
       include: { user: { select: { id: true, fullName: true, avatarUrl: true } } }
