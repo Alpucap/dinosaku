@@ -696,6 +696,8 @@
 .ranking-current { background: #f3f7eb; border-radius: 12px; }
 .rank-number { width: 30px; flex-shrink: 0; text-align: center; font-size: 18px; }
 .rank-first { background: #fff0be; border: 1px solid #d8b664; border-radius: 8px; color: #70441a; padding: 4px 0; }
+.rank-second { background: #f1f3f4; border: 1px solid #bdc1c6; border-radius: 8px; color: #3c4043; padding: 4px 0; }
+.rank-third { background: #fbe9d7; border: 1px solid #d49a6a; border-radius: 8px; color: #733c16; padding: 4px 0; }
 .ranking-empty { text-align: center; padding: 22px; border-top: 1px solid #dce4d4; color: #4a5c50; }
 .profile-section { margin-top: 36px; scroll-margin-top: 24px; }
 .profile-picker { display: flex; flex-wrap: wrap; gap: 12px; }

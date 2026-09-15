@@ -25,8 +25,15 @@ export default async function LeaderboardPage() {
   let schoolName = 'Sekolah';
   
   if (user.classCode) {
-    if (user.schoolId) {
-      const school = DUMMY_SCHOOLS.find(s => s.id === user.schoolId);
+    // Cari guru yang memiliki classCode yang sama
+    const teacher = await prisma.user.findFirst({
+      where: { role: 'TEACHER', classCode: user.classCode }
+    });
+    
+    const schoolIdToUse = user.schoolId || teacher?.schoolId;
+    
+    if (schoolIdToUse) {
+      const school = DUMMY_SCHOOLS.find(s => s.id === schoolIdToUse);
       if (school) schoolName = school.name;
     }
 
@@ -61,10 +68,16 @@ export default async function LeaderboardPage() {
               const points = entry.totalPoints;
               const rank = index + 1;
               const isCurrentUser = entry.user.id === user.id;
+              let rankClass = '';
+              if (points > 0) {
+                if (rank === 1) rankClass = 'rank-first';
+                else if (rank === 2) rankClass = 'rank-second';
+                else if (rank === 3) rankClass = 'rank-third';
+              }
               
               return (
                 <li key={entry.id} className={isCurrentUser ? 'ranking-current' : ''}>
-                  <span className={`rank-number ${rank === 1 && points > 0 ? 'rank-first' : ''}`}>{rank}</span>
+                  <span className={`rank-number ${rankClass}`}>{rank}</span>
                   {entry.user.avatarUrl ? (
                     <img src={entry.user.avatarUrl} alt="" aria-hidden className="w-10 h-10 rounded-full border border-border" />
                   ) : (
@@ -105,9 +118,16 @@ export default async function LeaderboardPage() {
                 const rank = index + 1;
                 const isCurrentUser = entry.user.id === user.id;
                 
+                let rankClass = '';
+                if (points > 0) {
+                  if (rank === 1) rankClass = 'rank-first';
+                  else if (rank === 2) rankClass = 'rank-second';
+                  else if (rank === 3) rankClass = 'rank-third';
+                }
+                
                 return (
                   <li key={entry.id} className={isCurrentUser ? 'ranking-current' : ''}>
-                    <span className={`rank-number ${rank === 1 && points > 0 ? 'rank-first' : ''}`}>{rank}</span>
+                    <span className={`rank-number ${rankClass}`}>{rank}</span>
                     {entry.user.avatarUrl ? (
                       <img src={entry.user.avatarUrl} alt="" aria-hidden className="w-10 h-10 rounded-full border border-border" />
                     ) : (
