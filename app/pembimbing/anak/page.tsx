@@ -85,15 +85,20 @@ export default async function DaftarAnakPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                  {child.classCode && (
-                    <span className="rounded-full bg-brand-accent-soft px-2.5 py-1 text-[11px] font-semibold text-brand-primary">
-                      {child.classCode}
+                <div className="flex flex-wrap gap-2 items-center justify-between">
+                  <div className="flex flex-wrap gap-2">
+                    {child.classCode && (
+                      <span className="rounded-full bg-brand-accent-soft px-2.5 py-1 text-[11px] font-semibold text-brand-primary">
+                        {child.classCode}
+                      </span>
+                    )}
+                    <span className="rounded-full bg-surface-soft px-2.5 py-1 text-[11px] font-semibold text-text-secondary">
+                      Aktif
                     </span>
-                  )}
-                  <span className="rounded-full bg-surface-soft px-2.5 py-1 text-[11px] font-semibold text-text-secondary">
-                    Aktif
-                  </span>
+                  </div>
+                  <button className="text-red-600 hover:bg-red-50 rounded-lg px-2 py-1 text-[11px] font-bold transition-colors">
+                    {guardian.role === 'teacher' ? 'Keluarkan' : 'Putuskan'}
+                  </button>
                 </div>
 
                 {game ? (
