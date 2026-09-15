@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma';
 import { getSessionUser } from '@/lib/auth/session';
 import { redirect } from 'next/navigation';
 
+import { DUMMY_SCHOOLS } from '@/lib/data/dummy-schools';
+
 export default async function LeaderboardPage() {
   const user = await getSessionUser();
   if (!user || user.role !== 'children') {
@@ -24,7 +26,7 @@ export default async function LeaderboardPage() {
   
   if (user.classCode) {
     if (user.schoolId) {
-      const school = await prisma.school.findUnique({ where: { id: user.schoolId } });
+      const school = DUMMY_SCHOOLS.find(s => s.id === user.schoolId);
       if (school) schoolName = school.name;
     }
 
