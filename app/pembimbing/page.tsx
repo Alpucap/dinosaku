@@ -49,7 +49,7 @@ export default async function PembimbingDashboardPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
         <div className="flex flex-col justify-center rounded-xl border border-default bg-surface p-5">
           <div className="flex items-center gap-2 text-text-secondary">
             <Users className="h-4 w-4" />
@@ -70,6 +70,13 @@ export default async function PembimbingDashboardPage() {
             <span className="text-xs font-semibold uppercase tracking-wider">Total Lencana</span>
           </div>
           <p className="mt-2 font-heading text-3xl font-bold text-brand-primary">{totalBadges}</p>
+        </div>
+        <div className="flex flex-col justify-center rounded-xl border border-warning/30 bg-warning-soft/30 p-5">
+          <div className="flex items-center gap-2 text-warning">
+            <span className="text-lg leading-none">⚡</span>
+            <span className="text-xs font-bold uppercase tracking-wider">Energi Mingguan</span>
+          </div>
+          <p className="mt-2 font-heading text-3xl font-bold text-warning">{user.gamification?.energy || 0}</p>
         </div>
       </div>
 
