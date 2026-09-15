@@ -46,9 +46,9 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
       return;
     }
     const question = quiz[currentIndex];
-    if (gesture === 'Pointing_Up' && question.options[0]) handleSelect(question.options[0]);
-    if (gesture === 'Victory' && question.options[1]) handleSelect(question.options[1]);
-    if (gesture === 'ILoveYou' && question.options[2]) handleSelect(question.options[2]);
+    if (gesture === 'One_Finger' && question.options[0]) handleSelect(question.options[0]);
+    if (gesture === 'Two_Fingers' && question.options[1]) handleSelect(question.options[1]);
+    if (gesture === 'Five_Fingers' && question.options[2]) handleSelect(question.options[2]);
   }, [showResult, selectedAnswer, currentIndex, quiz, handleNext, handleSelect]);
 
   useEffect(() => {

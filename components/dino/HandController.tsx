@@ -5,7 +5,7 @@ import { initHandLandmarker } from '@/lib/gesture-control';
 import { HandLandmarker } from '@mediapipe/tasks-vision';
 import { Camera, CameraOff, Info } from 'lucide-react';
 
-export type Gesture = 'One_Finger' | 'Two_Fingers' | 'Three_Fingers' | 'Thumb_Up' | 'Thumb_Down' | 'None';
+export type Gesture = 'One_Finger' | 'Two_Fingers' | 'Five_Fingers' | 'Thumb_Up' | 'Thumb_Down' | 'None';
 
 interface Props {
   onGesture?: (gesture: Gesture) => void;
@@ -127,8 +127,8 @@ export default function HandController({ onGesture, mode = 'quiz' }: Props) {
             gesture = 'One_Finger';
           } else if (fingersUp === 2 && indexUp && middleUp) {
             gesture = 'Two_Fingers';
-          } else if (fingersUp === 3 && indexUp && middleUp && ringUp) {
-            gesture = 'Three_Fingers';
+          } else if (fingersUp >= 4) {
+            gesture = 'Five_Fingers';
           } else if (fingersUp === 0 && isThumbUp) {
             gesture = 'Thumb_Up';
           }
@@ -196,9 +196,9 @@ export default function HandController({ onGesture, mode = 'quiz' }: Props) {
           <h4 className="font-bold text-primary mb-2 flex items-center gap-2"><Info size={16} /> Cara Main</h4>
           {mode === 'quiz' ? (
             <ul className="space-y-2">
-              <li>☝️ <b>Telunjuk:</b> Pilih A</li>
-              <li>✌️ <b>Peace (2 Jari):</b> Pilih B</li>
-              <li>🤟 <b>Metal (3 Jari):</b> Pilih C</li>
+              <li>☝️ <b>Satu Jari:</b> Pilih A</li>
+              <li>✌️ <b>Dua Jari:</b> Pilih B</li>
+              <li>🖐️ <b>Lima Jari:</b> Pilih C</li>
               <li>👍 <b>Jempol:</b> Lanjut Soal</li>
             </ul>
           ) : (
