@@ -196,9 +196,9 @@ export default function HandController({ onGesture, mode = 'quiz' }: Props) {
           <h4 className="font-bold text-primary mb-2 flex items-center gap-2"><Info size={16} /> Cara Main</h4>
           {mode === 'quiz' ? (
             <ul className="space-y-2">
-              <li>☝️ <b>Satu Jari:</b> Pilih A</li>
-              <li>✌️ <b>Dua Jari:</b> Pilih B</li>
-              <li>🤟 <b>Tiga Jari:</b> Pilih C</li>
+              <li>☝️ <b>Telunjuk:</b> Pilih A</li>
+              <li>✌️ <b>Peace (2 Jari):</b> Pilih B</li>
+              <li>🤟 <b>Metal (3 Jari):</b> Pilih C</li>
               <li>👍 <b>Jempol:</b> Lanjut Soal</li>
             </ul>
           ) : (
