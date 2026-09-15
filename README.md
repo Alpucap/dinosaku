@@ -1,83 +1,124 @@
-# 🦖 Dinosaku
+# 🦖 Dinosaku: Generative AI for Kids Financial Literacy
 
-Dinosaku adalah platform edukasi literasi finansial interaktif yang dirancang khusus untuk anak-anak. Melalui perpaduan teknologi *Generative AI* (Google Gemini) dan gamifikasi, Dinosaku menyajikan pengalaman belajar mengelola keuangan melalui cerita petualangan yang menyenangkan dan dipersonalisasi.
+Dinosaku is an interactive financial literacy platform designed specifically for children. By blending Generative AI (Google Gemini) and gamification, Dinosaku delivers an engaging and personalized learning experience about managing money through interactive adventure stories.
 
-## ✨ Fitur Utama
+---
 
-- 🗺️ **Peta Petualangan (Adventure Map)**: Jalur belajar terstruktur di mana anak-anak dapat menyelesaikan berbagai babak cerita dan kuis seputar literasi finansial.
-- 🤖 **Cerita & Kuis Cerdas bertenaga AI**: Menggunakan Google Gemini API untuk menghasilkan cerita bergambar (komik) dan kuis secara dinamis sesuai dengan topik (Menabung, Investasi, dll) dan tema (Luar Angkasa, Bawah Laut, dll).
-- 👨‍🏫 **Dasbor Pembimbing (Guru & Orang Tua)**: Portal khusus bagi orang tua dan guru untuk memantau progres belajar, poin, serta target tabungan dunia nyata dari anak-anak/murid mereka.
-- 🎯 **Sistem Penugasan (Misi Khusus)**: Fitur bagi Pembimbing untuk memberikan "tugas" (misi spesifik) kepada anak dengan topik dan tema tertentu. Anak akan menerima notifikasi *Banner* Misi saat mereka *login*.
-- 🏆 **Gamifikasi Lengkap**: Menggunakan sistem Poin, *Streak* (aktivitas beruntun), dan Lencana (*Badges*) untuk memastikan anak tetap termotivasi belajar.
+## 🌟 Core Features
 
-## 🛠️ Teknologi yang Digunakan
+- 🗺️ **Adventure Map (Peta Petualangan)**: A structured learning path where children can complete various story chapters and quizzes regarding financial literacy.
+- 🤖 **AI-Powered Stories & Quizzes**: Utilizes the Google Gemini API to dynamically generate illustrated stories (comics) and quizzes based on specific topics (e.g., Saving, Investment) and themes (e.g., Space, Underwater).
+- 👨‍🏫 **Guardian Dashboard (Dasbor Pembimbing)**: A dedicated portal for parents and teachers to monitor learning progress, points, and real-world saving goals of their children/students.
+- 🎯 **Mission & Assignments (Penugasan)**: A feature for Guardians to assign specific "missions" to children. Children will receive a prominent Mission Banner notification upon logging in.
+- 🏆 **Gamification Engine**: Features Points, Streaks, and Badges to ensure children stay highly motivated to learn.
+
+---
+
+## 🔐 Demo Logic Credentials (For Judges & Testing)
+
+The application is pre-seeded with dummy accounts to help you test all features seamlessly without needing to register. **No password is required**, simply select the profile from the Login page.
+
+### 1. Children Role
+- **Name/Username:** Bagas (`bagas_s`)
+- **Use Case:** Test the core learning loop. View the Adventure Map, read AI-generated stories, complete quizzes to earn points, and view unlocked badges. Try completing a "Special Mission" if assigned by a teacher.
+
+### 2. Teacher Role
+- **Name/Username:** Budi Guru (`budi_guru`)
+- **Use Case:** Access the Guardian Dashboard. View the class leaderboard, track total points of all students, and use the **"Penugasan"** menu to assign a new learning topic to a specific student (e.g., Bagas). 
+
+### 3. Parent Role
+- **Name/Username:** Cindy Mom (`cindy_mom`)
+- **Use Case:** Access the Guardian Dashboard scoped only to their own child. Monitor the child's real-world "Saving Goal" (Target Tabungan) progress and learning activity timeline.
+
+---
+
+## 🛠️ Technology Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router) + React
-- **Database ORM**: [Prisma](https://www.prisma.io/)
-- **Database Relasional**: PostgreSQL (via [Neon](https://neon.tech/))
-- **Storage**: Firebase Storage (Untuk menyimpan aset gambar AI)
-- **Kecerdasan Buatan**: Google Gemini API
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Database**: PostgreSQL (via [Neon](https://neon.tech/))
+- **Storage**: Firebase Storage (For saving AI-generated story images)
+- **AI Engine**: Google Gemini API
 - **Styling**: Tailwind CSS
-- **Ikon**: Lucide React
+- **Icons**: Lucide React
 
-## 🚀 Panduan Instalasi Lokal (Setup)
+---
 
-Ikuti langkah-langkah di bawah ini untuk menjalankan proyek Dinosaku secara lokal di mesin Anda.
+## 🚀 Installation Steps
 
-### 1. Kloning Repositori
+Follow these steps to run the Dinosaku project locally on your machine.
+
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/Alpucap/dinosaku.git
 cd dinosaku
 ```
 
-### 2. Instalasi Dependensi
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Konfigurasi Environment Variables (`.env`)
-Buat file `.env` di *root directory* proyek Anda dan lengkapi kredensial berikut:
+### 3. Sync the Database
+Push the Prisma schema to your PostgreSQL database to create the necessary tables and generate the Prisma Client:
+```bash
+npx prisma db push
+```
+
+### 4. Run the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+
+---
+
+## ⚙️ Configuration Parameters (`.env`)
+
+Create a `.env` file in the root directory. You must configure the following parameters for the app to function properly:
 
 ```env
-# URL Database PostgreSQL (Neon / Supabase / dll)
+# [REQUIRED] PostgreSQL Database URL (e.g., Neon, Supabase, local PostgreSQL)
+# Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=require
 DATABASE_URL="postgresql://user:password@host:port/db_name?sslmode=require"
 
-# API Key Google Gemini
+# [REQUIRED] Google Gemini API Key
+# Obtain this from Google AI Studio. Used for generating stories and quizzes.
 GEMINI_API_KEY="AIzaSy..."
 
-# Konfigurasi Firebase Admin SDK (Untuk Cloud Storage)
+# [REQUIRED] Firebase Admin SDK Configuration
+# Used for securely uploading base64 images generated by the app to Firebase Storage.
+# Obtain these from your Firebase Console -> Project Settings -> Service Accounts.
 FIREBASE_PROJECT_ID="dinosaku-xxx"
 FIREBASE_CLIENT_EMAIL="firebase-adminsdk-xxx@dinosaku-xxx.iam.gserviceaccount.com"
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 FIREBASE_STORAGE_BUCKET="dinosaku-xxx.appspot.com"
 ```
 
-### 4. Sinkronisasi Database
-Jalankan perintah berikut untuk mendorong skema ke dalam database PostgreSQL Anda dan men-*generate* Prisma Client:
-```bash
-npx prisma db push
-```
-
-*(Catatan: Aplikasi ini sudah dilengkapi dengan beberapa data dummy akun untuk testing di `lib/data/dummy-users.ts`)*
-
-### 5. Jalankan Development Server
-```bash
-npm run dev
-```
-Buka [http://localhost:3000](http://localhost:3000) di *browser* Anda untuk melihat hasilnya.
-
 ---
 
-## 👥 Akun Testing (Dummy)
+## 📖 User Guide & Walkthrough
 
-Anda dapat masuk (Login) menggunakan salah satu akun berikut tanpa perlu *password*:
+Here is a quick guide on how to navigate and use the application:
 
-| Nama / Peran | Tipe Akun | *Use Case* |
-| --- | --- | --- |
-| **Bagas** | Anak | Melihat Peta Petualangan, membaca cerita AI, dan menyelesaikan kuis. |
-| **Budi Guru** | Guru | Melihat Dasbor Pembimbing, progres seluruh murid, dan memberikan tugas. |
-| **Cindy Mom** | Orang Tua | Memantau tabungan anak spesifik dan memberikan misi harian. |
+### Flow 1: Learning as a Child
+1. Go to `http://localhost:3000/login` and click on **Bagas**.
+2. You will land on the **Adventure Map**.
+3. If a teacher has assigned a mission, you will see a banner at the top. Click **"Mulai Misi Khusus"** to auto-generate a story based on the teacher's requirement.
+4. Alternatively, click on any unlocked node on the map, read the comic, and answer the quiz at the end to earn points and badges.
+
+### Flow 2: Assigning a Mission as a Teacher
+1. Go to `http://localhost:3000/login` and click on **Budi Guru**.
+2. You will land on the **Guardian Dashboard** showing class statistics.
+3. On the sidebar, click **"Penugasan"** (Assignments).
+4. Fill out the "Buat Misi Baru" form: Select a child (e.g., Bagas), pick a Financial Topic (e.g., "Menabung"), and pick a Theme (e.g., "Luar Angkasa"). Click Submit.
+5. The assignment will appear in the History list as "Pending". It will automatically change to "Completed" once the child finishes the story.
+
+### Flow 3: Monitoring Savings as a Parent
+1. Go to `http://localhost:3000/login` and click on **Cindy Mom**.
+2. On the sidebar, click **"Target Tabungan"** (Savings Goal).
+3. View the visual progress bar of what the child is currently saving for (e.g., "Beli Robot Dinosaurus - 30% Terkumpul"). 
+4. Click **"Progres Belajar"** to see a chronological timeline of when the child read stories and what quiz scores they received.
 
 ---
-
-Dibuat dengan ❤️ untuk literasi finansial anak usia dini.
+*Built with ❤️ for early childhood financial literacy.*
