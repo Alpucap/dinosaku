@@ -2,9 +2,11 @@ import React from 'react';
 import { LearnShell } from '@/components/dino/LearnShell';
 import StorageNotice from '@/components/dino/StorageNotice';
 import { getSessionUser } from '@/lib/auth/session';
+import { redirect } from 'next/navigation';
 
 export default async function LearnLayout({ children }: { children: React.ReactNode }) {
   const user = await getSessionUser();
+  if (!user) redirect('/login');
 
   return (
     <LearnShell
