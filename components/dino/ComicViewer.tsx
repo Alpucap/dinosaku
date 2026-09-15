@@ -31,8 +31,8 @@ export default function ComicViewer({ title, panels, onComplete }: { title: stri
       utterance.pitch = 1.1;
       
       utterance.onerror = (e) => {
-        console.error("Speech error:", e);
-        alert("Gagal memutar suara. Pastikan browser/OS kamu mendukung Text-to-Speech.");
+        if (e.error === 'interrupted' || e.error === 'canceled') return;
+        console.warn("Speech error:", e.error);
       };
       
       window.speechSynthesis.speak(utterance);
