@@ -1,25 +1,14 @@
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
-
-// Lib
-import { DUMMY_USERS } from '@/lib/data/dummy-users';
+import { getSessionUser } from '@/lib/auth/session';
 
 export default async function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    // Ambil cookie session
-    const cookieStore = await cookies();
-    const sessionId = cookieStore.get('dinosaku_session')?.value;
+    const user = await getSessionUser();
 
     // Proteksi Route
-    if (!sessionId) {
-        redirect('/login');
-    }
-
-    // Validasi user
-    const user = DUMMY_USERS.find(u => u.id === sessionId);
     if (!user) {
         redirect('/login');
     }

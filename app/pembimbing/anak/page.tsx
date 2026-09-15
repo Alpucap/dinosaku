@@ -27,15 +27,13 @@ export default async function DaftarAnakPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h2 className="font-heading text-xl font-bold text-text-primary">
-          Daftar Anak
-        </h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          {getGuardianScopeLabel(guardian as any)} — {children.length} anak.
-        </p>
-      </div>
+    <div className="learning-page">
+      <header className="page-heading">
+        <p className="eyebrow">Manajemen Murid / Anak</p>
+        <h1>Daftar Anak</h1>
+        <p>{getGuardianScopeLabel(guardian as any)} — {children.length} anak.</p>
+      </header>
+      <div className="flex flex-col gap-6">
 
       {children.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border-strong bg-surface px-6 py-14 text-center">
@@ -146,6 +144,7 @@ export default async function DaftarAnakPage() {
           })}
         </ul>
       )}
+    </div>
     </div>
   );
 }

@@ -13,12 +13,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/components/ui/toast";
 
 // Icon
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, UserCircle2, GraduationCap, Users } from "lucide-react";
 
 // Lib
 import { validateLoginForm } from "@/lib/validations/auth";
-import { DUMMY_USERS } from "@/lib/data/dummy-users";
-import { getDashboardPath } from "@/lib/constants/roles";
+import { loginUserAction } from "../actions";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -38,9 +37,20 @@ export default function LoginPage() {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
 
+        // Hapus pesan error saat user mengetik
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
+    };
+
+    const handleFastLogin = (email: string) => {
+        setFormData({
+            email: email,
+            password: 'password123',
+            rememberMe: false
+        });
+        // Scroll ke form
+        document.getElementById('email')?.focus();
     };
 
     const handleSubmit = async (e: FormEvent) => {
@@ -50,34 +60,27 @@ export default function LoginPage() {
 
         if (Object.keys(newErrors).length === 0) {
             setIsSubmitting(true);
+            setErrors({});
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Server Action
+            const result = await loginUserAction(formData.email, formData.password);
 
-            // Verifikasi dengan data dummy (email atau username)
-            const user = DUMMY_USERS.find(u => 
-                (u.email === formData.email || u.username === formData.email) && 
-                u.password === formData.password
-            );
-
-            // Jika login berhasil
-            if (user) {
+            if (result.success && result.redirectUrl) {
                 setIsRedirecting(true);
                 
-                // Set cookie untuk simulasi session
-                document.cookie = `dinosaku_session=${user.id}; path=/; max-age=86400`; // 1 hari
-
                 toast.add({
                     title: "Login Berhasil",
-                    description: `Selamat datang kembali, ${user.fullName}!`,
+                    description: `Selamat datang kembali!`,
                     type: "success",
                     timeout: 3000
                 });
+                
                 setTimeout(() => {
-                    router.push(getDashboardPath(user.role));
-                }, 1500);
+                    router.push(result.redirectUrl as string);
+                }, 1000);
             } else {
                 setIsSubmitting(false);
-                setErrors({ root: 'Email atau kata sandi yang Anda masukkan salah.' });
+                setErrors({ root: result.error || 'Email atau kata sandi yang Anda masukkan salah.' });
             }
         } else {
             setErrors(newErrors);
@@ -85,38 +88,65 @@ export default function LoginPage() {
     };
 
     return (
-        <Card className="w-full shadow-xl border-t-[6px] border-brand-primary rounded-xl bg-surface relative z-10 overflow-hidden">
-            <CardContent className="p-6 md:p-8 pt-6 md:pt-6">
-                {/* Header untuk mobile/tablet */}
-                <div className="lg:hidden flex flex-col items-center text-center mb-4 relative">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary rounded-full blur-[40px] opacity-20 pointer-events-none"></div>
-                    <div className="relative z-10 w-24 h-24 md:w-32 md:h-32 animate-[floatMascot_4s_ease-in-out_infinite]">
+        <Card className="w-full max-w-md mx-auto shadow-card border-2 border-border-light rounded-3xl overflow-hidden bg-background">
+            <CardContent className="p-6 sm:p-10 flex flex-col gap-8">
+                {/* Logo & Judul */}
+                <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="relative h-16 w-16 mb-2">
                         <Image
-                            src="/mascot/dino.png"
-                            alt="Mascot Dinosaku"
+                            src="/mascot/dino-happy.svg"
+                            alt="Dinosaku Logo"
                             fill
+                            className="object-contain"
                             priority
-                            className="object-contain drop-shadow-md"
                         />
                     </div>
-                    <h2 className="mt-4 text-2xl md:text-3xl font-heading text-primary tracking-tight">Selamat Datang Kembali!</h2>
-                    <p className="mt-1 text-sm text-secondary">Mari lanjut belajar bersama Dinosaku.</p>
+                    <div>
+                        <h1 className="font-heading text-3xl font-bold text-primary tracking-tight">Selamat Datang!</h1>
+                        <p className="text-muted text-base mt-2 font-medium">Masuk untuk melanjutkan petualangan finansialmu.</p>
+                    </div>
                 </div>
 
-                <h2 className="text-3xl font-heading text-primary mb-0 mt-2">Masuk Akun</h2>
-                <p className="text-secondary mb-3 text-sm md:text-base">Masukkan email dan kata sandimu untuk masuk.</p>
+                {/* FAST LOGIN BUTTONS FOR HACKATHON MVP */}
+                <div className="bg-brand-primary/5 rounded-xl p-4 border border-brand-primary/20 space-y-3">
+                    <p className="text-xs font-bold text-center text-brand-primary uppercase tracking-wider">Fast Login (MVP)</p>
+                    <div className="grid grid-cols-3 gap-2">
+                        <button 
+                            type="button" 
+                            onClick={() => handleFastLogin('anak1@dinosaku.com')}
+                            className="flex flex-col items-center justify-center p-2 bg-white rounded-lg border border-border-light shadow-sm hover:border-brand-primary hover:bg-brand-primary/5 transition-all group"
+                        >
+                            <UserCircle2 className="text-text-secondary group-hover:text-brand-primary h-6 w-6 mb-1" />
+                            <span className="text-[10px] font-bold text-text-primary text-center">Siswa</span>
+                        </button>
+                        <button 
+                            type="button" 
+                            onClick={() => handleFastLogin('ortu@dinosaku.com')}
+                            className="flex flex-col items-center justify-center p-2 bg-white rounded-lg border border-border-light shadow-sm hover:border-brand-primary hover:bg-brand-primary/5 transition-all group"
+                        >
+                            <Users className="text-text-secondary group-hover:text-brand-primary h-6 w-6 mb-1" />
+                            <span className="text-[10px] font-bold text-text-primary text-center">Orang Tua</span>
+                        </button>
+                        <button 
+                            type="button" 
+                            onClick={() => handleFastLogin('guru@dinosaku.com')}
+                            className="flex flex-col items-center justify-center p-2 bg-white rounded-lg border border-border-light shadow-sm hover:border-brand-primary hover:bg-brand-primary/5 transition-all group"
+                        >
+                            <GraduationCap className="text-text-secondary group-hover:text-brand-primary h-6 w-6 mb-1" />
+                            <span className="text-[10px] font-bold text-text-primary text-center">Guru</span>
+                        </button>
+                    </div>
+                </div>
 
+                {/* Pesan Error Root */}
                 {errors.root && (
-                    <div className="mb-4 p-3 rounded-lg bg-danger/10 border border-danger/20 flex items-start gap-2">
-                        <svg className="w-5 h-5 text-danger shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <p className="text-sm font-medium text-danger">{errors.root}</p>
+                    <div className="p-4 rounded-xl bg-danger-soft border-2 border-danger text-danger text-sm font-medium animate-shake text-center">
+                        {errors.root}
                     </div>
                 )}
 
-                <form className="space-y-4 relative z-10" onSubmit={handleSubmit} noValidate>
-                    <FieldGroup className="gap-3">
+                <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                    <FieldGroup>
                         {/* Email Input */}
                         <Field orientation="vertical" data-invalid={!!errors.email}>
                             <FieldLabel htmlFor="email" className="text-base font-heading text-primary">
@@ -163,9 +193,9 @@ export default function LoginPage() {
                                 />
                                 <button
                                     type="button"
-                                    suppressHydrationWarning
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-0 top-0 h-12 px-4 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary transition-colors focus:outline-none p-1 rounded-md hover:bg-surface-soft"
+                                    aria-label={showPassword ? "Sembunyikan sandi" : "Tampilkan sandi"}
                                 >
                                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                 </button>
@@ -174,25 +204,29 @@ export default function LoginPage() {
                         </Field>
                     </FieldGroup>
 
-                    {/* Lupa Password & Ingat Saya */}
-                    <div className="flex items-center justify-between !mt-4">
-                        <div className="flex items-center gap-2">
+                    {/* Checkbox Remember Me & Forgot Password */}
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mt-4">
+                        <div className="flex items-center space-x-2">
                             <Checkbox
                                 id="rememberMe"
                                 name="rememberMe"
                                 checked={formData.rememberMe}
-                                onCheckedChange={(checked) => {
-                                    setFormData(prev => ({ ...prev, rememberMe: checked === true }));
-                                }}
-                                className="h-5 w-5 rounded border-2 border-brand-primary/40 data-checked:border-brand-primary data-checked:bg-brand-primary [&>span>svg]:size-4"
+                                onCheckedChange={(checked) =>
+                                    handleChange({ target: { name: 'rememberMe', type: 'checkbox', checked } } as any)
+                                }
+                                className="h-5 w-5 rounded border-2 border-border-strong data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary transition-all"
                             />
-                            <label htmlFor="rememberMe" className="text-sm font-medium text-secondary cursor-pointer">
-                                Ingat Saya
+                            <label
+                                htmlFor="rememberMe"
+                                className="text-sm font-medium leading-none text-text-secondary cursor-pointer select-none"
+                            >
+                                Ingat saya
                             </label>
                         </div>
+
                         <Link
                             href="/forgot-password"
-                            className="text-sm font-heading text-brand-primary hover:text-brand-primary-hover transition-colors"
+                            className="text-sm font-bold text-brand-primary hover:text-brand-primary-hover hover:underline"
                         >
                             Lupa kata sandi?
                         </Link>

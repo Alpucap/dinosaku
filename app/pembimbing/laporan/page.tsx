@@ -5,20 +5,18 @@ export default async function LaporanPage() {
   const user = await requireRole(["parents", "teacher"]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="font-heading text-xl font-bold text-text-primary">
-            Laporan Belajar
-          </h2>
-          <p className="mt-1 text-sm text-text-secondary">
-            Ringkasan mingguan atau bulanan tentang aktivitas anak.
-          </p>
+    <div className="learning-page">
+      <header className="page-heading">
+        <p className="eyebrow">Manajemen Murid / Anak</p>
+        <h1>Laporan Belajar</h1>
+        <p>Ringkasan mingguan atau bulanan tentang aktivitas anak.</p>
+      </header>
+      <div className="flex flex-col gap-6">
+        <div className="flex justify-end">
+          <button className="flex items-center gap-2 px-4 py-2 border border-border-strong text-text-primary text-sm font-bold rounded-lg hover:bg-surface-soft transition-colors w-max">
+            <Download size={16} /> Unduh PDF
+          </button>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 border border-border-strong text-text-primary text-sm font-bold rounded-lg hover:bg-surface-soft transition-colors w-max">
-          <Download size={16} /> Unduh PDF
-        </button>
-      </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         <div className="rounded-xl border border-default bg-surface p-6 flex flex-col justify-between">
@@ -41,15 +39,19 @@ export default async function LaporanPage() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center p-6 text-center rounded-xl border border-dashed border-border-strong bg-surface">
-          <div className="h-16 w-16 bg-surface-soft rounded-full flex items-center justify-center text-text-muted mb-4">
-            <FileText size={28} />
+        <div className="rounded-xl border border-default bg-surface p-6 flex flex-col justify-between">
+          <div>
+            <h3 className="font-bold text-text-primary flex items-center gap-2">
+              <FileText size={18} className="text-brand-primary" /> Analisis Gaya Belajar (Segera Hadir)
+            </h3>
+            <p className="text-sm text-text-secondary mt-1">Sistem AI Dinosaku akan menganalisis topik apa yang paling disukai anak dan di mana mereka butuh bantuan.</p>
           </div>
-          <h3 className="font-bold text-text-primary mb-2">Laporan Lengkap Belum Siap</h3>
-          <p className="text-sm text-text-secondary max-w-xs mx-auto">
+          
+          <p className="text-xs text-text-muted mt-8 p-4 bg-surface-soft rounded-lg italic">
             Sistem membutuhkan setidaknya 7 hari data berturut-turut untuk menghasilkan analisis gaya belajar AI yang akurat.
           </p>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ import { Eye, EyeOff, AtSign } from "lucide-react";
 // Lib
 import { Role, REGISTER_ROLES } from "@/lib/constants/roles";
 import { validateRegistrationForm } from "@/lib/validations/auth";
+import { registerUserAction } from "../actions";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -67,9 +68,20 @@ export default function RegisterPage() {
 
         if (Object.keys(newErrors).length === 0) {
             setIsSubmitting(true);
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setIsSubmitting(false);
-            setSuccess(true);
+            setErrors({});
+            
+            // Panggil Server Action
+            const result = await registerUserAction(formData);
+            
+            if (result.success && result.redirectUrl) {
+                setSuccess(true);
+                setTimeout(() => {
+                    router.push(result.redirectUrl as string);
+                }, 2000);
+            } else {
+                setIsSubmitting(false);
+                setErrors({ root: result.error || 'Gagal mendaftar' });
+            }
         } else {
             setErrors(newErrors);
         }
@@ -118,6 +130,7 @@ export default function RegisterPage() {
 
                     <h2 className="text-3xl font-heading text-primary mb-0 mt-2">Ayo Bergabung!</h2>
                     <p className="text-secondary mb-3 text-sm md:text-base">Isi data di bawah ini untuk membuat akun barumu.</p>
+                    {errors.root && <div className="p-3 mb-4 rounded-xl bg-danger-soft border border-danger text-danger text-sm font-medium animate-shake text-center">{errors.root}</div>}
 
                     <form className="space-y-4 relative z-10" onSubmit={handleSubmit} noValidate>
                         <FieldGroup className="gap-3">

@@ -5,15 +5,13 @@ export default async function PengaturanPage() {
   const user = await requireRole(["parents", "teacher"]);
 
   return (
-    <div className="flex flex-col gap-6 max-w-3xl">
-      <div>
-        <h2 className="font-heading text-xl font-bold text-text-primary">
-          Pengaturan Akun
-        </h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Kelola preferensi akun {user.role === 'teacher' ? 'Guru' : 'Orang Tua'} Anda di sini.
-        </p>
-      </div>
+    <div className="learning-page">
+      <header className="page-heading">
+        <p className="eyebrow">Manajemen Akun</p>
+        <h1>Pengaturan Akun</h1>
+        <p>Kelola preferensi akun {user.role === 'teacher' ? 'Guru' : 'Orang Tua'} Anda di sini.</p>
+      </header>
+      <div className="flex flex-col gap-6 max-w-3xl">
 
       {user.role === 'teacher' && user.classCode && (
         <div className="rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-5 flex items-start gap-4">
@@ -67,6 +65,7 @@ export default async function PengaturanPage() {
           </li>
         </ul>
       </div>
+    </div>
     </div>
   );
 }

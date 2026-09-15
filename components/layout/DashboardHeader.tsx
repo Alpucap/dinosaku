@@ -87,7 +87,7 @@ export function DashboardHeader({ title, user }: DashboardHeaderProps) {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-default bg-surface px-4 shadow-sm sm:px-6 shrink-0 gap-4">
-      {/* Left Section: Sidebar Toggle + Title */}
+      {/* Left Section: Sidebar Toggle */}
       <div className="flex items-center gap-3">
         <Button
           variant="ghost"
@@ -98,12 +98,6 @@ export function DashboardHeader({ title, user }: DashboardHeaderProps) {
           <Menu className="h-[18px] w-[18px]" />
           <span className="sr-only">Buka menu</span>
         </Button>
-
-        {title && (
-          <h1 className="font-heading text-base sm:text-lg font-bold text-text-primary truncate">
-            {title}
-          </h1>
-        )}
       </div>
 
       {/* Right Section: Live Clock + Profil */}

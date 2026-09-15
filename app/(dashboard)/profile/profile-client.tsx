@@ -35,7 +35,15 @@ const CHILD_AVATAR_OPTIONS = [
     "https://api.dicebear.com/10.x/critters/svg?seed=Ptero"
 ];
 
-export default function ProfileClient({ initialUser }: { initialUser: User }) {
+export default function ProfileClient({ 
+    initialUser, 
+    serverChildren = [], 
+    serverTeacher = null 
+}: { 
+    initialUser: any,
+    serverChildren?: any[],
+    serverTeacher?: any
+}) {
     const router = useRouter();
     const [user, setUser] = useState(initialUser);
 
@@ -55,12 +63,9 @@ export default function ProfileClient({ initialUser }: { initialUser: User }) {
     const isTeacher = user.role === 'teacher';
     const isAdmin = user.role === 'admin';
 
-    const myChildren = DUMMY_USERS.filter(u => u.parentId === user.id);
-    const premiumChildrenCount = myChildren.filter(c => c.plan === 'premium').length;
+    const premiumChildrenCount = serverChildren.filter(c => c.plan === 'premium' || c.plan === 'PREMIUM').length;
 
-    const myTeacher = isChild && user.classCode ? DUMMY_USERS.find(u => u.role === 'teacher' && u.classCode === user.classCode) : null;
-
-    const handleLogout = () => {
+    const handleLogout = async () => {
         document.cookie = 'dinosaku_session=; path=/; max-age=0';
         toast.add({
             title: "Log Out Berhasil",
@@ -96,13 +101,6 @@ export default function ProfileClient({ initialUser }: { initialUser: User }) {
                 newErrors.username = "Username wajib diisi.";
             } else if (formData.username.length < 3) {
                 newErrors.username = "Username minimal 3 karakter.";
-            } else {
-                const isUsernameTaken = DUMMY_USERS.some(
-                    u => u.username.toLowerCase() === formData.username.toLowerCase() && u.id !== initialUser.id
-                );
-                if (isUsernameTaken) {
-                    newErrors.username = "Username sudah digunakan oleh pengguna lain.";
-                }
             }
         }
 
@@ -202,13 +200,13 @@ export default function ProfileClient({ initialUser }: { initialUser: User }) {
             />
 
             {/* Role: Anak-Anak */}
-            {isChild && <ChildrenProfileSection user={user} myTeacher={myTeacher || null} />}
+            {isChild && <ChildrenProfileSection user={user} myTeacher={serverTeacher || null} />}
 
             {/* Role: Admin Utama */}
             {isAdmin && <AdminProfileSection />}
 
             {/* Role: Orang Tua */}
-            {isParent && <ParentsProfileSection user={user} premiumChildrenCount={premiumChildrenCount} myChildren={myChildren} />}
+            {isParent && <ParentsProfileSection user={user} premiumChildrenCount={premiumChildrenCount} myChildren={serverChildren} />}
 
             {/* Informasi Pribadi (Termasuk Guru) */}
             <PersonalInfoSection

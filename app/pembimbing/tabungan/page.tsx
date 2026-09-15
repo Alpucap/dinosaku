@@ -44,17 +44,13 @@ export default async function TabunganPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="font-heading text-xl font-bold text-text-primary">
-            Target Tabungan
-          </h2>
-          <p className="mt-1 text-sm text-text-secondary">
-            Pantau barang impian yang sedang ditabung oleh anak.
-          </p>
-        </div>
-      </div>
+    <div className="learning-page">
+      <header className="page-heading">
+        <p className="eyebrow">Manajemen Keuangan</p>
+        <h1>Target Tabungan</h1>
+        <p>Pantau barang impian yang sedang ditabung oleh anak.</p>
+      </header>
+      <div className="flex flex-col gap-6">
 
       <div className="grid gap-6 md:grid-cols-3 items-start">
         {/* Form Tambah Target */}
@@ -136,6 +132,7 @@ export default async function TabunganPage() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

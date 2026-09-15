@@ -1,52 +1,65 @@
 import { cookies } from "next/headers";
-import { DUMMY_USERS, type User, type UserBadge } from "@/lib/data/dummy-users";
 import { prisma } from "@/lib/prisma";
+import type { UserStatus, SubscriptionPlan, UserBadge, User as BaseUser } from "@/lib/data/dummy-users";
 
 export const SESSION_COOKIE = "dinosaku_session";
 
-export async function getSessionUser(): Promise<User | null> {
+// Temporary shim to keep compatibility with existing dummy types
+export async function getSessionUser(): Promise<any | null> {
   const store = await cookies();
   const sessionId = store.get(SESSION_COOKIE)?.value;
   if (!sessionId) return null;
-  
-  const dummyUser = DUMMY_USERS.find((u) => u.id === sessionId) ?? null;
-  if (!dummyUser) return null;
 
   try {
-    const dbGamification = await prisma.gamification.findUnique({
-      where: { userId: dummyUser.id }
-    });
-    
-    const dbUserBadges = await prisma.userBadge.findMany({
-      where: { userId: dummyUser.id },
-      include: { badge: true }
-    });
-
-    if (dbGamification) {
-      const realBadges: UserBadge[] = dbUserBadges.map(ub => ({
-        id: ub.badge.id,
-        icon: ub.badge.icon,
-        title: ub.badge.title,
-        description: ub.badge.description,
-        unlocked: true
-      }));
-
-      return {
-        ...dummyUser,
-        gamification: {
-          ...dummyUser.gamification,
-          totalPoints: dbGamification.totalPoints,
-          currentStreak: dbGamification.currentStreak,
-          energy: dbGamification.energy,
-          maxEnergy: dbGamification.maxEnergy ?? dummyUser.gamification?.maxEnergy ?? 0,
-          totalBadges: dbUserBadges.length,
-          badges: realBadges
+    const user = await prisma.user.findUnique({
+      where: { id: sessionId },
+      include: {
+        gamification: true,
+        userBadges: {
+          include: { badge: true }
         }
-      };
-    }
-  } catch (err) {
-    console.error("Error fetching gamification for session:", err);
-  }
+      }
+    });
 
-  return dummyUser;
+    if (!user) return null;
+
+    // Convert to the shape expected by the frontend UI (similar to DUMMY_USERS)
+    const formattedBadges = user.userBadges.map(ub => ({
+      id: ub.badge.id,
+      icon: ub.badge.icon,
+      title: ub.badge.title,
+      description: ub.badge.description,
+      unlocked: true
+    }));
+
+    return {
+      id: user.id,
+      email: user.email,
+      password: user.password,
+      fullName: user.fullName,
+      username: user.username,
+      role: user.role.toLowerCase(),
+      avatarUrl: user.avatarUrl || undefined,
+      status: user.status.toLowerCase() as UserStatus,
+      plan: user.plan ? user.plan.toLowerCase() as SubscriptionPlan : undefined,
+      classCode: user.classCode || undefined,
+      createdAt: user.createdAt.toISOString(),
+      parentId: user.parentId || undefined,
+      schoolId: user.schoolId || undefined,
+      preferences: {
+        notificationsEnabled: user.notificationsEnabled
+      },
+      gamification: user.gamification ? {
+        totalPoints: user.gamification.totalPoints,
+        currentStreak: user.gamification.currentStreak,
+        energy: user.gamification.energy,
+        maxEnergy: user.gamification.maxEnergy || 1,
+        totalBadges: formattedBadges.length,
+        badges: formattedBadges
+      } : undefined
+    };
+  } catch (err) {
+    console.error("Error fetching user for session:", err);
+    return null;
+  }
 }

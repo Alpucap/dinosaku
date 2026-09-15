@@ -39,15 +39,14 @@ export default async function PembimbingDashboardPage() {
   });
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h2 className="font-heading text-xl font-bold text-text-primary">
-          Dasbor {user.role === 'teacher' ? 'Guru' : 'Orang Tua'}
-        </h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Selamat datang, {user.fullName}! Pantau perkembangan belajar {user.role === 'teacher' ? 'murid-muridmu' : 'anak-anakmu'} di sini.
-        </p>
-      </div>
+    <div className="learning-page">
+      <header className="page-heading">
+        <p className="eyebrow">Dasbor Pembimbing</p>
+        <h1>Dasbor {user.role === 'teacher' ? 'Guru' : 'Orang Tua'}</h1>
+        <p>Selamat datang, {user.fullName}! Pantau perkembangan belajar {user.role === 'teacher' ? 'murid-muridmu' : 'anak-anakmu'} di sini.</p>
+      </header>
+
+      <div className="flex flex-col gap-6">
 
       <div className="grid gap-4 sm:grid-cols-4">
         <div className="flex flex-col justify-center rounded-xl border border-default bg-surface p-5">
@@ -151,6 +150,7 @@ export default async function PembimbingDashboardPage() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

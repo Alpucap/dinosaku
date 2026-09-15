@@ -22,15 +22,13 @@ export default async function ProgresBelajarPage() {
   });
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h2 className="font-heading text-xl font-bold text-text-primary">
-          Progres Belajar
-        </h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Pantau aktivitas membaca cerita dan hasil kuis terbaru dari anak-anak.
-        </p>
-      </div>
+    <div className="learning-page">
+      <header className="page-heading">
+        <p className="eyebrow">Manajemen Murid / Anak</p>
+        <h1>Progres Belajar</h1>
+        <p>Pantau aktivitas membaca cerita dan hasil kuis terbaru dari anak-anak.</p>
+      </header>
+      <div className="flex flex-col gap-6">
 
       <div className="rounded-xl border border-default bg-surface p-6">
         {activities.length === 0 ? (
@@ -68,6 +66,7 @@ export default async function ProgresBelajarPage() {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }

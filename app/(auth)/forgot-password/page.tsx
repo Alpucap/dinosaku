@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 // Lib
 import { validateForgotPasswordForm } from "@/lib/validations/auth";
-import { DUMMY_USERS } from "@/lib/data/dummy-users";
+import { forgotPasswordAction } from "../actions";
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('');
@@ -36,17 +36,15 @@ export default function ForgotPasswordPage() {
 
         if (Object.keys(newErrors).length === 0) {
             setIsSubmitting(true);
+            setErrors({});
 
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            const result = await forgotPasswordAction(email);
             setIsSubmitting(false);
 
-            // Cek apakah email ada di dummy users
-            const userExists = DUMMY_USERS.some(u => u.email.toLowerCase() === email.toLowerCase());
-
-            if (userExists) {
+            if (result.success) {
                 setSuccess(true);
             } else {
-                setErrors({ root: 'Email tidak ditemukan di sistem kami.' });
+                setErrors({ root: result.error || 'Email tidak ditemukan di sistem kami.' });
             }
         } else {
             setErrors(newErrors);

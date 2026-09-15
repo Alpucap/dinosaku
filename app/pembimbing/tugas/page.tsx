@@ -41,15 +41,13 @@ export default async function PenugasanPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl">
-      <div>
-        <h2 className="font-heading text-xl font-bold text-text-primary">
-          Misi & Penugasan
-        </h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Beri tantangan literasi finansial spesifik untuk diselesaikan anak.
-        </p>
-      </div>
+    <div className="learning-page">
+      <header className="page-heading">
+        <p className="eyebrow">Manajemen Murid / Anak</p>
+        <h1>Berikan Tugas</h1>
+        <p>Berikan tugas cerita edukasi kepada anak dengan topik dan tema tertentu.</p>
+      </header>
+      <div className="flex flex-col gap-6 max-w-4xl">
 
       <div className="grid gap-6 md:grid-cols-3 items-start">
         <form action={createAssignment} className="rounded-xl border border-default bg-surface p-5 flex flex-col gap-4 md:col-span-1 md:sticky md:top-6">
@@ -125,6 +123,7 @@ export default async function PenugasanPage() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
