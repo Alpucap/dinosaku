@@ -10,10 +10,11 @@ export type Progress = {
 };
 
 export const BADGES = [
-  { id: 'first', name: 'Langkah Pertama', description: 'Selesaikan kuis pertamamu.' },
+  { id: 'first', name: 'Langkah Pertama', description: 'Berhasil lulus kuis pertamamu.' },
   { id: 'perfect', name: 'Bintang Kuis', description: 'Jawab semua soal dengan benar dalam satu kuis.' },
-  { id: 'saving', name: 'Penabung Ulung', description: 'Raih nilai sempurna di Misi Menabung di Planet Asing.' },
-  { id: 'needs', name: 'Pembeli Cermat', description: 'Raih nilai sempurna di Berburu Harta Karun Hutan.' },
+  { id: 'veteran', name: 'Petualang Veteran', description: 'Berhasil menyelesaikan dan lulus 5 misi.' },
+  { id: 'master', name: 'Master Edukasi', description: 'Berhasil menyelesaikan dan lulus 10 misi.' },
+  { id: 'rich', name: 'Sultan Poin', description: 'Berhasil mengumpulkan lebih dari 200 poin secara total.' },
   { id: 'streak', name: 'Rajin Belajar', description: 'Selesaikan kuis selama tiga hari berturut-turut.' },
 ] as const;
 
@@ -89,11 +90,13 @@ export function getPoints(profile: Profile): number {
 
 export function getBadges(profile: Profile): string[] {
   const perfect = profile.results.filter(r => r.score === r.total);
+  const totalPoints = getPoints(profile);
   return [
-    ...(profile.results.length ? ['first'] : []),
-    ...(perfect.length ? ['perfect'] : []),
-    ...(perfect.some(r => r.storyId === 'menabung-luar-angkasa') ? ['saving'] : []),
-    ...(perfect.some(r => r.storyId === 'kebutuhan-hutan-ajaib') ? ['needs'] : []),
+    ...(profile.completedStories.length > 0 ? ['first'] : []),
+    ...(perfect.length > 0 ? ['perfect'] : []),
+    ...(profile.completedStories.length >= 5 ? ['veteran'] : []),
+    ...(profile.completedStories.length >= 10 ? ['master'] : []),
+    ...(totalPoints > 200 ? ['rich'] : []),
     ...(profile.studyDays.some(day => getStreak(profile.studyDays, day) >= 3) ? ['streak'] : []),
   ];
 }

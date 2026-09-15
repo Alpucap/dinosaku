@@ -1,19 +1,14 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 // Lib
-import { DUMMY_USERS } from '@/lib/data/dummy-users';
+import { getSessionUser } from '@/lib/auth/session';
 
 // Section
 import ProfileClient from './profile-client';
 
 export default async function ProfilePage() {
-    const cookieStore = await cookies();
-    const sessionId = cookieStore.get('dinosaku_session')?.value;
+    const user = await getSessionUser();
 
-    if (!sessionId) redirect('/login');
-
-    const user = DUMMY_USERS.find(u => u.id === sessionId);
     if (!user) redirect('/login');
 
     return (

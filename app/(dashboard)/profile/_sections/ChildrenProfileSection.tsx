@@ -1,8 +1,12 @@
+'use client';
 import { GraduationCap, Star, Zap, Flame, Lock, Medal } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { User } from '@/lib/data/dummy-users';
+import { useProgress } from '@/lib/use-progress';
+import { BADGES } from '@/lib/progress';
+import BadgeMedal from '@/components/dino/BadgeMedal';
 
 interface Props {
     user: User;
@@ -10,6 +14,14 @@ interface Props {
 }
 
 export function ChildrenProfileSection({ user, myTeacher }: Props) {
+    const { profile, points: localPoints, streak: localStreak, badges: localBadges, ready } = useProgress();
+    
+    // Fallback to dummy data if no profile (Server Side Rendering or not started)
+    const totalPoints = ready && profile ? localPoints : (user.gamification?.totalPoints || 0);
+    const currentStreak = ready && profile ? localStreak : (user.gamification?.currentStreak || 0);
+    const unlockedBadges = ready && profile ? localBadges : [];
+    const totalBadges = ready && profile ? unlockedBadges.length : (user.gamification?.totalBadges || 0);
+
     return (
         <>
             {/* Classroom section */}
@@ -58,7 +70,7 @@ export function ChildrenProfileSection({ user, myTeacher }: Props) {
                             <div>
                                 <p className="text-sm text-muted-foreground">Total Poin</p>
                                 <p className="text-xl font-bold text-brand-primary">
-                                    {user.gamification?.totalPoints?.toLocaleString() || 0}
+                                    {totalPoints.toLocaleString()}
                                 </p>
                             </div>
                         </div>
@@ -69,7 +81,7 @@ export function ChildrenProfileSection({ user, myTeacher }: Props) {
                             <div>
                                 <p className="text-sm text-muted-foreground">Streak Harian</p>
                                 <p className="text-xl font-bold text-brand-primary">
-                                    {user.gamification?.currentStreak || 0}
+                                    {currentStreak}
                                 </p>
                             </div>
                         </div>
@@ -80,7 +92,7 @@ export function ChildrenProfileSection({ user, myTeacher }: Props) {
                             <div>
                                 <p className="text-sm text-muted-foreground">Total Lencana</p>
                                 <p className="text-xl font-bold text-brand-primary">
-                                    {user.gamification?.totalBadges || 0}
+                                    {totalBadges}
                                 </p>
                             </div>
                         </div>
@@ -90,26 +102,15 @@ export function ChildrenProfileSection({ user, myTeacher }: Props) {
                     <div className="pt-4 mt-2 border-t border-brand-accent/10">
                         <h4 className="font-semibold mb-3 text-sm text-brand-primary uppercase tracking-wider">Koleksi Lencanaku</h4>
                         <div className="flex flex-wrap gap-4">
-                            {user.gamification?.badges?.map((badge) => (
-                                badge.unlocked ? (
-                                    <div key={badge.id} className="flex flex-col items-center gap-2 w-20" title={`${badge.title}: ${badge.description}`}>
-                                        <div className="h-12 w-12 rounded-full bg-brand-secondary/20 border border-brand-primary flex items-center justify-center">
-                                            <span className="text-xl">{badge.icon}</span>
-                                        </div>
-                                        <span className="text-xs font-medium text-center text-foreground">{badge.title}</span>
+                            {BADGES.map((badge) => {
+                                const isUnlocked = unlockedBadges.includes(badge.id);
+                                return (
+                                    <div key={badge.id} className={`flex flex-col items-center gap-2 w-24 ${isUnlocked ? '' : 'opacity-50'}`} title={`${badge.name}: ${badge.description}`}>
+                                        <BadgeMedal id={badge.id} unlocked={isUnlocked} />
+                                        <span className="text-xs font-medium text-center text-foreground">{badge.name}</span>
                                     </div>
-                                ) : (
-                                    <div key={badge.id} className="flex flex-col items-center gap-2 w-20 opacity-60" title={`${badge.title}: ${badge.description}`}>
-                                        <div className="h-12 w-12 rounded-full bg-surface-soft border border-dashed border-muted-foreground/40 flex items-center justify-center">
-                                            <Lock className="h-4 w-4 text-muted-foreground" />
-                                        </div>
-                                        <span className="text-xs text-center text-muted-foreground">Terkunci</span>
-                                    </div>
-                                )
-                            ))}
-                            {(!user.gamification?.badges || user.gamification.badges.length === 0) && (
-                                <p className="text-sm text-muted-foreground italic">Belum ada lencana. Teruslah bermain untuk mendapatkannya!</p>
-                            )}
+                                );
+                            })}
                         </div>
                     </div>
                 </CardContent>

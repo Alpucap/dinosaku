@@ -238,7 +238,7 @@ export default function HandController({ onGesture, mode = 'quiz' }: Props) {
               <div>
                 {currentGesture === 'One_Finger' ? '☝️ Opsi A' :
                  currentGesture === 'Two_Fingers' ? '✌️ Opsi B' :
-                 currentGesture === 'Three_Fingers' ? '🤟 Opsi C' :
+                 currentGesture === 'Five_Fingers' ? '🖐️ Opsi C' :
                  currentGesture === 'Thumb_Up' ? '👍 Lanjut' : '👀 Cari...'}
               </div>
               {holdProgress > 0 && holdProgress < 100 && (

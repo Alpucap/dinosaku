@@ -1,6 +1,13 @@
-import { Flame, Footprints, LockKeyhole, PiggyBank, ShoppingBasket, Star } from 'lucide-react';
+import { Flame, Footprints, LockKeyhole, Star, Medal, Crown, Coins } from 'lucide-react';
 
-const icons = { first: Footprints, perfect: Star, saving: PiggyBank, needs: ShoppingBasket, streak: Flame };
+const icons = { 
+  first: Footprints, 
+  perfect: Star, 
+  veteran: Medal, 
+  master: Crown, 
+  rich: Coins, 
+  streak: Flame 
+};
 
 export default function BadgeMedal({ id, unlocked }: { id: string; unlocked: boolean }) {
   const Icon = icons[id as keyof typeof icons] ?? Star;
