@@ -20,7 +20,14 @@ export default async function LeaderboardPage() {
 
   // 2. Ambil Leaderboard Sekolah/Kelas jika anak punya classCode
   let classGamifications: any[] = [];
+  let schoolName = 'Sekolah';
+  
   if (user.classCode) {
+    if (user.schoolId) {
+      const school = await prisma.school.findUnique({ where: { id: user.schoolId } });
+      if (school) schoolName = school.name;
+    }
+
     classGamifications = await prisma.gamification.findMany({
       where: { user: { classCode: user.classCode, role: 'CHILDREN' } },
       orderBy: { totalPoints: 'desc' },
@@ -86,8 +93,8 @@ export default async function LeaderboardPage() {
             <div className="leaderboard-title">
               <Users size={28} className="text-brand-primary" />
               <div>
-                <h2>Sekolah: {user.classCode}</h2>
-                <p>Bersaing secara sehat dengan teman sekolahmu.</p>
+                <h2>{schoolName} - Kelas {user.classCode}</h2>
+                <p>Bersaing secara sehat dengan teman sekelasmu.</p>
               </div>
             </div>
             <ol className="ranking-list">
