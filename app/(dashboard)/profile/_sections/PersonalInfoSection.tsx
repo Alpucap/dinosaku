@@ -15,9 +15,10 @@ interface Props {
     isTeacher: boolean;
     handleSaveProfile: () => void;
     isSavingProfile: boolean;
+    myChildrenCount?: number;
 }
 
-export function PersonalInfoSection({ user, formData, setFormData, errors, isChild, isTeacher, handleSaveProfile, isSavingProfile }: Props) {
+export function PersonalInfoSection({ user, formData, setFormData, errors, isChild, isTeacher, handleSaveProfile, isSavingProfile, myChildrenCount = 0 }: Props) {
     return (
         <Card>
             <CardContent className="p-4 md:p-6 space-y-4">
@@ -72,7 +73,7 @@ export function PersonalInfoSection({ user, formData, setFormData, errors, isChi
 
                     {/* Guru punya kolom Identitas Profesional */}
                     {isTeacher && (
-                        <TeacherProfileSection formData={formData} setFormData={setFormData} />
+                        <TeacherProfileSection formData={formData} setFormData={setFormData} myChildrenCount={myChildrenCount} />
                     )}
                 </div>
 

@@ -12,12 +12,12 @@ export default async function ProfilePage() {
     if (user.role === 'parents') {
         myChildren = await prisma.user.findMany({
             where: { parentId: user.id },
-            select: { id: true, plan: true }
+            select: { id: true, plan: true, fullName: true, username: true, avatarUrl: true }
         });
     } else if (user.role === 'teacher' && user.classCode) {
         myChildren = await prisma.user.findMany({
             where: { role: 'CHILDREN', classCode: user.classCode },
-            select: { id: true, plan: true }
+            select: { id: true, plan: true, fullName: true, username: true, avatarUrl: true }
         });
     }
 

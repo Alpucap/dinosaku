@@ -17,8 +17,7 @@ export const pembimbingMenuSections: SidebarMenuSection[] = [
     items: [
       { name: "Progres Belajar", href: "/pembimbing/progres", icon: TrendingUp },
       { name: "Daftar Anak", href: "/pembimbing/anak", icon: Users },
-      { name: "Penugasan", href: "/pembimbing/tugas", icon: FileText },
-      { name: "Target Tabungan", href: "/pembimbing/tabungan", icon: PiggyBank },
+      { name: "Aksi & Misi", href: "/pembimbing/aksi", icon: PiggyBank },
     ],
   },
   {

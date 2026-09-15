@@ -101,7 +101,7 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
             type: 'QUIZ_COMPLETED',
             title: `Menyelesaikan Misi`,
             score: score,
-            pointsEarned: 50 // Asumsi dasar penambahan poin kuis
+            pointsEarned: 2 + Math.round((score / quiz.length) * 8)
           }
         })
       }).catch(console.error);

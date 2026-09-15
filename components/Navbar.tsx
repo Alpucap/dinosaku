@@ -24,7 +24,16 @@ export default async function Navbar() {
           />
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-label text-secondary">
-          <Link href="/learn" className="hover:text-primary transition-colors">Learn</Link>
+          {user ? (
+            <Link 
+              href={user.role === 'children' ? '/learn' : user.role === 'admin' ? '/admin' : '/pembimbing'} 
+              className="hover:text-primary transition-colors"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <Link href="/learn" className="hover:text-primary transition-colors">Learn</Link>
+          )}
           <Link href="#about" className="hover:text-primary transition-colors">About Us</Link>
           <Link href="#contact" className="hover:text-primary transition-colors">Contact</Link>
         </nav>

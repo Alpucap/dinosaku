@@ -69,6 +69,7 @@ export const DUMMY_USERS: User[] = [
         fullName: "Budi Santoso",
         role: "parents",
         status: "active",
+        plan: "premium",
         avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
         createdAt: "2024-01-10T10:00:00Z",
         preferences: { notificationsEnabled: true },

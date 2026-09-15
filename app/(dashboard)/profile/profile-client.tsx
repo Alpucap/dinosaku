@@ -63,7 +63,6 @@ export default function ProfileClient({
     const isTeacher = user.role === 'teacher';
     const isAdmin = user.role === 'admin';
 
-    const premiumChildrenCount = serverChildren.filter(c => c.plan === 'premium' || c.plan === 'PREMIUM').length;
 
     const handleLogout = async () => {
         document.cookie = 'dinosaku_session=; path=/; max-age=0';
@@ -206,7 +205,7 @@ export default function ProfileClient({
             {isAdmin && <AdminProfileSection />}
 
             {/* Role: Orang Tua */}
-            {isParent && <ParentsProfileSection user={user} premiumChildrenCount={premiumChildrenCount} myChildren={serverChildren} />}
+            {isParent && <ParentsProfileSection user={user} myChildren={serverChildren} />}
 
             {/* Informasi Pribadi (Termasuk Guru) */}
             <PersonalInfoSection
@@ -218,6 +217,7 @@ export default function ProfileClient({
                 isTeacher={isTeacher}
                 handleSaveProfile={handleSaveProfile}
                 isSavingProfile={isSavingProfile}
+                myChildrenCount={serverChildren?.length || 0}
             />
 
             {/* Keamanan Akun */}

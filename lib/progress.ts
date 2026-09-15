@@ -1,4 +1,4 @@
-export const PROGRESS_KEY = 'dinosaku_progress_v1';
+export const PROGRESS_KEY = 'dinosaku_progress_v2';
 export const DAILY_ENERGY = 3;
 export type QuizResult = { storyId: string; score: number; total: number };
 export type Profile = { id: string; name: string; completedStories: string[]; results: QuizResult[]; studyDays: string[] };
@@ -85,7 +85,10 @@ export function getStreak(days: string[], today = localDay()): number {
 }
 
 export function getPoints(profile: Profile): number {
-  return profile.results.reduce((sum, result) => sum + Math.round(result.score / result.total * 100), 0);
+  const readingPoints = profile.completedStories.length * 2;
+  const quizPoints = profile.results.reduce((sum, result) => sum + Math.round((result.score / result.total) * 8), 0);
+  const weeklyBonus = Math.floor(profile.studyDays.length / 7) * 10;
+  return readingPoints + quizPoints + weeklyBonus;
 }
 
 export function getBadges(profile: Profile): string[] {
