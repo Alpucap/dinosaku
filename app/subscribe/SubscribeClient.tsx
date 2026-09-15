@@ -78,7 +78,7 @@ export default function SubscribeClient() {
             </div>
             
             <ul className="space-y-4 mb-8 flex-1">
-              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary font-bold">⚡ 3 Energi / Bulan (Maks 3 Anak = 9 Energi)</span></li>
+              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary font-bold">⚡ 3 Energi / Bulan (Per Anak)</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Ortu bisa atur jatah mingguan anak</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Fitur Target Tabungan & Penugasan Lengkap</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Laporan Belajar AI Bulanan</span></li>
