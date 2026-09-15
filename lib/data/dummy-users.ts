@@ -161,6 +161,32 @@ export const DUMMY_USERS: User[] = [
         }
     },
 
+    // 6. MURID TAMBAHAN UNTUK GURU (Hanya punya Class Code, tidak punya Parent)
+    {
+        id: "usr_child_004",
+        email: "murid1@dinosaku.com",
+        username: "tono_s",
+        password: "password123",
+        fullName: "Tono Saputra",
+        role: "children",
+        status: "active",
+        plan: "free",
+        avatarUrl: "https://api.dicebear.com/10.x/critters/svg?seed=Tono",
+        createdAt: "2024-06-15T08:00:00Z",
+        preferences: { notificationsEnabled: false },
+        classCode: "DINO-4A",
+        gamification: {
+            totalPoints: 350,
+            currentStreak: 2,
+            energy: 1,
+            maxEnergy: 1,
+            totalBadges: 1,
+            badges: [
+                { id: "b1", icon: "🌱", title: "Penabung Pemula", description: "Mencatat pengeluaran pertama", unlocked: true }
+            ]
+        }
+    },
+
     // 5. GURU
     {
         id: "usr_teacher_001",
