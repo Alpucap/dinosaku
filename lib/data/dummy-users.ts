@@ -37,6 +37,8 @@ export interface User {
     gamification?: {
         totalPoints: number;
         currentStreak: number;
+        aiCoins?: number;
+        dailyCoinLimit?: number;
         totalBadges: number;
         badges: UserBadge[];
     };
@@ -68,9 +70,16 @@ export const DUMMY_USERS: User[] = [
         role: "parents",
         status: "active",
         avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
-        createdAt: "2024-05-10T10:30:00Z",
+        createdAt: "2024-01-10T10:00:00Z",
         preferences: { notificationsEnabled: true },
-        childrenIds: ["usr_child_001", "usr_child_002", "usr_child_003"]
+        childrenIds: ["usr_child_001", "usr_child_002", "usr_child_003"],
+        gamification: {
+            totalPoints: 0,
+            currentStreak: 0,
+            aiCoins: 30,
+            totalBadges: 0,
+            badges: []
+        }
     },
 
     // 3. ANAK PERTAMA (Terhubung ke Budi)
@@ -123,6 +132,8 @@ export const DUMMY_USERS: User[] = [
         gamification: {
             totalPoints: 1250,
             currentStreak: 12,
+            aiCoins: 15,
+            dailyCoinLimit: 2,
             totalBadges: 2,
             badges: [
                 { id: "b1", icon: "🌱", title: "Penabung Pemula", description: "Mencatat pengeluaran pertama", unlocked: true },
@@ -146,6 +157,13 @@ export const DUMMY_USERS: User[] = [
         createdAt: "2024-08-01T07:15:00Z",
         preferences: { notificationsEnabled: true },
         schoolId: "sch_001",
-        classCode: "DINO-4A"
+        classCode: "DINO-4A",
+        gamification: {
+            totalPoints: 0,
+            currentStreak: 0,
+            aiCoins: 250,
+            totalBadges: 0,
+            badges: []
+        }
     }
 ];

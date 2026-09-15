@@ -6,7 +6,11 @@ export default async function PembimbingLayout({ children }: { children: ReactNo
   const user = await requireRole(["parents", "teacher"]);
 
   return (
-    <PembimbingShell user={{ fullName: user.fullName, avatarUrl: user.avatarUrl }}>
+    <PembimbingShell user={{ 
+      fullName: user.fullName, 
+      avatarUrl: user.avatarUrl,
+      gamification: user.gamification
+    }}>
       {children}
     </PembimbingShell>
   );

@@ -8,7 +8,11 @@ export default async function LearnLayout({ children }: { children: React.ReactN
 
   return (
     <LearnShell
-      user={user ? { fullName: user.fullName, avatarUrl: user.avatarUrl } : null}
+      user={user ? { 
+        fullName: user.fullName, 
+        avatarUrl: user.avatarUrl,
+        gamification: user.gamification 
+      } : null}
     >
       <StorageNotice />
       {children}

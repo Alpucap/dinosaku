@@ -106,8 +106,14 @@ export function DashboardHeader({ title, user }: DashboardHeaderProps) {
         )}
       </div>
 
-      {/* Right Section: Live Clock + Profil */}
+      {/* Right Section: Koin, Live Clock + Profil */}
       <div className="flex items-center gap-2 sm:gap-3">
+        {user?.gamification?.aiCoins !== undefined && (
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-warning-soft text-warning font-bold text-xs border border-warning/20 shadow-sm whitespace-nowrap">
+            <span>⚡</span>
+            <span>{user.gamification.aiCoins} Koin</span>
+          </div>
+        )}
         <LiveHeaderClock />
         {user && <ProfileAvatar user={user} />}
       </div>

@@ -81,7 +81,11 @@ model Gamification {
   user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   totalPoints   Int    @default(0)
   currentStreak Int    @default(0)
-  updatedAt     DateTime @updatedAt
+  updatedAt     DateTime         @updatedAt
+  
+  // Subscription & Gamification
+  aiCoins        Int              @default(2) // Free tier gets 2 coins
+  dailyCoinLimit Int?             // Optional limit set by parent/teacher
 }
 
 model Badge {

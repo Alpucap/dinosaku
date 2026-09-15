@@ -4,6 +4,10 @@ import { cn } from "@/lib/utils";
 export type ProfileUser = {
   fullName: string;
   avatarUrl?: string;
+  gamification?: {
+    totalPoints?: number;
+    aiCoins?: number;
+  };
 };
 
 interface ProfileAvatarProps {

@@ -23,11 +23,11 @@ The application is pre-seeded with dummy accounts to help you test all features 
 - **Use Case:** Test the core learning loop. View the Adventure Map, read AI-generated stories, complete quizzes to earn points, and view unlocked badges. Try completing a "Special Mission" if assigned by a teacher.
 
 ### 2. Teacher Role
-- **Name/Username:** Budi Guru (`budi_guru`)
+- **Name/Username:** Siti Aminah (`bu_siti`)
 - **Use Case:** Access the Guardian Dashboard. View the class leaderboard, track total points of all students, and use the **"Penugasan"** menu to assign a new learning topic to a specific student (e.g., Bagas). 
 
 ### 3. Parent Role
-- **Name/Username:** Cindy Mom (`cindy_mom`)
+- **Name/Username:** Budi Santoso (`budi_parent`)
 - **Use Case:** Access the Guardian Dashboard scoped only to their own child. Monitor the child's real-world "Saving Goal" (Target Tabungan) progress and learning activity timeline.
 
 ---
