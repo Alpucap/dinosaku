@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦖 Dinosaku: Generative AI for Kids Financial Literacy
 
-## Getting Started
+Dinosaku is an interactive financial literacy platform designed specifically for children. By blending Generative AI (Google Gemini) and gamification, Dinosaku delivers an engaging and personalized learning experience about managing money through interactive adventure stories.
 
-First, run the development server:
+---
 
+## 🌟 Core Features
+
+- 🗺️ **Adventure Map (Peta Petualangan)**: A structured learning path where children can complete various story chapters and quizzes regarding financial literacy.
+- 🤖 **AI-Powered Stories & Quizzes**: Utilizes the Google Gemini API to dynamically generate illustrated stories (comics) and quizzes based on specific topics (e.g., Saving, Investment) and themes (e.g., Space, Underwater).
+- 👨‍🏫 **Guardian Dashboard (Dasbor Pembimbing)**: A dedicated portal for parents and teachers to monitor learning progress, points, and real-world saving goals of their children/students.
+- 🎯 **Mission & Assignments (Penugasan)**: A feature for Guardians to assign specific "missions" to children. Children will receive a prominent Mission Banner notification upon logging in.
+- 🏆 **Gamification Engine**: Features Points, Streaks, and Badges to ensure children stay highly motivated to learn.
+
+---
+
+## 🔐 Demo Logic Credentials (For Judges & Testing)
+
+The application is pre-seeded with dummy accounts to help you test all features seamlessly without needing to register. **No password is required**, simply select the profile from the Login page.
+
+### 1. Children Role
+- **Name/Username:** Bagas (`bagas_s`)
+- **Use Case:** Test the core learning loop. View the Adventure Map, read AI-generated stories, complete quizzes to earn points, and view unlocked badges. Try completing a "Special Mission" if assigned by a teacher.
+
+### 2. Teacher Role
+- **Name/Username:** Siti Aminah (`bu_siti`)
+- **Use Case:** Access the Guardian Dashboard. View the class leaderboard, track total points of all students, and use the **"Penugasan"** menu to assign a new learning topic to a specific student (e.g., Bagas). 
+
+### 3. Parent Role
+- **Name/Username:** Budi Santoso (`budi_parent`)
+- **Use Case:** Access the Guardian Dashboard scoped only to their own child. Monitor the child's real-world "Saving Goal" (Target Tabungan) progress and learning activity timeline.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router) + React
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Database**: PostgreSQL (via [Neon](https://neon.tech/))
+- **Storage**: Firebase Storage (For saving AI-generated story images)
+- **AI Engine**: Google Gemini API
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+
+---
+
+## 🚀 Installation Steps
+
+Follow these steps to run the Dinosaku project locally on your machine.
+
+### 1. Clone the Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Alpucap/dinosaku.git
+cd dinosaku
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Sync the Database
+Push the Prisma schema to your PostgreSQL database to create the necessary tables and generate the Prisma Client:
+```bash
+npx prisma db push
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Run the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ⚙️ Configuration Parameters (`.env`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a `.env` file in the root directory. You must configure the following parameters for the app to function properly:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```env
+# [REQUIRED] PostgreSQL Database URL (e.g., Neon, Supabase, local PostgreSQL)
+# Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=require
+DATABASE_URL="postgresql://user:password@host:port/db_name?sslmode=require"
 
-## Deploy on Vercel
+# [REQUIRED] Google Gemini API Key
+# Obtain this from Google AI Studio. Used for generating stories and quizzes.
+GEMINI_API_KEY="AIzaSy..."
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# [REQUIRED] Firebase Admin SDK Configuration
+# Used for securely uploading base64 images generated by the app to Firebase Storage.
+# Obtain these from your Firebase Console -> Project Settings -> Service Accounts.
+FIREBASE_PROJECT_ID="dinosaku-xxx"
+FIREBASE_CLIENT_EMAIL="firebase-adminsdk-xxx@dinosaku-xxx.iam.gserviceaccount.com"
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+FIREBASE_STORAGE_BUCKET="dinosaku-xxx.appspot.com"
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📖 User Guide & Walkthrough
+
+Here is a quick guide on how to navigate and use the application:
+
+### Flow 1: Learning as a Child
+1. Go to `http://localhost:3000/login` and click on **Bagas**.
+2. You will land on the **Adventure Map**.
+3. If a teacher has assigned a mission, you will see a banner at the top. Click **"Mulai Misi Khusus"** to auto-generate a story based on the teacher's requirement.
+4. Alternatively, click on any unlocked node on the map, read the comic, and answer the quiz at the end to earn points and badges.
+
+### Flow 2: Assigning a Mission as a Teacher
+1. Go to `http://localhost:3000/login` and click on **Budi Guru**.
+2. You will land on the **Guardian Dashboard** showing class statistics.
+3. On the sidebar, click **"Penugasan"** (Assignments).
+4. Fill out the "Buat Misi Baru" form: Select a child (e.g., Bagas), pick a Financial Topic (e.g., "Menabung"), and pick a Theme (e.g., "Luar Angkasa"). Click Submit.
+5. The assignment will appear in the History list as "Pending". It will automatically change to "Completed" once the child finishes the story.
+
+### Flow 3: Monitoring Savings as a Parent
+1. Go to `http://localhost:3000/login` and click on **Cindy Mom**.
+2. On the sidebar, click **"Target Tabungan"** (Savings Goal).
+3. View the visual progress bar of what the child is currently saving for (e.g., "Beli Robot Dinosaurus - 30% Terkumpul"). 
+4. Click **"Progres Belajar"** to see a chronological timeline of when the child read stories and what quiz scores they received.
+
+---
+*Built with ❤️ for early childhood financial literacy.*

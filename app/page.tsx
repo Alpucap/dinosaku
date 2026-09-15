@@ -134,14 +134,69 @@ export default function Home() {
             variant="a"
           />
 
-          {/* SUBSCRIPTION CTA SECTION */}
-          <SubscriptionCTA />
+          {/* ABOUT US SECTION */}
+          <section id="about" className="scroll-mt-24 pt-20 pb-20 bg-surface-soft relative">
+            <div className="container-main max-w-4xl mx-auto text-center">
+              <Reveal>
+                <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary mb-6">Tentang Dinosaku</h2>
+                <div className="bg-white rounded-3xl p-8 md:p-12 shadow-card border-4 border-border-strong text-left md:text-center">
+                  <p className="text-secondary text-lg leading-relaxed mb-6">
+                    Mengenalkan konsep keuangan pada anak seringkali terasa membosankan dan sulit dipahami. 
+                    Berangkat dari keresahan tersebut, <strong>Dinosaku</strong> hadir untuk mengubah cara anak belajar tentang uang!
+                  </p>
+                  <p className="text-secondary text-lg leading-relaxed">
+                    Melalui bantuan asisten AI canggih, kami meracik materi literasi finansial menjadi sebuah komik interaktif yang seru. 
+                    Ditemani oleh <strong>Purba</strong> sang dinosaurus hijau yang menggemaskan, anak-anak kini bisa bertualang sambil menyerap ilmu mengelola uang sejak usia dini. 
+                    Misi kami adalah mempersiapkan generasi masa depan yang melek finansial, satu cerita dalam satu waktu.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          </section>
 
           <SectionWave
             above="bg-surface-soft"
             below="var(--color-surface)"
             variant="b"
           />
+
+          {/* SUBSCRIPTION CTA SECTION */}
+          <SubscriptionCTA />
+
+          <SectionWave
+            above="bg-surface"
+            below="var(--color-surface-soft)"
+            variant="a"
+          />
+
+          {/* CONTACT SECTION */}
+          <section id="contact" className="scroll-mt-24 pt-16 pb-24 bg-surface-soft relative">
+            <div className="container-main max-w-5xl mx-auto">
+              <Reveal className="bg-brand-primary text-white rounded-[3rem] p-10 md:p-16 shadow-modal text-center relative overflow-hidden">
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-brand-accent/30 rounded-full blur-2xl"></div>
+                <h2 className="font-heading text-3xl md:text-5xl font-bold mb-6 relative z-10">Punya Pertanyaan?</h2>
+                <p className="text-white/90 text-lg mb-10 max-w-2xl mx-auto relative z-10">
+                  Tim kami selalu siap membantu perjalanan petualangan finansial si kecil. Jangan ragu untuk menghubungi kami jika ada kritik, saran, atau sekadar ingin menyapa Purba!
+                </p>
+                <div className="flex flex-col md:flex-row justify-center items-center gap-6 relative z-10">
+                  <a href="mailto:halo@dinosaku.com" className="button-accent px-8 py-4 font-bold text-lg rounded-full w-full md:w-auto shadow-card">
+                    Email Kami
+                  </a>
+                  <a href="https://wa.me/6281234567890" target="_blank" rel="noreferrer" className="bg-white text-brand-primary hover:bg-gray-100 px-8 py-4 font-bold text-lg rounded-full w-full md:w-auto shadow-card transition-colors border-4 border-transparent">
+                    WhatsApp
+                  </a>
+                </div>
+              </Reveal>
+            </div>
+          </section>
+
+          <SectionWave
+            above="bg-surface-soft"
+            below="var(--color-surface)"
+            variant="b"
+          />
+
         </main>
 
         {/* FOOTER */}
