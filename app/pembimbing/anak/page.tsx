@@ -1,4 +1,5 @@
-import { Flame, Star, Medal, UserRound } from "lucide-react";
+import Link from "next/link";
+import { Flame, Star, Medal, UserRound, ChevronRight } from "lucide-react";
 import { requireRole } from "@/lib/auth/guard";
 import { prisma } from "@/lib/prisma";
 import { getGuardianScopeLabel } from "@/lib/data/children";
@@ -59,7 +60,10 @@ export default async function DaftarAnakPage() {
                 key={child.id}
                 className="flex flex-col gap-4 rounded-xl border border-default bg-surface p-5 transition-shadow hover:shadow-card"
               >
-                <div className="flex items-center gap-3">
+                <Link
+                  href={`/pembimbing/anak/${child.id}`}
+                  className="group flex items-center gap-3"
+                >
                   {child.avatarUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -74,15 +78,16 @@ export default async function DaftarAnakPage() {
                     </span>
                   )}
 
-                  <div className="min-w-0">
-                    <p className="truncate font-heading text-base font-bold text-text-primary">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-heading text-base font-bold text-text-primary group-hover:text-brand-primary group-hover:underline">
                       {child.fullName}
                     </p>
                     <p className="truncate text-xs text-text-muted">
                       @{child.username}
                     </p>
                   </div>
-                </div>
+                  <ChevronRight size={18} className="shrink-0 text-text-muted group-hover:text-brand-primary" />
+                </Link>
 
                 <div className="flex flex-wrap gap-2 items-center justify-between">
                   <div className="flex flex-wrap gap-2">

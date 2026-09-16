@@ -6,7 +6,7 @@ export default async function AnakLayout({ children }: { children: ReactNode }) 
   const user = await requireRole(["children"]);
 
   return (
-    <AnakShell user={{ fullName: user.fullName, avatarUrl: user.avatarUrl }}>
+    <AnakShell user={{ fullName: user.fullName, avatarUrl: user.avatarUrl, role: user.role }}>
       {children}
     </AnakShell>
   );

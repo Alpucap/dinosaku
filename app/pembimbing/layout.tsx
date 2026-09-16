@@ -9,6 +9,7 @@ export default async function PembimbingLayout({ children }: { children: ReactNo
     <PembimbingShell user={{ 
       fullName: user.fullName, 
       avatarUrl: user.avatarUrl,
+      role: user.role,
       gamification: user.gamification
     }}>
       {children}

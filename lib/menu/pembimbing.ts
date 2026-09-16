@@ -3,7 +3,6 @@ import {
   TrendingUp,
   Users,
   PiggyBank,
-  FileText,
   Settings,
 } from "lucide-react";
 import type { SidebarMenuSection } from "@/components/layout/AppSidebar";
@@ -23,7 +22,6 @@ export const pembimbingMenuSections: SidebarMenuSection[] = [
   {
     title: "Lainnya",
     items: [
-      { name: "Laporan", href: "/pembimbing/laporan", icon: FileText },
       { name: "Pengaturan", href: "/pembimbing/pengaturan", icon: Settings },
     ],
   },

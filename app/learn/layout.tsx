@@ -11,6 +11,7 @@ export default async function LearnLayout({ children }: { children: React.ReactN
       user={{ 
         fullName: user.fullName, 
         avatarUrl: user.avatarUrl,
+        role: user.role,
         gamification: user.gamification 
       }}
     >

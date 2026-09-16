@@ -39,7 +39,7 @@ export default async function Navbar() {
         </nav>
         {user ? (
           <ProfileAvatar
-            user={{ fullName: user.fullName, avatarUrl: user.avatarUrl }}
+            user={{ fullName: user.fullName, avatarUrl: user.avatarUrl, role: user.role }}
           />
         ) : (
           <div className="flex items-center gap-4">

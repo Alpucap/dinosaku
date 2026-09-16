@@ -1,5 +1,6 @@
 import { requireRole } from "@/lib/auth/guard";
-import { Settings, User, Bell, Shield, KeyRound, Link as LinkIcon } from "lucide-react";
+import { Settings, User, Bell, Shield, Link as LinkIcon } from "lucide-react";
+import { ClassCodeCard } from "@/components/dino/ClassCodeCard";
 
 export default async function PengaturanPage() {
   const user = await requireRole(["parents", "teacher"]);
@@ -13,19 +14,8 @@ export default async function PengaturanPage() {
       </header>
       <div className="flex flex-col gap-6 max-w-3xl">
 
-      {user.role === 'teacher' && user.classCode && (
-        <div className="rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-5 flex items-start gap-4">
-          <div className="h-10 w-10 bg-brand-primary text-white rounded-full flex items-center justify-center shrink-0">
-            <KeyRound size={20} />
-          </div>
-          <div>
-            <h3 className="font-bold text-brand-primary">Kode Kelas Anda</h3>
-            <p className="text-sm text-text-secondary mt-1">Bagikan kode ini kepada murid-murid Anda saat mereka mendaftar agar otomatis masuk ke daftar pantauan Anda.</p>
-            <div className="mt-3 bg-white border border-border-strong px-4 py-2 rounded-lg font-mono font-bold text-lg inline-block text-text-primary tracking-widest shadow-sm">
-              {user.classCode}
-            </div>
-          </div>
-        </div>
+      {user.role === 'teacher' && (
+        <ClassCodeCard initialCode={user.classCode} />
       )}
 
       {user.role === 'parents' && (
