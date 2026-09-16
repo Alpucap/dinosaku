@@ -40,7 +40,7 @@ export default function TransactionForm({ onSubmit }: TransactionFormProps) {
             <div className="flex gap-2 bg-surface-soft p-1.5 rounded-xl border border-border">
                 <button
                     type="button"
-                    onClick={() => setType('expense')}
+                    onClick={() => { setType('expense'); setCategory('food'); }}
                     className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${type === 'expense'
                             ? 'bg-destructive text-white shadow-sm scale-[1.02]'
                             : 'bg-transparent text-text-secondary hover:bg-destructive/10 hover:text-destructive'
@@ -50,7 +50,7 @@ export default function TransactionForm({ onSubmit }: TransactionFormProps) {
                 </button>
                 <button
                     type="button"
-                    onClick={() => setType('income')}
+                    onClick={() => { setType('income'); setCategory('salary'); }}
                     className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${type === 'income'
                             ? 'bg-brand-primary text-white shadow-sm scale-[1.02]'
                             : 'bg-transparent text-text-secondary hover:bg-brand-primary/10 hover:text-brand-primary'

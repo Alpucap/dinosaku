@@ -112,6 +112,7 @@ model UserBadge {
 
 // Menyimpan struktur cerita AI yang asalnya dari IndexedDB
 model Story {
+  assignments   Assignment[]
   id          String   @id @default(uuid())
   title       String
   topic       String?
@@ -173,6 +174,9 @@ model Assignment {
   topic       String
   theme       String
   status      AssignmentStatus @default(PENDING)
+  
+  storyId     String?
+  story       Story?   @relation(fields: [storyId], references: [id], onDelete: SetNull)
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

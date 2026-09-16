@@ -91,3 +91,18 @@ export async function allocateToGoalAction(goalId: string, amount: number) {
 
     revalidatePath('/learn/tracker');
 }
+
+export async function resetWalletAction() {
+    const user = await getSessionUser();
+    if (!user) throw new Error('Not authenticated');
+
+    await prisma.walletTransaction.deleteMany({
+        where: { userId: user.id }
+    });
+
+    await prisma.savingGoal.deleteMany({
+        where: { userId: user.id }
+    });
+
+    revalidatePath('/learn/tracker');
+}

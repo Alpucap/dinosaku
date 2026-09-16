@@ -113,23 +113,24 @@ export default function RegisterPage() {
             <Card className="w-full shadow-xl border-t-[6px] border-brand-primary rounded-xl bg-surface relative z-10 overflow-hidden">
                 <CardContent className="p-6 md:p-8 pt-6 md:pt-6">
                     {/* Header untuk mobile/tablet */}
-                    <div className="lg:hidden flex flex-col items-center text-center mb-4 relative">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary rounded-full blur-[40px] opacity-20 pointer-events-none"></div>
-                        <div className="relative z-10 w-24 h-24 md:w-32 md:h-32 animate-[floatMascot_4s_ease-in-out_infinite]">
+                    <div className="lg:hidden flex flex-col items-center text-center space-y-4 mb-4 mt-2">
+                        <div className="relative h-12 w-[180px] mb-2">
                             <Image
-                                src="/mascot/dino.png"
-                                alt="Mascot Dinosaku"
+                                src="/logo/dinosaku.svg"
+                                alt="Dinosaku Logo"
                                 fill
+                                className="object-contain"
                                 priority
-                                className="object-contain drop-shadow-md"
                             />
                         </div>
-                        <h2 className="mt-4 text-2xl md:text-3xl font-heading text-primary tracking-tight">Selamat Datang!</h2>
-                        <p className="mt-1 text-sm text-secondary">Mari belajar bersama Dinosaku.</p>
+                        <div>
+                            <h2 className="text-3xl font-heading text-primary tracking-tight">Selamat Datang!</h2>
+                            <p className="mt-1 text-sm text-secondary">Mari belajar bersama Dinosaku.</p>
+                        </div>
                     </div>
-
-                    <h2 className="text-3xl font-heading text-primary mb-0 mt-2">Ayo Bergabung!</h2>
-                    <p className="text-secondary mb-3 text-sm md:text-base">Isi data di bawah ini untuk membuat akun barumu.</p>
+                    
+                    <h2 className="hidden lg:block text-3xl font-heading text-primary mb-0 mt-2">Ayo Bergabung!</h2>
+                    <p className="hidden lg:block text-secondary mb-3 text-sm md:text-base">Isi data di bawah ini untuk membuat akun barumu.</p>
                     {errors.root && <div className="p-3 mb-4 rounded-xl bg-danger-soft border border-danger text-danger text-sm font-medium animate-shake text-center">{errors.root}</div>}
 
                     <form className="space-y-4 relative z-10" onSubmit={handleSubmit} noValidate>

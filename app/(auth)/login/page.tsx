@@ -92,9 +92,9 @@ export default function LoginPage() {
             <CardContent className="p-6 sm:p-10 flex flex-col gap-8">
                 {/* Logo & Judul */}
                 <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="relative h-16 w-16 mb-2">
+                    <div className="relative h-12 w-[180px] mb-2">
                         <Image
-                            src="/mascot/dino-happy.svg"
+                            src="/logo/dinosaku.svg"
                             alt="Dinosaku Logo"
                             fill
                             className="object-contain"

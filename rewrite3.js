@@ -1,4 +1,6 @@
+const fs = require('fs');
 
+const code = `
 'use client';
 
 import { useState } from 'react';
@@ -113,7 +115,7 @@ export default function TrackerClient({ initialTransactions, initialGoals }: Tra
                 </div>
 
                 {/* Main Content Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                     
                     {/* Top Left: Form Transaksi */}
                     <div className="bg-surface p-6 sm:p-8 rounded-3xl shadow-sm border border-border">
@@ -121,7 +123,7 @@ export default function TrackerClient({ initialTransactions, initialGoals }: Tra
                     </div>
 
                     {/* Top Right: Riwayat Transaksi */}
-                    <div className="bg-surface p-6 sm:p-8 rounded-3xl shadow-sm border border-border flex flex-col h-full space-y-4">
+                    <div className="bg-surface p-6 sm:p-8 rounded-3xl shadow-sm border border-border space-y-4">
                         <div className="flex justify-between items-center">
                             <h3 className="font-heading font-bold text-xl text-brand-primary">Catatan Uang</h3>
                             <button 
@@ -136,7 +138,7 @@ export default function TrackerClient({ initialTransactions, initialGoals }: Tra
                                 <p className="text-text-muted font-bold text-sm">Masih kosong... Yuk, mulai catat uangmu!</p>
                             </div>
                         ) : (
-                            <div className="space-y-4 flex flex-col flex-1">
+                            <div className="space-y-4">
                                 <div className="divide-y divide-border">
                                     {paginatedTransactions.map((t) => {
                                         const categoryLabels: Record<string, string> = {
@@ -154,7 +156,7 @@ export default function TrackerClient({ initialTransactions, initialGoals }: Tra
                                         return (
                                             <div key={t.id} className="py-3 flex justify-between items-center group hover:bg-surface-soft px-2 rounded-xl transition-colors">
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center font-black text-xl ${t.type === 'income' ? 'bg-brand-secondary/30 text-brand-primary' : 'bg-destructive/10 text-destructive'}`}>
+                                                    <div className={\`w-10 h-10 rounded-full shrink-0 flex items-center justify-center font-black text-xl \${t.type === 'income' ? 'bg-brand-secondary/30 text-brand-primary' : 'bg-destructive/10 text-destructive'}\`}>
                                                         {t.type === 'income' ? '+' : '-'}
                                                     </div>
                                                     <div>
@@ -162,7 +164,7 @@ export default function TrackerClient({ initialTransactions, initialGoals }: Tra
                                                         <p className="text-xs font-semibold text-text-muted">{t.date}</p>
                                                     </div>
                                                 </div>
-                                                <span className={`shrink-0 font-bold text-sm px-3 py-1 rounded-lg ${t.type === 'income' ? 'text-brand-primary bg-brand-secondary/20' : 'text-destructive bg-destructive/10'}`}>
+                                                <span className={\`shrink-0 font-bold text-sm px-3 py-1 rounded-lg \${t.type === 'income' ? 'text-brand-primary bg-brand-secondary/20' : 'text-destructive bg-destructive/10'}\`}>
                                                     {t.type === 'income' ? '+' : '-'} Rp {t.amount.toLocaleString('id-ID')}
                                                 </span>
                                             </div>
@@ -172,7 +174,7 @@ export default function TrackerClient({ initialTransactions, initialGoals }: Tra
                                 
                                 {/* Pagination Controls */}
                                 {totalPages > 1 && (
-                                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-border">
+                                    <div className="flex items-center justify-between pt-2 border-t border-border">
                                         <button 
                                             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                             disabled={currentPage === 1}
@@ -261,3 +263,9 @@ export default function TrackerClient({ initialTransactions, initialGoals }: Tra
         </div>
     );
 }
+            </div>
+        </div>
+    );
+}
+`;
+fs.writeFileSync('app/learn/tracker/TrackerClient.tsx', code);

@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function TeacherProfileSection({ formData, setFormData, myChildrenCount = 0 }: Props) {
-    const maxStudents = 30;
+    const maxStudents = 50;
     
     return (
         <Field className="md:col-span-2 mt-4 pt-4 border-t">
@@ -55,7 +55,7 @@ export function TeacherProfileSection({ formData, setFormData, myChildrenCount =
                         <Users className="h-4 w-4" />
                         Kapasitas Murid
                     </h5>
-                    <p className="text-sm text-text-secondary mt-1">Satu kelas dapat menampung maksimal 30 murid secara gratis.</p>
+                    <p className="text-sm text-text-secondary mt-1">Satu kelas dapat menampung maksimal 50 murid secara gratis.</p>
                 </div>
                 <div className="text-right">
                     <span className="text-2xl font-bold font-heading text-brand-primary">{myChildrenCount}</span>

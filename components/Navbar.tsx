@@ -29,7 +29,7 @@ export default async function Navbar() {
               href={user.role === 'children' ? '/learn' : user.role === 'admin' ? '/admin' : '/pembimbing'} 
               className="hover:text-primary transition-colors"
             >
-              Dashboard
+              {user.role === 'children' ? 'Learn' : 'Dashboard'}
             </Link>
           ) : (
             <Link href="/learn" className="hover:text-primary transition-colors">Learn</Link>

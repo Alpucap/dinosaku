@@ -1,80 +1,12 @@
-import { requireRole } from "@/lib/auth/guard";
-import { prisma } from "@/lib/prisma";
-import { Target, CheckCircle, Clock, PiggyBank, Plus, Check } from "lucide-react";
-import { revalidatePath } from "next/cache";
-import CeritaClient from "../cerita/CeritaClient";
+const fs = require('fs');
 
-export default async function AksiDanMisiPage() {
-  const user = await requireRole(["parents", "teacher"]);
+let pageStr = fs.readFileSync('app/pembimbing/aksi/page.tsx', 'utf-8');
 
-  let children: any[] = [];
-  if (user.role === 'teacher' && user.classCode) {
-    children = await prisma.user.findMany({ where: { role: 'CHILDREN', classCode: user.classCode }, select: { id: true, fullName: true } });
-  } else if (user.role === 'parents') {
-    children = await prisma.user.findMany({ where: { role: 'CHILDREN', parentId: user.id }, select: { id: true, fullName: true } });
-  }
+if (!pageStr.includes('CeritaClient')) {
+  pageStr = pageStr.replace('import { revalidatePath } from "next/cache";', 'import { revalidatePath } from "next/cache";\nimport CeritaClient from "../cerita/CeritaClient";');
+}
 
-  const childrenIds = children.map(c => c.id);
-
-  // Fetch Assignments
-  const assignments = await prisma.assignment.findMany({
-    where: { assignerId: user.id },
-    include: { assignee: { select: { fullName: true } } },
-    orderBy: { createdAt: 'desc' }
-  });
-
-  // Fetch Savings
-  const savings = await prisma.savingGoal.findMany({
-    where: { userId: { in: childrenIds } },
-    include: { user: { select: { fullName: true } } },
-    orderBy: { createdAt: 'desc' }
-  });
-
-  // Server Actions
-  async function createAssignment(formData: FormData) {
-    'use server';
-    const assigneeId = formData.get('assigneeId') as string;
-    const topic = formData.get('topic') as string;
-    const theme = formData.get('theme') as string;
-
-    if (!assigneeId || !topic || !theme) return;
-
-    await prisma.assignment.create({
-      data: {
-        assignerId: user.id,
-        assigneeId,
-        topic,
-        theme,
-        status: 'PENDING'
-      }
-    });
-
-    revalidatePath('/pembimbing/aksi');
-  }
-
-  async function createSavingGoal(formData: FormData) {
-    'use server';
-    const userId = formData.get('userId') as string;
-    const title = formData.get('title') as string;
-    const targetAmount = parseInt(formData.get('targetAmount') as string);
-    const currentAmount = parseInt(formData.get('currentAmount') as string) || 0;
-
-    if (!userId || !title || !targetAmount) return;
-
-    await prisma.savingGoal.create({
-      data: {
-        userId,
-        title,
-        targetAmount,
-        currentAmount,
-        isCompleted: currentAmount >= targetAmount
-      }
-    });
-
-    revalidatePath('/pembimbing/aksi');
-  }
-
-
+const newReturn = `
   return (
     <div className="learning-page w-full">
       <header className="page-heading">
@@ -252,3 +184,8 @@ export default async function AksiDanMisiPage() {
     </div>
   );
 }
+`;
+
+pageStr = pageStr.substring(0, pageStr.indexOf('  return (')) + newReturn;
+
+fs.writeFileSync('app/pembimbing/aksi/page.tsx', pageStr);
