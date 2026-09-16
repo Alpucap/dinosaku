@@ -17,8 +17,18 @@ export function ActivityCompositionDonut({ slices }: { slices: CompositionSlice[
     return arc;
   });
 
+
+  const storySlice = slices.find(s => s.type === 'STORY_READ')?.count || 0;
+  const quizSlice = slices.find(s => s.type === 'QUIZ_COMPLETED')?.count || 0;
+  
+  const literasiScore = Math.min(Math.max(Math.round((storySlice / 5) * 100), 15), 98);
+  const quizScore = Math.min(Math.max(Math.round(totalCount > 0 ? (quizSlice / (storySlice + quizSlice || 1)) * 100 : 10), 15), 95);
+  const consistScore = Math.min(Math.max(Math.round((totalCount / 20) * 100), 20), 90);
+
+  const getLabel = (score: number) => score >= 80 ? "Sangat Baik" : score >= 50 ? "Menengah" : "Pemula";
+
   return (
-    <div className="rounded-xl border border-default bg-surface p-6">
+    <div className="rounded-xl border border-default bg-surface p-6 flex flex-col h-full">
       <h3 className="font-bold text-text-primary">Komposisi Aktivitas</h3>
       <p className="text-sm text-text-secondary mt-1">
         Sebaran jenis aktivitas sepanjang riwayat belajarnya.
@@ -87,6 +97,39 @@ export function ActivityCompositionDonut({ slices }: { slices: CompositionSlice[
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="mt-auto pt-8">
+        <h4 className="font-bold text-text-primary text-sm mb-4">Estimasi Keterampilan Anak</h4>
+        <div className="space-y-4">
+          <div>
+            <div className="flex justify-between text-xs mb-1.5">
+              <span className="font-medium text-text-secondary">Minat Literasi Cerita</span>
+              <span className="font-bold text-[#10b981]">{getLabel(literasiScore)}</span>
+            </div>
+            <div className="h-2 w-full bg-border rounded-full overflow-hidden">
+              <div className="h-full bg-[#10b981] transition-all duration-1000" style={{ width: `${literasiScore}%` }} />
+            </div>
+          </div>
+          <div>
+            <div className="flex justify-between text-xs mb-1.5">
+              <span className="font-medium text-text-secondary">Pemahaman Teks (Kuis)</span>
+              <span className="font-bold text-brand-primary">{getLabel(quizScore)}</span>
+            </div>
+            <div className="h-2 w-full bg-border rounded-full overflow-hidden">
+              <div className="h-full bg-brand-primary transition-all duration-1000" style={{ width: `${quizScore}%` }} />
+            </div>
+          </div>
+          <div>
+            <div className="flex justify-between text-xs mb-1.5">
+              <span className="font-medium text-text-secondary">Konsistensi Belajar</span>
+              <span className="font-bold text-brand-accent">{getLabel(consistScore)}</span>
+            </div>
+            <div className="h-2 w-full bg-border rounded-full overflow-hidden">
+              <div className="h-full bg-brand-accent transition-all duration-1000" style={{ width: `${consistScore}%` }} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

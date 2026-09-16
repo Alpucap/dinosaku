@@ -74,17 +74,19 @@ export default function CeritaClient() {
     setIsGenerating(true);
     try {
       const finalTheme = character ? `${theme} dengan Purba sang Dino yang memakai kostum/berperan sebagai ${character}` : theme;
-      await createAndAssignStory(topic, finalTheme, selectedStudents);
-      toast.add({ title: "Cerita berhasil dibuat & ditugaskan!", type: 'success' });
-      setTopic('');
-      setTheme('');
-      setSelectedStudents([]);
-      const newEnergy = await getTeacherEnergy();
-      setEnergy(newEnergy);
-      router.refresh();
+      const storyId = await createAndAssignStory(topic, finalTheme, []); // Pass empty array so it doesn't assign yet
+      
+      toast.add({ title: "Cerita berhasil diracik! Silakan preview.", type: 'success' });
+      
+      // Redirect to preview page with pending students
+      if (selectedStudents.length > 0) {
+        router.push(`/pembimbing/koleksi/${storyId}?pendingAssign=${selectedStudents.join(',')}`);
+      } else {
+        router.push(`/pembimbing/koleksi/${storyId}`);
+      }
+      
     } catch (e: any) {
       toast.add({ title: e.message || "Terjadi kesalahan saat membuat cerita", type: 'error' });
-    } finally {
       setIsGenerating(false);
     }
   };
@@ -183,7 +185,7 @@ export default function CeritaClient() {
               {isGenerating ? (
                 <><Loader2 className="animate-spin" size={20} /> AI Sedang Meracik Cerita...</>
               ) : (
-                <><BookOpen size={20} /> Buat & Tugaskan (1 Energi)</>
+                <><BookOpen size={20} /> Buat Cerita & Preview (1 Energi)</>
               )}
             </button>
             {energy < 1 && (

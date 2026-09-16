@@ -15,9 +15,20 @@ export function PembimbingShell({
   children: React.ReactNode;
   user?: ProfileUser | null;
 }) {
+  // Filter out teacher-only menus if user is parent
+  const filteredMenuSections = React.useMemo(() => {
+    return pembimbingMenuSections.map(section => ({
+      ...section,
+      items: section.items.filter(item => {
+        if (item.name === "Koleksi Cerita" && user?.role !== 'teacher') return false;
+        return true;
+      })
+    })).filter(section => section.items.length > 0);
+  }, [user?.role]);
+
   return (
     <DashboardShell
-      menuSections={pembimbingMenuSections}
+      menuSections={filteredMenuSections}
       rootHrefs={pembimbingRootHrefs}
       user={user}
       title="Dasbor Pembimbing"

@@ -1,6 +1,6 @@
 import { requireRole } from "@/lib/auth/guard";
 import { prisma } from "@/lib/prisma";
-import { Target, CheckCircle, Clock, PiggyBank, Plus, Check } from "lucide-react";
+import { Target, CheckCircle, Clock, PiggyBank, Plus, Check, Trash2 } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import CeritaClient from "../cerita/CeritaClient";
 
@@ -49,6 +49,18 @@ export default async function AksiDanMisiPage() {
       }
     });
 
+    revalidatePath('/pembimbing/aksi');
+  }
+
+  async function deleteSavingGoal(formData: FormData) {
+    'use server';
+    const id = formData.get('id') as string;
+    if (!id) return;
+    
+    const goal = await prisma.savingGoal.findUnique({ where: { id }, select: { userId: true } });
+    if (!goal || !childrenIds.includes(goal.userId)) return;
+
+    await prisma.savingGoal.delete({ where: { id } });
     revalidatePath('/pembimbing/aksi');
   }
 
@@ -215,8 +227,14 @@ export default async function AksiDanMisiPage() {
                   {savings.map((goal) => {
                     const percentage = Math.min(Math.round((goal.currentAmount / goal.targetAmount) * 100), 100);
                     return (
-                      <div key={goal.id} className="flex flex-col gap-3 rounded-xl border border-border-light bg-surface-soft p-4">
-                        <div className="flex items-center justify-between">
+                      <div key={goal.id} className="flex flex-col gap-3 rounded-xl border border-border-light bg-surface-soft p-4 relative group">
+                        <form action={deleteSavingGoal} className="absolute top-2 right-2 z-10">
+                          <input type="hidden" name="id" value={goal.id} />
+                          <button type="submit" className="text-text-muted hover:text-brand-danger transition-colors opacity-0 group-hover:opacity-100 p-1" title="Hapus target tabungan">
+                            <Trash2 size={16} />
+                          </button>
+                        </form>
+                        <div className="flex items-center justify-between pr-8">
                           <div>
                             <h3 className="font-bold text-text-primary text-sm">{goal.title}</h3>
                             <p className="text-[10px] text-text-muted mt-0.5">Untuk: <span className="font-semibold text-brand-primary">{goal.user.fullName}</span></p>

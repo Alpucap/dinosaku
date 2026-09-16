@@ -13,7 +13,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-export function ClassCodeCard({ initialCode }: { initialCode?: string | null }) {
+export function ClassCodeCard({ initialCode, plan }: { initialCode?: string | null, plan?: string }) {
   const router = useRouter();
   const [code, setCode] = useState(initialCode ?? null);
   const [loading, setLoading] = useState(false);
@@ -68,7 +68,19 @@ export function ClassCodeCard({ initialCode }: { initialCode?: string | null }) 
   };
 
   return (
-    <div className="rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-5 flex items-start gap-4">
+    <div className="rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-5 flex items-start gap-4 relative overflow-hidden">
+      {plan?.toUpperCase() !== 'PREMIUM' && (
+        <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center p-4 text-center">
+          <div className="bg-white px-6 py-4 rounded-2xl shadow-lg border border-border flex flex-col items-center max-w-sm">
+            <KeyRound size={24} className="text-brand-primary mb-2" />
+            <h3 className="font-bold text-text-primary mb-1">Fitur Premium</h3>
+            <p className="text-xs text-text-secondary mb-3">Upgrade ke lisensi Premium untuk membagikan kode kelas dan memantau progres murid Anda secara penuh.</p>
+            <button className="w-full bg-brand-primary text-white text-xs font-bold py-2 rounded-lg hover:bg-brand-primary/90">
+              Upgrade Sekarang
+            </button>
+          </div>
+        </div>
+      )}
       <div className="h-10 w-10 bg-brand-primary text-white rounded-full flex items-center justify-center shrink-0">
         <KeyRound size={20} />
       </div>

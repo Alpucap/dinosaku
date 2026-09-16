@@ -34,7 +34,25 @@ export default function StoriesLibraryPage() {
         setIsLoading(false);
       }
     }
+    
+    async function pollAssignments() {
+      try {
+        const res = await fetch('/api/assignments');
+        const data = await res.json();
+        if (data.assignments) {
+          // Hanya update state jika ada perubahan agar tidak re-render terus
+          setAssignments(prev => JSON.stringify(prev) !== JSON.stringify(data.assignments) ? data.assignments : prev);
+        }
+      } catch (e) {
+        // Abaikan error polling senyap
+      }
+    }
+
     loadData();
+    
+    // Auto-refresh misi setiap 5 detik
+    const interval = setInterval(pollAssignments, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const completed = presetStories.filter(story => profile.completedStories.includes(story.id)).length;
@@ -54,10 +72,10 @@ export default function StoriesLibraryPage() {
               <Flag size={20} /> Misi Khusus dari {assignments[0].assigner?.fullName || 'Guru/Ortu'}
             </h2>
             <p className="mt-1 text-sm text-text-primary">
-              Ada tugas petualangan bertema <strong>{assignments[0].theme}</strong> tentang <strong>{assignments[0].topic}</strong> yang harus kamu selesaikan!
+              Ada tugas cerita berjudul <strong>{assignments[0].topic}</strong> yang harus kamu selesaikan!
             </p>
           </div>
-          <Link href={`/learn/create?topic=${encodeURIComponent(assignments[0].topic)}&theme=${encodeURIComponent(assignments[0].theme)}&assignmentId=${assignments[0].id}`} className="button-primary shrink-0 px-5 py-2.5 shadow-sm">
+          <Link href={assignments[0].storyId ? `/learn/stories/${assignments[0].storyId}?assignmentId=${assignments[0].id}` : `/learn/create?topic=${encodeURIComponent(assignments[0].topic)}&theme=${encodeURIComponent(assignments[0].theme)}&assignmentId=${assignments[0].id}`} className="button-primary shrink-0 px-5 py-2.5 shadow-sm">
             Mulai Misi Khusus
           </Link>
         </div>

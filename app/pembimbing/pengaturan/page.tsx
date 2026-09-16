@@ -15,7 +15,7 @@ export default async function PengaturanPage() {
       <div className="flex flex-col gap-6 max-w-3xl">
 
       {user.role === 'teacher' && (
-        <ClassCodeCard initialCode={user.classCode} />
+        <ClassCodeCard initialCode={user.classCode} plan={user.plan as any} />
       )}
 
       {user.role === 'parents' && (

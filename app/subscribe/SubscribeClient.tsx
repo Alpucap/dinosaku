@@ -103,7 +103,7 @@ export default function SubscribeClient() {
             </div>
             
             <ul className="space-y-4 mb-8 flex-1">
-              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary font-bold">⚡ 60 Energi / Bulan (Sistem Jatah)</span></li>
+              <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary font-bold">⚡ 50 Energi / Bulan</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Lisensi Premium hingga 50 Murid</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Dasbor Guru (Analitik Kelas Lengkap)</span></li>
               <li className="flex items-start gap-3"><Check className="text-success shrink-0" size={20} /> <span className="text-text-primary">Beri Tugas (Misi Khusus) Serentak</span></li>

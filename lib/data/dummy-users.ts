@@ -211,6 +211,7 @@ export const DUMMY_USERS: User[] = [
         fullName: "Siti Aminah, S.Pd",
         role: "teacher",
         status: "active",
+        plan: "premium",
         avatarUrl: "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=wuwu1oq7",
         createdAt: "2024-08-01T07:15:00Z",
         preferences: { notificationsEnabled: true },
@@ -219,8 +220,8 @@ export const DUMMY_USERS: User[] = [
         gamification: {
             totalPoints: 0,
             currentStreak: 0,
-            energy: 60,
-            maxEnergy: 60,
+            energy: 50,
+            maxEnergy: 50,
             totalBadges: 0,
             badges: []
         }

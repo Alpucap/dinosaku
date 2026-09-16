@@ -12,15 +12,41 @@ import { useProgress } from '@/lib/use-progress';
 
 import { useRouter } from 'next/navigation';
 
-export default function PresetStoryViewer({ story, storyId }: { story: StoryData, storyId: string }) {
+export default function PresetStoryViewer({ story, storyId, assignmentId, returnUrl = "/learn", pendingAssign }: { story: StoryData, storyId: string, assignmentId?: string, returnUrl?: string, pendingAssign?: string }) {
   const [mode, setMode] = useState<'comic' | 'quiz'>('comic');
   const router = useRouter();
   const { profile, ready } = useProgress();
   const unlocked = true; // Temporarily unlock all if reached via URL
   // Removed strict locked check
 
-  const handleQuizFinish = () => {
-    router.push('/learn');
+  const [isAssigning, setIsAssigning] = useState(false);
+
+  const handleQuizFinish = async () => {
+    if (assignmentId) {
+      try {
+        await fetch('/api/assignments', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ assignmentId, status: 'COMPLETED' })
+        });
+      } catch(e) {
+        console.error(e);
+      }
+    } else if (pendingAssign) {
+      setIsAssigning(true);
+      try {
+        await fetch('/api/assignments/bulk-create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ storyId, title: story.title, studentIds: pendingAssign.split(',') })
+        });
+      } catch(e) {
+        console.error(e);
+      }
+      setIsAssigning(false);
+    }
+    router.refresh();
+    router.push(returnUrl);
   };
 
   if (!ready) return <p role="status" className="p-8">Membuka cerita...</p>;
@@ -52,7 +78,7 @@ export default function PresetStoryViewer({ story, storyId }: { story: StoryData
             storyId={storyId}
             quiz={story.quiz} 
             onRestart={handleQuizFinish}
-            restartLabel="Selesai & Kembali ke Peta"
+            restartLabel={isAssigning ? "Menugaskan..." : pendingAssign ? "Setuju & Tugaskan ke Murid" : "Selesai"}
           />
         )}
       </div>

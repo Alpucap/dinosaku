@@ -3,10 +3,10 @@ import { prisma } from '@/lib/prisma';
 import PresetStoryViewer from '@/components/dino/PresetStoryViewer';
 import { notFound } from 'next/navigation';
 
-export default async function StoryPage({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ assignmentId?: string }> }) {
+export default async function TeacherStoryPage({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ pendingAssign?: string }> }) {
   const { id } = await params;
   const sp = await searchParams;
-  const assignmentId = sp.assignmentId;
+  const pendingAssign = sp.pendingAssign;
   
   const dbStory = await prisma.story.findUnique({
     where: { id }
@@ -29,5 +29,5 @@ export default async function StoryPage({ params, searchParams }: { params: Prom
     ...(pagesData as any)
   };
 
-  return <PresetStoryViewer story={story} storyId={story.id} assignmentId={assignmentId} />;
+  return <PresetStoryViewer story={story} storyId={story.id} returnUrl="/pembimbing/koleksi" pendingAssign={pendingAssign} />;
 }
