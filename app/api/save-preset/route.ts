@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { uploadBase64ToFirebase } from '@/lib/firebase/admin';
 import crypto from 'crypto';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const { story, images, assignmentId } = await req.json();

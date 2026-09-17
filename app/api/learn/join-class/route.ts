@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth/session";
 import { findClassroomByCode, normalizeClassCode } from "@/lib/data/class";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const user = await getSessionUser();
