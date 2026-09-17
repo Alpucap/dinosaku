@@ -23,6 +23,7 @@ import {
 import { WeeklyActivityChart } from "@/components/dino/report/WeeklyActivityChart";
 import { ActivityCompositionDonut } from "@/components/dino/report/ActivityCompositionDonut";
 import { PrintReportButton } from "@/components/dino/report/PrintReportButton";
+import { PrintableReport } from "@/components/dino/report/PrintableReport";
 
 export default async function PembimbingDashboardPage() {
   const user = await requireRole(["parents", "teacher"]);
@@ -64,7 +65,9 @@ export default async function PembimbingDashboardPage() {
 
   return (
     <div className="learning-page">
-      <header className="page-heading">
+      <PrintableReport guardianName={user.fullName} role={user.role} students={summaries} />
+
+      <header className="page-heading print:hidden">
         <p className="eyebrow">Dasbor Pembimbing</p>
         <h1>Dasbor {user.role === "teacher" ? "Guru" : "Orang Tua"}</h1>
         <p>
@@ -73,27 +76,27 @@ export default async function PembimbingDashboardPage() {
         </p>
       </header>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 print:hidden">
         <div className="flex justify-end">
           <PrintReportButton />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {overviewTiles.map((tile) => (
-            <div key={tile.label} className="flex flex-col justify-center rounded-xl border border-default bg-surface p-5">
+            <div key={tile.label} className="flex min-w-0 flex-col justify-center rounded-xl border border-default bg-surface p-4 sm:p-5">
               <div className="flex items-center gap-2 text-text-secondary">
-                <tile.icon className="h-4 w-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider">{tile.label}</span>
+                <tile.icon className="h-4 w-4 shrink-0" />
+                <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider leading-tight">{tile.label}</span>
               </div>
-              <p className={`mt-2 font-heading text-3xl font-bold ${tile.valueClass}`}>{tile.value}</p>
+              <p className={`mt-2 font-heading text-2xl sm:text-3xl font-bold ${tile.valueClass}`}>{tile.value}</p>
             </div>
           ))}
-          <div className="flex flex-col justify-center rounded-xl border border-warning/30 bg-warning-soft/30 p-5">
+          <div className="flex min-w-0 flex-col justify-center rounded-xl border border-warning/30 bg-warning-soft/30 p-4 sm:p-5">
             <div className="flex items-center gap-2 text-warning">
               <span className="text-lg leading-none">⚡</span>
-              <span className="text-xs font-bold uppercase tracking-wider">Energi Bulanan</span>
+              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider leading-tight">Energi Bulanan</span>
             </div>
-            <p className="mt-2 font-heading text-3xl font-bold text-warning">{user.gamification?.energy || 0}</p>
+            <p className="mt-2 font-heading text-2xl sm:text-3xl font-bold text-warning">{user.gamification?.energy || 0}</p>
           </div>
         </div>
 
@@ -107,21 +110,21 @@ export default async function PembimbingDashboardPage() {
             </p>
             <p className="max-w-sm text-sm text-text-secondary">
               {user.role === "teacher"
-                ? "Bagikan kode kelasmu dari halaman Pengaturan agar murid bisa bergabung."
-                : "Hubungkan akun anak dulu dari halaman Pengaturan."}
+                ? "Bagikan kode kelasmu dari halaman Daftar Anak agar murid bisa bergabung."
+                : "Anak akan muncul di sini setelah akunnya terhubung dengan akunmu."}
             </p>
           </div>
         ) : (
           <>
             {/* Ringkasan minggu ini — pelengkap tiga kartu di atas yang bersifat total sepanjang waktu. */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4">
               {weeklyTiles.map((tile) => (
-                <div key={tile.label} className="rounded-xl border border-default bg-surface p-4">
-                  <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${tile.tint}`}>
+                <div key={tile.label} className="min-w-0 rounded-xl border border-default bg-surface p-3 sm:p-4">
+                  <span className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg ${tile.tint}`}>
                     <tile.icon size={18} />
                   </span>
-                  <p className="mt-3 font-heading text-2xl font-bold text-text-primary">{tile.value}</p>
-                  <p className="text-xs font-semibold text-text-secondary">{tile.label}</p>
+                  <p className="mt-3 font-heading text-xl sm:text-2xl font-bold text-text-primary">{tile.value}</p>
+                  <p className="text-[11px] sm:text-xs font-semibold leading-tight text-text-secondary">{tile.label}</p>
                 </div>
               ))}
             </div>
@@ -149,21 +152,21 @@ export default async function PembimbingDashboardPage() {
                 </h3>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[680px] text-left text-sm">
+                <table className="w-full sm:min-w-[680px] text-left text-sm">
                   <caption className="sr-only">Ringkasan belajar tiap anak</caption>
                   <thead>
                     <tr className="border-b border-border-light text-xs text-text-muted">
-                      <th scope="col" className="py-3 pl-5 pr-3 font-semibold">Anak</th>
+                      <th scope="col" className="py-3 pl-4 sm:pl-5 pr-3 font-semibold">Anak</th>
                       <th scope="col" className="py-3 pr-3 font-semibold">Aktivitas (7 hari)</th>
-                      <th scope="col" className="py-3 pr-3 font-semibold">Poin (7 hari)</th>
-                      <th scope="col" className="py-3 pr-3 font-semibold">Streak</th>
-                      <th scope="col" className="py-3 pr-5 font-semibold">Terakhir Aktif</th>
+                      <th scope="col" className="py-3 pr-4 sm:pr-3 font-semibold">Poin (7 hari)</th>
+                      <th scope="col" className="hidden sm:table-cell py-3 pr-3 font-semibold">Streak</th>
+                      <th scope="col" className="hidden sm:table-cell py-3 pr-5 font-semibold">Terakhir Aktif</th>
                     </tr>
                   </thead>
                   <tbody>
                     {sorted.map((child) => (
                       <tr key={child.id} className="border-b border-border-light last:border-0 hover:bg-surface-soft transition-colors">
-                        <td className="py-3 pl-5 pr-3">
+                        <td className="py-3 pl-4 sm:pl-5 pr-3">
                           <Link href={`/pembimbing/anak/${child.id}`} className="flex items-center gap-3 group">
                             {child.avatarUrl ? (
                               // eslint-disable-next-line @next/next/no-img-element
@@ -184,13 +187,13 @@ export default async function PembimbingDashboardPage() {
                               </span>
                               <span className="block truncate text-xs text-text-muted">@{child.username}</span>
                             </span>
-                            <ChevronRight size={16} className="ml-1 shrink-0 text-text-muted group-hover:text-brand-primary" />
+                            <ChevronRight size={16} className="ml-1 hidden sm:block shrink-0 text-text-muted group-hover:text-brand-primary print:hidden" />
                           </Link>
                         </td>
                         <td className="py-3 pr-3 text-text-secondary">{child.activitiesThisWeek}</td>
-                        <td className="py-3 pr-3 font-bold text-text-primary">{child.pointsThisWeek}</td>
-                        <td className="py-3 pr-3 text-text-secondary">{child.currentStreak} hari</td>
-                        <td className="py-3 pr-5 text-text-secondary">{formatRelativeTime(child.lastActiveAt)}</td>
+                        <td className="py-3 pr-4 sm:pr-3 font-bold text-text-primary">{child.pointsThisWeek}</td>
+                        <td className="hidden sm:table-cell py-3 pr-3 text-text-secondary">{child.currentStreak} hari</td>
+                        <td className="hidden sm:table-cell py-3 pr-5 text-text-secondary">{formatRelativeTime(child.lastActiveAt)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -198,7 +201,7 @@ export default async function PembimbingDashboardPage() {
               </div>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 [&>*]:min-w-0">
               <WeeklyActivityChart days={weeklyBreakdown} />
               <ActivityCompositionDonut slices={composition} />
             </div>
@@ -208,7 +211,7 @@ export default async function PembimbingDashboardPage() {
         <div className="rounded-xl border border-default bg-surface overflow-hidden flex flex-col">
           <div className="border-b border-border-light bg-surface-soft px-5 py-4 flex justify-between items-center">
             <h3 className="font-heading text-base font-bold text-text-primary">Aktivitas Terbaru</h3>
-            <Link href="/pembimbing/progres" className="text-xs font-semibold text-brand-primary flex items-center hover:underline">
+            <Link href="/pembimbing/progres" className="print:hidden text-xs font-semibold text-brand-primary flex items-center hover:underline">
               Selengkapnya <ChevronRight className="h-3 w-3 ml-1" />
             </Link>
           </div>

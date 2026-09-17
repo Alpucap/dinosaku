@@ -174,7 +174,7 @@ export default function DinoApp() {
   return (
     <div className="generator-page min-h-full text-primary py-8 px-4 lg:px-10 font-sans selection:bg-brand-accent-soft selection:text-brand-primary">
       {(mode === 'comic' || mode === 'quiz') && <HandController mode={mode} />}
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1600px] mx-auto w-full">
         {mode === 'form' && (
           <motion.header 
             initial={{ opacity: 0, y: -20 }}

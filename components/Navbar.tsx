@@ -1,7 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getSessionUser } from "@/lib/auth/session";
+import { getDashboardPath } from "@/lib/constants/roles";
 import { ProfileAvatar } from "@/components/layout/ProfileAvatar";
+
+function getNavLabel(role: string) {
+  if (role === "children") return "Berpetualang";
+  if (role === "admin") return "Dashboard";
+  return "Kelas";
+}
 
 export default async function Navbar() {
   const user = await getSessionUser();
@@ -25,33 +32,30 @@ export default async function Navbar() {
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-label text-secondary">
           {user ? (
-            <Link 
-              href={user.role === 'children' ? '/learn' : user.role === 'admin' ? '/admin' : '/pembimbing'} 
-              className="hover:text-primary transition-colors"
-            >
-              {user.role === 'children' ? 'Learn' : 'Dashboard'}
+            <Link href={getDashboardPath(user.role)} className="hover:text-primary transition-colors">
+              {getNavLabel(user.role)}
             </Link>
           ) : (
-            <Link href="/learn" className="hover:text-primary transition-colors">Learn</Link>
+            <Link href="/learn" className="hover:text-primary transition-colors">Berpetualang</Link>
           )}
-          <Link href="#about" className="hover:text-primary transition-colors">About Us</Link>
-          <Link href="#contact" className="hover:text-primary transition-colors">Contact</Link>
+          <Link href="#how-it-works" className="hover:text-primary transition-colors">Cara Kerja</Link>
+          <Link href="#contact" className="hover:text-primary transition-colors">Hubungi Kami</Link>
         </nav>
         {user ? (
           <ProfileAvatar
             user={{ fullName: user.fullName, avatarUrl: user.avatarUrl, role: user.role }}
           />
         ) : (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link
               href="/login"
-              className="text-label font-semibold text-secondary hover:text-primary transition-colors hidden sm:block"
+              className="text-label font-semibold text-secondary hover:text-primary transition-colors"
             >
               Masuk
             </Link>
             <Link
               href="/subscribe"
-              className="button-primary rounded-full px-5 py-2.5 text-sm"
+              className="button-primary rounded-full px-4 sm:px-5 py-2.5 text-sm"
             >
               Berlangganan
             </Link>

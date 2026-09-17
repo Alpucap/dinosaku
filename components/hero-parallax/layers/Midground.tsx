@@ -108,21 +108,23 @@ export default function Midground() {
 
         {/* --- DINOSAKU (Perfectly grounded on the exact peak of the lowered hill) --- */}
         {/* Subtle, small contact shadow right at his feet */}
-        <ellipse cx="720" cy="705" rx="60" ry="10" fill="#1b5e20" opacity="0.3" />
-        
-        {/* Dinosaku standing naturally on the terrain */}
-        <foreignObject x="570" y="465" width="300" height="260">
-          <div {...{ xmlns: "http://www.w3.org/1999/xhtml" }} className="w-full h-full flex justify-center items-end pb-[5px]">
-            <video 
-              src="/mascot/dinosaku-hero.webm" 
-              autoPlay 
-              loop 
-              muted 
-              playsInline
-              className="w-[85%] object-contain drop-shadow-2xl"
-            />
-          </div>
-        </foreignObject>
+        <g className="md:translate-x-[105px] lg:translate-x-[230px]">
+          <ellipse cx="720" cy="705" rx="60" ry="10" fill="#1b5e20" opacity="0.3" />
+
+          {/* Dinosaku standing naturally on the terrain */}
+          <foreignObject x="570" y="465" width="300" height="260">
+            <div {...{ xmlns: "http://www.w3.org/1999/xhtml" }} className="w-full h-full flex justify-center items-end pb-[5px]">
+              <video
+                src="/mascot/dinosaku-hero.webm"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-[85%] object-contain drop-shadow-2xl"
+              />
+            </div>
+          </foreignObject>
+        </g>
 
       </svg>
     </div>

@@ -85,7 +85,7 @@ export default async function ChildReportPage({
           ))}
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 [&>*]:min-w-0">
           <WeeklyActivityChart days={weeklyBreakdown} />
           <ActivityCompositionDonut slices={composition} />
         </div>
@@ -104,27 +104,32 @@ export default async function ChildReportPage({
             </p>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[520px] text-left text-sm">
+              <table className="w-full sm:min-w-[520px] text-left text-sm">
                 <caption className="sr-only">Riwayat aktivitas {summary.fullName}</caption>
                 <thead>
                   <tr className="border-b border-border-light bg-surface-soft text-xs text-text-muted">
-                    <th scope="col" className="py-3 pl-5 pr-3 font-semibold">Aktivitas</th>
-                    <th scope="col" className="py-3 pr-3 font-semibold">Jenis</th>
+                    <th scope="col" className="py-3 pl-4 sm:pl-5 pr-3 font-semibold">Aktivitas</th>
+                    <th scope="col" className="hidden sm:table-cell py-3 pr-3 font-semibold">Jenis</th>
                     <th scope="col" className="py-3 pr-3 font-semibold">Skor</th>
-                    <th scope="col" className="py-3 pr-3 font-semibold">Poin</th>
-                    <th scope="col" className="py-3 pr-5 font-semibold">Waktu</th>
+                    <th scope="col" className="py-3 pr-4 sm:pr-3 font-semibold">Poin</th>
+                    <th scope="col" className="hidden sm:table-cell py-3 pr-5 font-semibold">Waktu</th>
                   </tr>
                 </thead>
                 <tbody>
                   {log.map((entry) => (
                     <tr key={entry.id} className="border-b border-border-light last:border-0">
-                      <td className="py-3 pl-5 pr-3 font-semibold text-text-primary">{entry.title}</td>
-                      <td className="py-3 pr-3 text-text-secondary">{entry.label}</td>
+                      <td className="py-3 pl-4 sm:pl-5 pr-3">
+                        <span className="block font-semibold text-text-primary">{entry.title}</span>
+                        <span className="mt-0.5 block text-xs text-text-secondary sm:hidden">
+                          {entry.label} · {formatRelativeTime(entry.createdAt)}
+                        </span>
+                      </td>
+                      <td className="hidden sm:table-cell py-3 pr-3 text-text-secondary">{entry.label}</td>
                       <td className="py-3 pr-3 text-text-secondary">
                         {entry.score !== null ? entry.score : "—"}
                       </td>
-                      <td className="py-3 pr-3 font-bold text-text-primary">+{entry.pointsEarned}</td>
-                      <td className="py-3 pr-5 text-text-secondary">{formatRelativeTime(entry.createdAt)}</td>
+                      <td className="py-3 pr-4 sm:pr-3 font-bold text-text-primary">+{entry.pointsEarned}</td>
+                      <td className="hidden sm:table-cell py-3 pr-5 text-text-secondary">{formatRelativeTime(entry.createdAt)}</td>
                     </tr>
                   ))}
                 </tbody>

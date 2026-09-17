@@ -4,6 +4,7 @@ import { requireRole } from "@/lib/auth/guard";
 import { prisma } from "@/lib/prisma";
 import { getGuardianScopeLabel } from "@/lib/data/children";
 import UnlinkButton from "@/components/dino/UnlinkButton";
+import { ClassCodeCard } from "@/components/dino/ClassCodeCard";
 
 const STATUS_LABEL: Record<string, string> = {
   active: "Aktif",
@@ -36,6 +37,10 @@ export default async function DaftarAnakPage() {
       </header>
       <div className="flex flex-col gap-6">
 
+      {guardian.role === "teacher" && (
+        <ClassCodeCard initialCode={guardian.classCode} plan={guardian.plan as any} />
+      )}
+
       {children.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border-strong bg-surface px-6 py-14 text-center">
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-surface-soft text-text-muted">
@@ -46,8 +51,8 @@ export default async function DaftarAnakPage() {
           </p>
           <p className="max-w-sm text-sm text-text-secondary">
             {guardian.role === "teacher"
-              ? "Anak akan muncul di sini setelah kode kelasmu dipakai saat mereka mendaftar."
-              : "Tambahkan anak dari halaman pengaturan untuk mulai memantau progresnya."}
+              ? "Bagikan kode kelas di atas. Murid akan muncul di sini setelah memakai kode tersebut."
+              : "Anak akan muncul di sini setelah akunnya terhubung dengan akunmu."}
           </p>
         </div>
       ) : (

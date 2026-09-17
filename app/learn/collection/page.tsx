@@ -1,16 +1,23 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { getCollection, deleteStoryFromCollection, SavedStory } from '@/lib/collection';
-import { Book, Play, Sparkles, Trash2 } from 'lucide-react';
+import { Book, Play, Search, Sparkles, Trash2 } from 'lucide-react';
 import { useProgress } from '@/lib/use-progress';
 
 export default function CollectionPage() {
   const { profile } = useProgress();
   const [stories, setStories] = useState<SavedStory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<{id: string, title: string} | null>(null);
+
+  const filteredStories = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return stories;
+    return stories.filter(story => story.title.toLowerCase().includes(query));
+  }, [stories, search]);
 
   useEffect(() => {
     getCollection().then(res => {
@@ -47,6 +54,19 @@ export default function CollectionPage() {
         <span>{stories.length} cerita tersimpan</span>
       </div>
 
+      {!loading && stories.length > 0 && (
+        <div className="relative w-full max-w-sm mb-6">
+          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Cari judul ceritamu..."
+            className="w-full bg-white border-[3px] border-border-light rounded-2xl py-3 pl-12 pr-4 font-medium text-primary placeholder:text-secondary/70 focus:outline-none focus:border-brand-primary transition-colors"
+          />
+        </div>
+      )}
+
       {loading ? (
         <p role="status">Memuat koleksimu...</p>
       ) : stories.length === 0 ? (
@@ -55,9 +75,14 @@ export default function CollectionPage() {
           <p className="mb-6 text-secondary">Rak bukumu masih kosong. Yuk buat cerita pertamamu!</p>
           <Link href="/learn/create" className="button-primary px-8 py-4 text-lg">Buat Cerita Sekarang</Link>
         </div>
+      ) : filteredStories.length === 0 ? (
+        <div className="ranking-empty py-16 flex flex-col items-center justify-center">
+          <Search size={48} className="text-secondary opacity-50 mb-4 mx-auto" />
+          <p className="text-secondary">Tidak ada cerita dengan judul "{search}".</p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {stories.map(story => (
+          {filteredStories.map(story => (
             <article key={story.id} className="bg-white rounded-[2rem] p-5 border-[3px] border-border-light shadow-[0_8px_0_0_rgba(203,213,225,1)] flex flex-col hover:-translate-y-1 transition-transform">
               <div className="w-full aspect-square bg-[#F8FAFC] rounded-2xl mb-5 overflow-hidden border-2 border-border-light relative">
                 {story.panels[0]?.imageUrl ? (

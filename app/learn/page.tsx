@@ -3,12 +3,15 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Check, LockKeyhole, Play, Flag } from 'lucide-react';
 import { useProgress } from '@/lib/use-progress';
 import LearningStats from '@/components/dino/LearningStats';
+import AdventureWelcome from '@/components/dino/AdventureWelcome';
 
 export default function StoriesLibraryPage() {
   const { profile, ready } = useProgress();
+  const reduceMotion = useReducedMotion();
   const [presetStories, setPresetStories] = useState<any[]>([]);
   const [assignments, setAssignments] = useState<any[]>([]);
   const [isPremium, setIsPremium] = useState(false);
@@ -59,10 +62,11 @@ export default function StoriesLibraryPage() {
   const next = presetStories.find(story => !profile.completedStories.includes(story.id));
   
   return <div className="learning-page">
-    <header className="adventure-welcome">
-      <div className="welcome-copy"><p className="eyebrow">Halo, {profile.name}!</p><h1>Petualangan kecil.<br /><span>Bekal untuk masa depan.</span></h1><p>Temani Purba menjelajah, belajar mengelola uang, dan mengisi buku pencapaianmu.</p><Link href={next ? `/learn/stories/${next.id}` : '/learn/badges'} className="button-primary mt-5 px-6 py-3">{completed === 0 ? 'Mulai petualangan' : next ? 'Lanjutkan petualangan' : 'Lihat pencapaianku'}<Play size={17} aria-hidden="true" /></Link></div>
-      <div className="welcome-mascot"><span className="mascot-speech">Kita belajar bersama, yuk!</span><Image src="/mascot/dino.png" alt="Purba, teman petualanganmu" width={230} height={230} priority /><span className="mascot-ground" aria-hidden="true" /></div>
-    </header>
+    <AdventureWelcome
+      name={profile.name}
+      ctaHref={next ? `/learn/stories/${next.id}` : '/learn/badges'}
+      ctaLabel={completed === 0 ? 'Mulai petualangan' : next ? 'Lanjutkan petualangan' : 'Lihat pencapaianku'}
+    />
 
     {assignments.length > 0 && (
       <section className="mt-8 mb-8 rounded-xl border-2 border-brand-primary bg-brand-primary/5 p-6 shadow-sm">
@@ -86,23 +90,60 @@ export default function StoriesLibraryPage() {
     <section aria-labelledby="adventure-map-heading">
       <div className="section-heading"><div><p className="eyebrow">Bab 01 · Kenalan dengan uang</p><h2 id="adventure-map-heading">Peta petualanganmu</h2></div><span>{completed} / {presetStories.length} selesai</span></div>
       <progress className="learning-progress mb-8" value={completed} max={Math.max(1, presetStories.length)} aria-label="Cerita selesai" />
-      {(!ready || isLoading) ? <p role="status" className="py-10">Membuka peta petualangan...</p> : presetStories.length === 0 ? <p role="status">Cerita baru sedang disiapkan. Coba buat cerita sendiri dulu, ya!</p> : <ol className="adventure-path">{presetStories.map((story, index) => {
+      {(!ready || isLoading) ? (
+        <div role="status" className="flex flex-col items-center gap-3 py-12 text-secondary">
+          <motion.div
+            animate={reduceMotion ? undefined : { y: [0, -14, 0], rotate: [0, -4, 4, 0] }}
+            transition={{ duration: 0.9, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <Image src="/mascot/dino.png" alt="" aria-hidden width={72} height={72} />
+          </motion.div>
+          <p>Membuka peta petualangan...</p>
+        </div>
+      ) : presetStories.length === 0 ? <p role="status">Cerita baru sedang disiapkan. Coba buat cerita sendiri dulu, ya!</p> : <ol className="adventure-path">{presetStories.map((story, index) => {
         const done = profile.completedStories.includes(story.id);
         const isPaywalled = !isPremium && index >= 2;
         const unlocked = (index === 0 || profile.completedStories.includes(presetStories[index - 1].id)) && !isPaywalled;
         const result = profile.results.find(r => r.storyId === story.id);
-        return <li key={story.id} className={`adventure-stop ${done ? 'stop-done' : unlocked ? 'stop-current' : 'stop-locked'}`}>
-          <span className="path-checkpoint" aria-hidden="true">{done ? <Check size={23} /> : unlocked ? index + 1 : <LockKeyhole size={21} />}</span>
-          <article className="story-stop-card">
+        const isCurrent = unlocked && !done;
+        return <motion.li
+          key={story.id}
+          className={`adventure-stop ${done ? 'stop-done' : unlocked ? 'stop-current' : 'stop-locked'}`}
+          initial={reduceMotion ? false : { opacity: 0, y: 40, x: index % 2 ? 28 : -28 }}
+          whileInView={{ opacity: 1, y: 0, x: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ type: 'spring', stiffness: 110, damping: 17, delay: Math.min(index, 3) * 0.12 }}
+        >
+          <motion.span
+            className={`path-checkpoint ${isCurrent ? 'checkpoint-beacon' : ''}`}
+            aria-hidden="true"
+            initial={reduceMotion ? false : { scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: 'spring', stiffness: 260, damping: 12, delay: Math.min(index, 3) * 0.12 + 0.25 }}
+          >
+            {done ? <Check size={23} /> : unlocked ? index + 1 : <LockKeyhole size={21} />}
+          </motion.span>
+          <motion.article
+            className="story-stop-card"
+            whileHover={unlocked && !reduceMotion ? { y: -5 } : undefined}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          >
             <div className={`story-scene ${index % 2 ? 'scene-forest' : 'scene-space'}`} aria-hidden="true"><span className="scene-orbit" /><span className="scene-world" /><Image src="/mascot/dino.png" alt="" width={130} height={130} /><span className="scene-label">{story.themeLabel || (index % 2 ? 'Hutan Ajaib' : 'Luar Angkasa')}</span></div>
             <div className="story-stop-copy"><p className="eyebrow">Misi 0{index + 1} · {story.quiz?.length || 0} pertanyaan</p><h3>{story.title}</h3><p>{story.description}</p>
               {unlocked ? <><Link href={`/learn/stories/${story.id}`} className={`mt-4 w-full px-4 py-3 ${done ? 'button-secondary' : 'button-primary'}`}><Play size={17} />{done ? 'Mainkan lagi' : 'Mainkan'}</Link>{result && <p className="mt-3 text-sm text-brand-primary">Nilai terbaik: {result.score} / {result.total}</p>}</> : 
                isPaywalled ? <div className="locked-message bg-brand-accent-soft text-brand-accent-strong border border-brand-accent-soft rounded-lg p-3 flex gap-2 text-sm mt-3"><LockKeyhole size={16} className="shrink-0 mt-0.5" /><span>Berlangganan Premium untuk membuka misi ini dan misi selanjutnya!</span></div> :
                <div className="locked-message"><LockKeyhole size={16} className="shrink-0" /><span>Selesaikan misi sebelumnya untuk membuka.</span></div>}
             </div>
-          </article>
-        </li>;
-      })}<li className="path-finish"><Flag size={22} aria-hidden="true" /><span>{completed === presetStories.length ? 'Semua misi selesai. Hebat, petualang!' : 'Selangkah demi selangkah, kamu pasti bisa.'}</span></li></ol>}
+          </motion.article>
+        </motion.li>;
+      })}<motion.li
+        className="path-finish"
+        initial={reduceMotion ? false : { opacity: 0, scale: 0.85 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', stiffness: 180, damping: 14 }}
+      ><Flag size={22} aria-hidden="true" /><span>{completed === presetStories.length ? 'Semua misi selesai. Hebat, petualang!' : 'Selangkah demi selangkah, kamu pasti bisa.'}</span></motion.li></ol>}
     </section>
   </div>;
 }

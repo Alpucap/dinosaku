@@ -95,7 +95,7 @@ export function WeeklyActivityChart({ days }: { days: DayBreakdown[] }) {
 
       {/* Tabel yang sama sebagai data — bukan cuma dekorasi tersembunyi. */}
       <div className="mt-6 overflow-x-auto">
-        <table className="w-full min-w-[420px] text-left text-xs">
+        <table className="w-full sm:min-w-[420px] text-left text-xs">
           <caption className="sr-only">Rincian poin harian menurut jenis aktivitas</caption>
           <thead>
             <tr className="border-b border-border-light text-text-muted">

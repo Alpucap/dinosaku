@@ -94,7 +94,9 @@ export default async function LeaderboardPage(props: PageProps) {
         {/* LEADERBOARD GLOBAL */}
         <section className="leaderboard-sheet" aria-label="Peringkat Global">
           <div className="leaderboard-title">
-            <Trophy size={28} className="text-brand-accent" />
+            <span className="leaderboard-icon">
+              <Trophy size={24} className="text-brand-accent" />
+            </span>
             <div>
               <h2>Global (Top 10)</h2>
               <p>Petualang terbaik dari seluruh dunia.</p>
@@ -106,25 +108,26 @@ export default async function LeaderboardPage(props: PageProps) {
               const rank = index + 1;
               const isCurrentUser = entry.user.id === user.id;
               let rankClass = '';
+              let podiumClass = '';
               if (points > 0) {
-                if (rank === 1) rankClass = 'rank-first';
-                else if (rank === 2) rankClass = 'rank-second';
-                else if (rank === 3) rankClass = 'rank-third';
+                if (rank === 1) { rankClass = 'rank-first'; podiumClass = 'podium-avatar podium-avatar-1'; }
+                else if (rank === 2) { rankClass = 'rank-second'; podiumClass = 'podium-avatar podium-avatar-2'; }
+                else if (rank === 3) { rankClass = 'rank-third'; podiumClass = 'podium-avatar podium-avatar-3'; }
               }
-              
+
               return (
                 <li key={entry.id} className={isCurrentUser ? 'ranking-current' : ''}>
                   <span className={`rank-number ${rankClass}`}>{rank}</span>
                   {entry.user.avatarUrl ? (
-                    <img src={entry.user.avatarUrl} alt="" aria-hidden className="w-10 h-10 rounded-full border border-border" />
+                    <img src={entry.user.avatarUrl} alt="" aria-hidden className={`w-10 h-10 rounded-full border border-border ${podiumClass}`} />
                   ) : (
-                    <span className={`profile-avatar avatar-${index % 3}`} aria-hidden="true">
+                    <span className={`profile-avatar avatar-${index % 3} ${podiumClass}`} aria-hidden="true">
                       {entry.user.fullName.slice(0, 1).toUpperCase()}
                     </span>
                   )}
                   <div className="min-w-0 flex-1">
                     <strong className="break-words">{entry.user.fullName}</strong>
-                    {isCurrentUser && <span className="ml-2 text-xs text-secondary">Kamu</span>}
+                    {isCurrentUser && <span className="kamu-badge">Kamu</span>}
                     <small className="block text-secondary">
                       Streak: {entry.currentStreak} hari
                     </small>
@@ -136,7 +139,7 @@ export default async function LeaderboardPage(props: PageProps) {
                 </li>
               );
             })}
-            
+
             {/* Render User's Global Rank if not in top 10 */}
             {!isUserInGlobalTop10 && userGlobalEntry && (
               <>
@@ -154,7 +157,7 @@ export default async function LeaderboardPage(props: PageProps) {
                   )}
                   <div className="min-w-0 flex-1">
                     <strong className="break-words">{userGlobalEntry.user.fullName}</strong>
-                    <span className="ml-2 text-xs text-secondary">Kamu</span>
+                    <span className="kamu-badge">Kamu</span>
                     <small className="block text-secondary">
                       Streak: {userGlobalEntry.currentStreak} hari
                     </small>
@@ -173,7 +176,9 @@ export default async function LeaderboardPage(props: PageProps) {
         {user.classCode && (
           <section className="leaderboard-sheet flex flex-col" aria-label="Peringkat Sekolah">
             <div className="leaderboard-title">
-              <Users size={28} className="text-brand-primary" />
+              <span className="leaderboard-icon">
+                <Users size={24} className="text-brand-primary" />
+              </span>
               <div>
                 <h2>{schoolName} - Kelas {user.classCode}</h2>
                 <p>Bersaing secara sehat dengan teman sekelasmu.</p>
@@ -187,25 +192,26 @@ export default async function LeaderboardPage(props: PageProps) {
                 const isCurrentUser = entry.user.id === user.id;
                 
                 let rankClass = '';
+                let podiumClass = '';
                 if (points > 0) {
-                  if (rank === 1) rankClass = 'rank-first';
-                  else if (rank === 2) rankClass = 'rank-second';
-                  else if (rank === 3) rankClass = 'rank-third';
+                  if (rank === 1) { rankClass = 'rank-first'; podiumClass = 'podium-avatar podium-avatar-1'; }
+                  else if (rank === 2) { rankClass = 'rank-second'; podiumClass = 'podium-avatar podium-avatar-2'; }
+                  else if (rank === 3) { rankClass = 'rank-third'; podiumClass = 'podium-avatar podium-avatar-3'; }
                 }
-                
+
                 return (
                   <li key={entry.id} className={isCurrentUser ? 'ranking-current' : ''}>
                     <span className={`rank-number ${rankClass}`}>{rank}</span>
                     {entry.user.avatarUrl ? (
-                      <img src={entry.user.avatarUrl} alt="" aria-hidden className="w-10 h-10 rounded-full border border-border" />
+                      <img src={entry.user.avatarUrl} alt="" aria-hidden className={`w-10 h-10 rounded-full border border-border ${podiumClass}`} />
                     ) : (
-                      <span className={`profile-avatar avatar-${index % 3}`} aria-hidden="true">
+                      <span className={`profile-avatar avatar-${index % 3} ${podiumClass}`} aria-hidden="true">
                         {entry.user.fullName.slice(0, 1).toUpperCase()}
                       </span>
                     )}
                     <div className="min-w-0 flex-1">
                       <strong className="break-words">{entry.user.fullName}</strong>
-                      {isCurrentUser && <span className="ml-2 text-xs text-secondary">Kamu</span>}
+                      {isCurrentUser && <span className="kamu-badge">Kamu</span>}
                       <small className="block text-secondary">
                         Streak: {entry.currentStreak} hari
                       </small>

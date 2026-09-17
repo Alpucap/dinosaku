@@ -275,7 +275,7 @@ export default function SubscriptionCTA() {
   return (
     <section
       id="langganan"
-      className="scroll-mt-24 bg-surface-soft py-20 md:py-28"
+      className="scroll-mt-24 bg-surface py-20 md:py-28"
     >
       <div className="container-main max-w-5xl grid items-center gap-16 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
         <Reveal from="left">
@@ -338,7 +338,7 @@ export default function SubscriptionCTA() {
                   {isActive && (
                     <motion.span
                       layoutId="chapter-highlight"
-                      className="absolute inset-0 rounded-2xl bg-surface shadow-soft"
+                      className="absolute inset-0 rounded-2xl bg-surface-soft"
                       transition={{
                         type: "spring",
                         stiffness: 400,

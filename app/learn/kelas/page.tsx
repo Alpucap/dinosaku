@@ -31,7 +31,7 @@ export default async function KelasPage() {
           <div className="rounded-xl border border-default bg-surface p-6">
             <p className="text-text-secondary">
               Halaman ini untuk akun anak. Guru membagikan kode kelasnya lewat
-              menu Pengaturan di dasbor Pembimbing.
+              menu Daftar Anak di dasbor Pembimbing.
             </p>
           </div>
         ) : (

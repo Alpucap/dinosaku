@@ -28,12 +28,16 @@ export function DashboardShell({
   return (
     <SidebarProvider>
       <TooltipProvider>
-        <div className="flex h-screen w-full overflow-hidden bg-background">
-          <AppSidebar menuSections={menuSections} rootHrefs={rootHrefs} />
+        <div className="flex h-screen w-full overflow-hidden bg-background print:block print:h-auto print:overflow-visible">
+          <div className="contents print:hidden">
+            <AppSidebar menuSections={menuSections} rootHrefs={rootHrefs} />
+          </div>
 
-          <div className="flex flex-1 flex-col overflow-hidden">
-            <DashboardHeader title={title} user={user} />
-            <main className="relative min-w-0 flex-1 overflow-y-auto">
+          <div className="flex flex-1 flex-col overflow-hidden print:block print:overflow-visible">
+            <div className="contents print:hidden">
+              <DashboardHeader title={title} user={user} />
+            </div>
+            <main className="relative min-w-0 flex-1 overflow-y-auto print:overflow-visible print:h-auto">
               {children}
             </main>
           </div>

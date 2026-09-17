@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Goal } from '@/types/tracker';
-import Image from 'next/image';
 
 interface GoalCardProps {
     goal: Goal;
@@ -47,10 +46,7 @@ export default function GoalCard({
             }`}>
             <div className="flex justify-between items-start mb-3">
                 <div>
-                    <div className="flex items-center gap-2">
-                        {isPrimary && (
-                            <Image src="/mascot/dino.png" alt="Dino" width={24} height={24} className="object-contain drop-shadow-sm" />
-                        )}
+                    <div className="flex flex-wrap items-center gap-2">
                         <h4 className="font-heading font-bold text-lg text-brand-primary">{goal.title}</h4>
                         {isPrimary && (
                             <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-brand-accent text-brand-primary uppercase tracking-wider shadow-sm flex items-center gap-1">

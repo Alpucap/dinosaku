@@ -53,6 +53,7 @@ export async function addTransactionAction(data: { type: 'income' | 'expense', a
     });
 
     revalidatePath('/learn/tracker');
+    revalidatePath('/learn/impian');
 }
 
 export async function addGoalAction(data: { title: string, targetAmount: number }) {
@@ -69,6 +70,7 @@ export async function addGoalAction(data: { title: string, targetAmount: number 
         }
     });
 
+    revalidatePath('/learn/impian');
     revalidatePath('/learn/tracker');
 }
 
@@ -89,6 +91,7 @@ export async function allocateToGoalAction(goalId: string, amount: number) {
         }
     });
 
+    revalidatePath('/learn/impian');
     revalidatePath('/learn/tracker');
 }
 
@@ -105,4 +108,5 @@ export async function resetWalletAction() {
     });
 
     revalidatePath('/learn/tracker');
+    revalidatePath('/learn/impian');
 }

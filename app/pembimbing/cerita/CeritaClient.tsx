@@ -95,199 +95,188 @@ export default function CeritaClient() {
     return <div className="flex justify-center py-20"><Loader2 className="animate-spin text-brand-primary w-8 h-8" /></div>;
   }
 
+  const inputClass = "w-full bg-surface-soft border border-border-strong rounded-lg p-2 text-sm focus:border-brand-primary outline-none transition-colors";
+  const labelClass = "block text-[11px] uppercase tracking-wider font-bold text-text-secondary mb-1";
+  const chipClass = "text-[11px] bg-surface-soft border border-border text-text-secondary font-bold px-2 py-1 rounded-md hover:bg-brand-primary/10 hover:text-brand-primary hover:border-brand-primary/30 transition-colors";
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-      
+    <div className="grid md:grid-cols-5 gap-6 items-start">
+
       {/* KIRI: Form Cerita */}
-      <div className="lg:col-span-7">
-        <div className="bg-surface rounded-3xl p-6 md:p-8 border border-border shadow-sm h-full flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold font-heading text-brand-primary flex items-center gap-2">
-              <Sparkles className="text-brand-accent" /> Buat Cerita Baru
-            </h2>
-            <div className="bg-warning-soft text-warning px-4 py-1.5 rounded-full font-bold text-sm flex items-center gap-2 border border-warning/20">
-              <Zap size={16} className="fill-warning" /> {energy} Energi
-            </div>
-          </div>
-
-                    <div className="bg-brand-primary/5 border border-brand-primary/20 rounded-xl p-4 flex gap-3 items-start mb-6">
-            <div className="bg-white text-brand-primary p-2 rounded-lg shrink-0 shadow-sm">
-              <Sparkles size={20} />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-brand-primary">💡 Tips AI</p>
-              <p className="text-xs text-text-secondary mt-1 leading-relaxed">
-                Kombinasikan topik belajar uang dengan dunia fantasi anak. AI akan meracik cerita petualangan lengkap dengan ilustrasi dan kuis interaktif secara instan!
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-5 flex-1">
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                <label className="block text-sm font-bold text-text-secondary">Topik Cerita</label>
-                <div className="flex flex-wrap gap-2">
-                  <button onClick={() => setTopic('Menabung untuk beli mainan')} className="text-xs bg-brand-primary/10 text-brand-primary font-bold px-3 py-1.5 rounded-md hover:bg-brand-primary/20 transition-colors">Menabung</button>
-                  <button onClick={() => setTopic('Pentingnya berbagi dengan teman')} className="text-xs bg-info/10 text-info font-bold px-3 py-1.5 rounded-md hover:bg-info/20 transition-colors">Berbagi</button>
-                  <button onClick={() => setTopic('Menghargai barang milik sendiri')} className="text-xs bg-brand-accent/10 text-brand-accent font-bold px-3 py-1.5 rounded-md hover:bg-brand-accent/20 transition-colors">Menghargai</button>
-                </div>
-              </div>
-              <input 
-                type="text" 
-                placeholder="Contoh: Belajar menabung untuk beli sepeda"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-                className="w-full bg-background border-2 border-border rounded-xl px-4 py-3 focus:outline-none focus:border-brand-primary transition-colors font-medium text-text-primary"
-              />
-            </div>
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                <label className="block text-sm font-bold text-text-secondary">Tema / Latar (Opsional)</label>
-                <div className="flex flex-wrap gap-2">
-                  <button onClick={() => setTheme('Luar Angkasa')} className="text-xs bg-surface-soft border border-border text-text-secondary font-bold px-3 py-1.5 rounded-md hover:bg-surface-hover transition-colors">Luar Angkasa</button>
-                  <button onClick={() => setTheme('Hutan Ajaib')} className="text-xs bg-surface-soft border border-border text-text-secondary font-bold px-3 py-1.5 rounded-md hover:bg-surface-hover transition-colors">Hutan Ajaib</button>
-                  <button onClick={() => setTheme('Kerajaan Dinosaurus')} className="text-xs bg-surface-soft border border-border text-text-secondary font-bold px-3 py-1.5 rounded-md hover:bg-surface-hover transition-colors">Dinosaurus</button>
-                </div>
-              </div>
-              <input 
-                type="text" 
-                placeholder="Contoh: Luar Angkasa, Hutan Ajaib"
-                value={theme}
-                onChange={(e) => setTheme(e.target.value)}
-                className="w-full bg-background border-2 border-border rounded-xl px-4 py-3 focus:outline-none focus:border-brand-primary transition-colors font-medium text-text-primary"
-              />
-            </div>
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                <label className="block text-sm font-bold text-text-secondary">Peran / Kostum Purba (Opsional)</label>
-                <div className="flex flex-wrap gap-2">
-                  <button onClick={() => setCharacter('Astronot')} className="text-xs bg-surface-soft border border-border text-text-secondary font-bold px-3 py-1.5 rounded-md hover:bg-surface-hover transition-colors">Astronot</button>
-                  <button onClick={() => setCharacter('Detektif')} className="text-xs bg-surface-soft border border-border text-text-secondary font-bold px-3 py-1.5 rounded-md hover:bg-surface-hover transition-colors">Detektif</button>
-                  <button onClick={() => setCharacter('Ksatria')} className="text-xs bg-surface-soft border border-border text-text-secondary font-bold px-3 py-1.5 rounded-md hover:bg-surface-hover transition-colors">Ksatria</button>
-                </div>
-              </div>
-              <input 
-                type="text" 
-                placeholder="Contoh: Astronot, Detektif, Pahlawan Super"
-                value={character}
-                onChange={(e) => setCharacter(e.target.value)}
-                className="w-full bg-background border-2 border-border rounded-xl px-4 py-3 focus:outline-none focus:border-brand-primary transition-colors font-medium text-text-primary"
-              />
-            </div>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-border mt-auto">
-            <button
-              onClick={handleGenerate}
-              disabled={isGenerating || energy < 1 || !topic || !theme}
-              className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isGenerating ? (
-                <><Loader2 className="animate-spin" size={20} /> AI Sedang Meracik Cerita...</>
-              ) : (
-                <><BookOpen size={20} /> Buat Cerita & Preview (1 Energi)</>
-              )}
-            </button>
-            {energy < 1 && (
-              <p className="text-center text-sm text-danger mt-3 font-medium">Energi habis! Beralih ke Premium untuk energi ekstra.</p>
-            )}
-          </div>
+      <div className="rounded-xl border border-default bg-surface p-5 flex flex-col gap-4 md:col-span-2">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="font-bold text-text-primary text-sm">Buat Cerita Baru</h3>
+          <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-warning bg-warning/10 px-2 py-1 rounded-md">
+            <Zap size={12} /> {energy} Energi
+          </span>
         </div>
+
+        <div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <label className={labelClass}>Topik Misi</label>
+            <div className="flex flex-wrap gap-1.5 mb-1">
+              <button type="button" onClick={() => setTopic('Menabung untuk beli mainan')} className={chipClass}>Menabung</button>
+              <button type="button" onClick={() => setTopic('Pentingnya berbagi dengan teman')} className={chipClass}>Berbagi</button>
+              <button type="button" onClick={() => setTopic('Menghargai barang milik sendiri')} className={chipClass}>Menghargai</button>
+            </div>
+          </div>
+          <input
+            type="text"
+            placeholder="Cth: Belajar menabung untuk beli sepeda"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <label className={labelClass}>Tema Cerita</label>
+            <div className="flex flex-wrap gap-1.5 mb-1">
+              <button type="button" onClick={() => setTheme('Luar Angkasa')} className={chipClass}>Luar Angkasa</button>
+              <button type="button" onClick={() => setTheme('Hutan Ajaib')} className={chipClass}>Hutan Ajaib</button>
+              <button type="button" onClick={() => setTheme('Kerajaan Dinosaurus')} className={chipClass}>Dinosaurus</button>
+            </div>
+          </div>
+          <input
+            type="text"
+            placeholder="Cth: Petualangan di Hutan Ajaib"
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <label className={labelClass}>Peran Purba (Opsional)</label>
+            <div className="flex flex-wrap gap-1.5 mb-1">
+              <button type="button" onClick={() => setCharacter('Astronot')} className={chipClass}>Astronot</button>
+              <button type="button" onClick={() => setCharacter('Detektif')} className={chipClass}>Detektif</button>
+              <button type="button" onClick={() => setCharacter('Ksatria')} className={chipClass}>Ksatria</button>
+            </div>
+          </div>
+          <input
+            type="text"
+            placeholder="Cth: Astronot, Detektif, Pahlawan Super"
+            value={character}
+            onChange={(e) => setCharacter(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+
+        <p className="text-[11px] text-text-secondary leading-relaxed bg-surface-soft border border-border-light rounded-lg p-3">
+          Kombinasikan topik belajar uang dengan dunia fantasi anak. AI akan meracik cerita lengkap
+          dengan ilustrasi dan kuis interaktif secara instan.
+        </p>
+
+        <button
+          onClick={handleGenerate}
+          disabled={isGenerating || energy < 1 || !topic || !theme}
+          className="mt-auto w-full flex items-center justify-center gap-2 bg-brand-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-brand-primary/90 transition-colors text-sm shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isGenerating ? (
+            <><Loader2 className="animate-spin" size={16} /> AI Sedang Meracik...</>
+          ) : (
+            <><BookOpen size={16} /> Buat Cerita & Preview (1 Energi)</>
+          )}
+        </button>
+        {energy < 1 && (
+          <p className="text-center text-xs text-danger font-medium">Energi habis! Beralih ke Premium untuk energi ekstra.</p>
+        )}
       </div>
 
       {/* KANAN: Penugasan */}
-      <div className="lg:col-span-5">
-        <div className="bg-surface rounded-3xl p-6 md:p-8 border border-border shadow-sm flex flex-col h-full">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold font-heading text-brand-primary flex items-center gap-2">
-              <Users className="text-info" /> Tugaskan ke Murid
-            </h2>
-          </div>
+      <div className="md:col-span-3 rounded-xl border border-default bg-surface overflow-hidden flex flex-col h-full min-h-[300px]">
+        <div className="border-b border-border-light bg-surface-soft px-4 py-3 flex items-center justify-between gap-2">
+          <h3 className="font-heading text-sm font-bold text-text-primary">Tugaskan ke Murid</h3>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
+            {selectedStudents.length} dipilih
+          </span>
+        </div>
 
-          <p className="text-sm text-text-secondary font-medium mb-4">Pilih murid yang akan menerima tugas membaca cerita ini. Anda juga bisa membuatnya tanpa menugaskan siapa pun.</p>
+        <div className="p-4 flex flex-col gap-3 flex-1">
+          <p className="text-xs text-text-secondary">
+            Pilih murid yang akan menerima tugas membaca cerita ini, atau buat tanpa menugaskan siapa pun.
+          </p>
 
-          <div className="relative mb-4">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search size={16} className="text-text-muted" />
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="relative flex-1">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+              <input
+                type="text"
+                placeholder="Cari nama murid..."
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                className={`${inputClass} pl-9`}
+              />
             </div>
-            <input
-              type="text"
-              placeholder="Cari nama murid..."
-              value={searchQuery}
-              onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-              className="w-full bg-surface-soft border border-border rounded-xl py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-brand-primary transition-colors"
-            />
-          </div>
-
-          <div className="flex items-center justify-between p-3 bg-surface-soft rounded-xl border border-border mb-4">
-            <span className="text-sm font-bold text-text-primary">Pilih Semua Murid ({students.length})</span>
-            <button 
+            <button
+              type="button"
               onClick={handleSelectAll}
-              className={`w-6 h-6 rounded-md flex items-center justify-center border-2 transition-colors ${selectedStudents.length === students.length && students.length > 0 ? 'bg-brand-primary border-brand-primary text-white' : 'border-text-muted bg-white'}`}
+              className="flex items-center justify-center gap-2 rounded-lg border border-border-strong bg-surface-soft px-3 py-2 text-xs font-bold text-text-secondary hover:bg-surface-hover transition-colors shrink-0"
             >
-              {selectedStudents.length === students.length && students.length > 0 && <Check size={14} strokeWidth={3} />}
+              <span className={`w-4 h-4 rounded flex items-center justify-center border transition-colors ${selectedStudents.length === students.length && students.length > 0 ? 'bg-brand-primary border-brand-primary text-white' : 'border-text-muted bg-white'}`}>
+                {selectedStudents.length === students.length && students.length > 0 && <Check size={10} strokeWidth={3} />}
+              </span>
+              Pilih Semua ({students.length})
             </button>
           </div>
 
-          <div className="space-y-2 flex-1">
+          <div className="flex flex-col gap-2 flex-1">
             {students.length === 0 ? (
-              <div className="text-center py-8 text-text-muted">
-                <p className="font-bold text-sm">Belum ada murid di kelas ini.</p>
-                <p className="text-xs mt-1">Undang murid terlebih dahulu.</p>
+              <div className="flex-1 flex flex-col items-center justify-center text-center text-text-secondary text-sm py-8">
+                <p className="font-bold">Belum ada murid di kelas ini.</p>
+                <p className="text-xs mt-1 text-text-muted">Undang murid terlebih dahulu.</p>
               </div>
             ) : currentStudents.length === 0 ? (
-              <div className="text-center py-8 text-text-muted">
-                <p className="font-bold text-sm">Murid tidak ditemukan.</p>
+              <div className="flex-1 flex items-center justify-center text-center text-text-secondary text-sm py-8">
+                Murid tidak ditemukan.
               </div>
             ) : (
               currentStudents.map(student => {
                 const isSelected = selectedStudents.includes(student.id);
                 return (
-                  <div 
-                    key={student.id} 
+                  <button
+                    type="button"
+                    key={student.id}
                     onClick={() => toggleStudent(student.id)}
-                    className={`flex items-center justify-between p-3 rounded-xl border-2 cursor-pointer transition-all ${isSelected ? 'border-brand-primary bg-brand-primary/5' : 'border-border hover:border-text-muted/30 bg-white'}`}
+                    className={`w-full text-left flex items-center justify-between gap-3 p-3 rounded-lg border transition-colors ${isSelected ? 'border-brand-primary bg-brand-primary/5' : 'border-border-light hover:bg-surface-soft'}`}
                   >
-                    <div>
-                      <p className="font-bold text-sm text-text-primary">{student.fullName}</p>
-                      <p className="text-xs text-text-muted">@{student.username}</p>
-                    </div>
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center border-2 transition-colors ${isSelected ? 'bg-brand-primary border-brand-primary text-white' : 'border-text-muted'}`}>
+                    <span className="min-w-0">
+                      <span className="block font-bold text-sm text-text-primary truncate">{student.fullName}</span>
+                      <span className="block text-xs text-text-muted truncate">@{student.username}</span>
+                    </span>
+                    <span className={`w-5 h-5 shrink-0 rounded-full flex items-center justify-center border-2 transition-colors ${isSelected ? 'bg-brand-primary border-brand-primary text-white' : 'border-text-muted'}`}>
                       {isSelected && <Check size={12} strokeWidth={3} />}
-                    </div>
-                  </div>
+                    </span>
+                  </button>
                 )
               })
             )}
           </div>
-          
-          <div className="pt-4 border-t border-border mt-auto flex items-center justify-between">
-            <p className="text-xs font-bold text-text-muted">
-              {selectedStudents.length} dipilih
-            </p>
-            
-            {totalPages > 1 && (
-              <div className="flex items-center gap-2">
-                <button 
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="p-1 rounded-md border border-border text-text-secondary disabled:opacity-50 hover:bg-surface-soft"
-                >
-                  <ChevronLeft size={16} />
-                </button>
-                <span className="text-xs font-bold text-text-secondary">
-                  {currentPage} / {totalPages}
-                </span>
-                <button 
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  className="p-1 rounded-md border border-border text-text-secondary disabled:opacity-50 hover:bg-surface-soft"
-                >
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-            )}
-          </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between border-t border-border-light pt-3 mt-auto">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-1.5 rounded-md border border-border text-text-secondary disabled:opacity-40 hover:bg-surface-soft transition-colors"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="text-xs font-bold text-text-secondary">
+                Halaman {currentPage} dari {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="p-1.5 rounded-md border border-border text-text-secondary disabled:opacity-40 hover:bg-surface-soft transition-colors"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

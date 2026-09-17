@@ -1,8 +1,9 @@
 'use client';
-import { GraduationCap, Star, Zap, Flame, Lock, Medal } from 'lucide-react';
+import { GraduationCap, Star, Zap, Flame, Lock, Medal, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { User } from '@/lib/data/dummy-users';
 import { useProgress } from '@/lib/use-progress';
 import { BADGES } from '@/lib/progress';
@@ -100,9 +101,37 @@ export function ChildrenProfileSection({ user, myTeacher }: Props) {
 
                     {/* Badge */}
                     <div className="pt-4 mt-2 border-t border-brand-accent/10">
-                        <h4 className="font-semibold mb-3 text-sm text-brand-primary uppercase tracking-wider">Koleksi Lencanaku</h4>
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="font-semibold text-sm text-brand-primary uppercase tracking-wider">Koleksi Lencanaku</h4>
+                            <Dialog>
+                                <DialogTrigger
+                                    render={
+                                        <Button variant="ghost" size="sm" className="h-8 text-xs font-medium text-brand-primary hover:text-brand-primary-hover hover:bg-brand-primary/5" />
+                                    }
+                                >
+                                    Lihat Semua
+                                    <ChevronRight className="w-4 h-4 ml-1" />
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
+                                    <DialogHeader>
+                                        <DialogTitle>Semua Lencana</DialogTitle>
+                                    </DialogHeader>
+                                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-y-6 gap-x-4 py-4">
+                                        {BADGES.map((badge) => {
+                                            const isUnlocked = unlockedBadges.includes(badge.id);
+                                            return (
+                                                <div key={badge.id} className={`flex flex-col items-center gap-2 ${isUnlocked ? '' : 'opacity-50'}`} title={`${badge.name}: ${badge.description}`}>
+                                                    <BadgeMedal id={badge.id} unlocked={isUnlocked} />
+                                                    <span className="text-xs font-medium text-center text-foreground">{badge.name}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
                         <div className="flex flex-wrap gap-4">
-                            {BADGES.map((badge) => {
+                            {BADGES.slice(0, 5).map((badge) => {
                                 const isUnlocked = unlockedBadges.includes(badge.id);
                                 return (
                                     <div key={badge.id} className={`flex flex-col items-center gap-2 w-24 ${isUnlocked ? '' : 'opacity-50'}`} title={`${badge.name}: ${badge.description}`}>
