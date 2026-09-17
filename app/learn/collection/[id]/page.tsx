@@ -28,7 +28,7 @@ export default function CollectionStoryViewer() {
 
   return (
     <div className="min-h-full text-primary py-8 px-4 lg:px-10">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-[1600px] mx-auto w-full">
         <Link href="/learn/collection" className="inline-flex items-center gap-2 text-secondary hover:text-brand-primary mb-8 font-medium transition-colors">
           <ArrowLeft size={20} />
           Kembali ke Koleksi

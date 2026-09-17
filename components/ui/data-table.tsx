@@ -54,6 +54,7 @@ export interface DataTableColumnMeta {
   filterLabel?: string
   filterPlaceholder?: string
   hideOnMobile?: boolean
+  align?: "left" | "center" | "right"
 }
 
 interface DataTableProps<TData extends RowData> {
@@ -206,15 +207,27 @@ export function DataTable<TData extends RowData>({
                   return (
                     <TableHead
                       key={header.id}
-                      className={`font-bold text-text-primary whitespace-nowrap text-center ${getColumnMeta(header.column)?.hideOnMobile ? "hidden sm:table-cell" : ""}`}
+                      className={`text-xs font-semibold text-text-muted whitespace-nowrap py-3 px-4 ${
+                        getColumnMeta(header.column)?.align === "center"
+                          ? "text-center"
+                          : getColumnMeta(header.column)?.align === "right"
+                          ? "text-right"
+                          : "text-left"
+                      } ${getColumnMeta(header.column)?.hideOnMobile ? "hidden sm:table-cell" : ""}`}
                     >
                       {header.isPlaceholder ? null : (
                         <div
-                          className={
+                          className={`flex items-center gap-1.5 ${
+                            getColumnMeta(header.column)?.align === "center"
+                              ? "justify-center"
+                              : getColumnMeta(header.column)?.align === "right"
+                              ? "justify-end"
+                              : "justify-start"
+                          } ${
                             header.column.getCanSort()
-                              ? "cursor-pointer select-none flex items-center justify-center gap-1 hover:text-brand-primary transition-colors"
-                              : "flex items-center justify-center"
-                          }
+                              ? "cursor-pointer select-none hover:text-brand-primary transition-colors"
+                              : ""
+                          }`}
                           onClick={header.column.getToggleSortingHandler()}
                         >
                           {flexRender(
@@ -222,11 +235,11 @@ export function DataTable<TData extends RowData>({
                             header.getContext()
                           )}
                           {{
-                            asc: <ChevronUp className="w-4 h-4" />,
-                            desc: <ChevronDown className="w-4 h-4" />,
+                            asc: <ChevronUp className="w-3.5 h-3.5" />,
+                            desc: <ChevronDown className="w-3.5 h-3.5" />,
                           }[header.column.getIsSorted() as string] ?? (
                             header.column.getCanSort() ? (
-                              <div className="w-4 h-4" /> // placeholder
+                              <div className="w-3.5 h-3.5 opacity-0" />
                             ) : null
                           )}
                         </div>
@@ -242,12 +255,18 @@ export function DataTable<TData extends RowData>({
               table.getRowModel().rows.map((row: any) => (
                 <TableRow
                   key={row.id}
-                  className="hover:bg-surface-soft/50 transition-colors"
+                  className="border-b border-border/40 last:border-0 hover:bg-surface-soft/60 transition-colors"
                 >
                   {row.getAllCells().map((cell: any) => (
                     <TableCell
                       key={cell.id}
-                      className={getColumnMeta(cell.column)?.hideOnMobile ? "hidden sm:table-cell" : ""}
+                      className={`py-3 px-4 ${getColumnMeta(cell.column)?.hideOnMobile ? "hidden sm:table-cell" : ""} ${
+                        getColumnMeta(cell.column)?.align === "center"
+                          ? "text-center"
+                          : getColumnMeta(cell.column)?.align === "right"
+                          ? "text-right"
+                          : "text-left"
+                      }`}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>

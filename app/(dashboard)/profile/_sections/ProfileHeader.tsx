@@ -103,16 +103,18 @@ export function ProfileHeader({ user, formData, isChild, isAvatarOpen, setIsAvat
                             <DialogHeader>
                                 <DialogTitle>Pilih Avatar Baru</DialogTitle>
                             </DialogHeader>
-                            <div className="grid grid-cols-4 gap-3 sm:gap-4 p-1 max-h-[60vh] overflow-y-auto">
+                            <div className="grid grid-cols-4 gap-3 sm:gap-4 p-2 max-h-[60vh] overflow-y-auto">
                                 {(AVATAR_OPTIONS_BY_ROLE[user.role] ?? PARENT_AVATAR_OPTIONS).map((url, idx) => (
-                                    <button
-                                        key={url}
-                                        onClick={() => handleAvatarChange(url)}
-                                        aria-label={`Pilih avatar ${idx + 1}`}
-                                        className={`w-full aspect-square rounded-full overflow-hidden border-4 bg-surface-soft transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${formData.avatarUrl === url ? 'border-brand-accent shadow-md' : 'border-transparent hover:border-brand-secondary/50'}`}
-                                    >
-                                        <img src={url} alt="" loading="lazy" className="h-full w-full object-cover" />
-                                    </button>
+                                    <div key={url} className="aspect-square flex items-center justify-center p-0.5">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAvatarChange(url)}
+                                            aria-label={`Pilih avatar ${idx + 1}`}
+                                            className={`h-full w-full rounded-full overflow-hidden border-4 bg-surface-soft transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${formData.avatarUrl === url ? 'border-brand-accent shadow-md ring-2 ring-brand-accent/30' : 'border-transparent hover:border-brand-secondary/50'}`}
+                                        >
+                                            <img src={url} alt="" loading="lazy" className="h-full w-full object-cover block" />
+                                        </button>
+                                    </div>
                                 ))}
                             </div>
                         </DialogContent>

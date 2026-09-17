@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Loader2, BookOpen, ImageIcon, Mic, MicOff, Sparkles, Rocket, Zap, PiggyBank, Coins, Scale, TrendingUp, Wallet, Palette, Wand2 } from 'lucide-react';
+import { Loader2, BookOpen, ImageIcon, Mic, MicOff, Sparkles, Rocket, Zap, PiggyBank, Coins, Scale, TrendingUp, Wallet, Palette, Wand2, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import ComicViewer from './ComicViewer';
 import HandController from './HandController';
@@ -175,6 +175,17 @@ export default function DinoApp() {
     <div className="generator-page min-h-full text-primary py-8 px-4 lg:px-10 font-sans selection:bg-brand-accent-soft selection:text-brand-primary">
       {(mode === 'comic' || mode === 'quiz') && <HandController mode={mode} />}
       <div className="max-w-[1600px] mx-auto w-full">
+        {mode !== 'form' && (
+          <button
+            type="button"
+            onClick={() => setMode('form')}
+            className="inline-flex items-center gap-2 text-secondary hover:text-brand-primary mb-8 font-medium transition-colors cursor-pointer"
+          >
+            <ArrowLeft size={20} />
+            Kembali ke Pembuat Cerita
+          </button>
+        )}
+
         {mode === 'form' && (
           <motion.header 
             initial={{ opacity: 0, y: -20 }}
