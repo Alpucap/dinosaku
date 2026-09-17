@@ -17,24 +17,6 @@ import { SecuritySection } from './_sections/SecuritySection';
 import { PreferencesSection } from './_sections/PreferencesSection';
 import { DangerZoneSection } from './_sections/DangerZoneSection';
 
-const ADULT_AVATAR_OPTIONS = [
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Siti",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Kelluny",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Cattelyaa",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Steva",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=AAbiiiW",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Petro"
-];
-
-const CHILD_AVATAR_OPTIONS = [
-    "https://api.dicebear.com/10.x/critters/svg?seed=Dino",
-    "https://api.dicebear.com/10.x/critters/svg?seed=Rex",
-    "https://api.dicebear.com/10.x/critters/svg?seed=Spike",
-    "https://api.dicebear.com/10.x/critters/svg?seed=Bella",
-    "https://api.dicebear.com/10.x/critters/svg?seed=Tricera",
-    "https://api.dicebear.com/10.x/critters/svg?seed=Ptero"
-];
-
 export default function ProfileClient({ 
     initialUser, 
     serverChildren = [], 

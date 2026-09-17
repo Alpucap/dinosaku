@@ -31,6 +31,12 @@ export default function AnakListClient({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClass, setSelectedClass] = useState(defaultClass);
 
+  const classroomsMap = useMemo(() => {
+    const map = new Map<string, string>();
+    classrooms.forEach((c) => map.set(c.id, c.name));
+    return map;
+  }, [classrooms]);
+
   const filteredChildren = useMemo(() => {
     return childrenList.filter(child => {
       // 1. Filter by Search Query
@@ -66,8 +72,10 @@ export default function AnakListClient({
           <div className="w-full sm:w-64">
             <Select value={selectedClass} onValueChange={(val) => setSelectedClass(val || 'all')}>
               <SelectTrigger>
-                <Filter className="w-4 h-4 mr-2 text-text-muted" />
-                <SelectValue placeholder="Semua Kelas" />
+                <Filter className="w-4 h-4 mr-1 text-text-muted shrink-0" />
+                <SelectValue placeholder="Semua Kelas">
+                  {(val) => (!val || val === "all" ? "Semua Kelas" : classroomsMap.get(val) || "Semua Kelas")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Semua Kelas</SelectItem>

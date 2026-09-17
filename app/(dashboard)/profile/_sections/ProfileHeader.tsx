@@ -8,31 +8,69 @@ import { User } from '@/lib/data/dummy-users';
 const dicebear = (style: string, seeds: string[], query = "") =>
     seeds.map((seed) => `https://api.dicebear.com/10.x/${style}/svg?${query}seed=${seed}`);
 
+const AVATAAR_SAFE_BASE = "mouthVariant=smile&eyesVariant=default&eyebrowsVariant=default&facialHairProbability=0";
+
+const createHijabAvatar = (seed: string, hatColor: string) =>
+    `https://api.dicebear.com/10.x/avataaars/svg?${AVATAAR_SAFE_BASE}&topVariant=hijab&hatColor=${hatColor}&seed=${seed}`;
+
+const createMaleAvatar = (seed: string) =>
+    `https://api.dicebear.com/10.x/avataaars/svg?${AVATAAR_SAFE_BASE}&topVariant=shortFlat,shortRound,shortWaved,theCaesar&seed=${seed}`;
+
+const createFemaleAvatar = (seed: string) =>
+    `https://api.dicebear.com/10.x/avataaars/svg?${AVATAAR_SAFE_BASE}&topVariant=straight01,straight02,straightAndStrand,curvy,bob,bun&seed=${seed}`;
+
 const PARENT_AVATAR_OPTIONS = [
-    "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=wuwu1oq7",
-    "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=p5d7w2b6",
-    "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=fonb5yf0",
-    "https://api.dicebear.com/10.x/avataaars/svg?seed=fooskqu5",
-    "https://api.dicebear.com/10.x/avataaars/svg?seed=n2wiknjj",
-    "https://api.dicebear.com/10.x/avataaars/svg?seed=laheishi",
-    "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
-    "https://api.dicebear.com/10.x/avataaars/svg?seed=Eapeaaa",
-    "https://api.dicebear.com/10.x/avataaars/svg?seed=HeAFAFAOF",
-    "https://api.dicebear.com/10.x/avataaars/svg?topVariant=hijab&seed=Ratna",
-    "https://api.dicebear.com/10.x/avataaars/svg?seed=Hendra",
-    "https://api.dicebear.com/10.x/avataaars/svg?seed=Wulan",
-    ...dicebear("avataaars", ["Aisyah", "Nurul"], "topVariant=hijab&"),
-    ...dicebear("lorelei", ["Ayu", "Dimas", "Fitri", "Rudi"]),
-    ...dicebear("notionists", ["Bunda", "Ayah", "Mama", "Papa"]),
-    ...dicebear("micah", ["Keluarga", "Rumah"]),
+    createHijabAvatar("Siti", "26a69a"),
+    createHijabAvatar("Aminah", "29b6f6"),
+    createHijabAvatar("Laila", "7e57c2"),
+    createHijabAvatar("Salma", "00796b"),
+    createHijabAvatar("Aisyah", "e91e63"),
+    createHijabAvatar("Nadia", "f57c00"),
+    createHijabAvatar("Maryam", "3f51b5"),
+    createHijabAvatar("Fatimah", "795548"),
+    createMaleAvatar("AyahBudi"),
+    createMaleAvatar("AyahHendra"),
+    createMaleAvatar("AyahSurya"),
+    createMaleAvatar("AyahDedi"),
+    createMaleAvatar("AyahIndra"),
+    createMaleAvatar("AyahGunawan"),
+    createMaleAvatar("AyahRian"),
+    createMaleAvatar("AyahJoko"),
+    createFemaleAvatar("BundaWulan"),
+    createFemaleAvatar("BundaDewi"),
+    createFemaleAvatar("BundaMaya"),
+    createFemaleAvatar("BundaSari"),
+    createFemaleAvatar("BundaFitri"),
+    createFemaleAvatar("BundaRatna"),
+    createFemaleAvatar("BundaAyu"),
+    createFemaleAvatar("BundaIndah"),
 ];
 
 const TEACHER_AVATAR_OPTIONS = [
-    ...dicebear("personas", ["Andi", "Sari", "Budi", "Rina", "Joko", "Maya", "Agus", "Dewi", "Fajar"]),
-    ...dicebear("avataaars", ["Siti", "Aminah", "Laila"], "topVariant=hijab&"),
-    ...dicebear("open-peeps", ["Pengajar", "Mentor", "Pendidik", "Pembina"]),
-    ...dicebear("micah", ["Kelas", "Sekolah", "Pelajaran", "Ilmu"]),
-    ...dicebear("notionists", ["Guru", "Dosen", "Wali", "Tutor"]),
+    createHijabAvatar("GuruSiti", "26a69a"),
+    createHijabAvatar("GuruAminah", "29b6f6"),
+    createHijabAvatar("GuruLaila", "7e57c2"),
+    createHijabAvatar("GuruSalma", "00796b"),
+    createHijabAvatar("GuruAisyah", "e91e63"),
+    createHijabAvatar("GuruNadia", "f57c00"),
+    createHijabAvatar("GuruMaryam", "3f51b5"),
+    createHijabAvatar("GuruFatimah", "795548"),
+    createMaleAvatar("PakBudi"),
+    createMaleAvatar("PakAndi"),
+    createMaleAvatar("PakJoko"),
+    createMaleAvatar("PakFajar"),
+    createMaleAvatar("PakAgus"),
+    createMaleAvatar("PakSurya"),
+    createMaleAvatar("PakHendra"),
+    createMaleAvatar("PakRian"),
+    createFemaleAvatar("BuSari"),
+    createFemaleAvatar("BuRina"),
+    createFemaleAvatar("BuMaya"),
+    createFemaleAvatar("BuDewi"),
+    createFemaleAvatar("BuIndah"),
+    createFemaleAvatar("BuRatna"),
+    createFemaleAvatar("BuWulan"),
+    createFemaleAvatar("BuFitri"),
 ];
 
 const ADMIN_AVATAR_OPTIONS = [
@@ -44,15 +82,20 @@ const ADMIN_AVATAR_OPTIONS = [
 ];
 
 const CHILD_AVATAR_OPTIONS = [
-    ...dicebear("critters", ["Dino", "Rex", "Spike", "Bella", "Tricera", "Ptero", "Bronto", "Stego", "Raptor", "Compy", "Terra", "Fern"]),
-    ...dicebear("big-smile", ["Ceria", "Riang", "Tawa", "Senyum"]),
-    ...dicebear("adventurer", ["Petualang", "Penjelajah", "Pemberani", "Pintar"]),
-    ...dicebear("fun-emoji", ["Gembira", "Lucu", "Asyik", "Seru"]),
+    ...dicebear("critters", [
+        "Dino", "Rex", "Spike", "Bella",
+        "Tricera", "Ptero", "Bronto", "Stego",
+        "Raptor", "Compy", "Terra", "Fern",
+        "Milo", "Coco", "Bobi", "Ollie",
+        "Ziggy", "Gizmo", "Kiki", "Lulu",
+        "Nori", "Zuzu", "Pippin", "Sparky"
+    ]),
 ];
 
 const AVATAR_OPTIONS_BY_ROLE: Record<string, string[]> = {
     children: CHILD_AVATAR_OPTIONS,
     parents: PARENT_AVATAR_OPTIONS,
+    parent: PARENT_AVATAR_OPTIONS,
     teacher: TEACHER_AVATAR_OPTIONS,
     admin: ADMIN_AVATAR_OPTIONS,
 };
@@ -104,7 +147,7 @@ export function ProfileHeader({ user, formData, isChild, isAvatarOpen, setIsAvat
                                 <DialogTitle>Pilih Avatar Baru</DialogTitle>
                             </DialogHeader>
                             <div className="grid grid-cols-4 gap-3 sm:gap-4 p-2 max-h-[60vh] overflow-y-auto">
-                                {(AVATAR_OPTIONS_BY_ROLE[user.role] ?? PARENT_AVATAR_OPTIONS).map((url, idx) => (
+                                {(AVATAR_OPTIONS_BY_ROLE[user.role?.toLowerCase()] ?? PARENT_AVATAR_OPTIONS).map((url, idx) => (
                                     <div key={url} className="aspect-square flex items-center justify-center p-0.5">
                                         <button
                                             type="button"

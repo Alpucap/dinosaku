@@ -252,7 +252,17 @@ export function UsersClient({ users }: { users: AdminUser[] }) {
           <div className="py-4">
             <Select value={selectedRole} onValueChange={(val) => setSelectedRole(val as Role)}>
               <SelectTrigger>
-                <SelectValue placeholder="Pilih Role" />
+                <SelectValue placeholder="Pilih Role">
+                  {(val) => {
+                    const roleLabels: Record<string, string> = {
+                      CHILDREN: "Anak",
+                      PARENTS: "Orang Tua",
+                      TEACHER: "Guru",
+                      ADMIN: "Admin",
+                    };
+                    return roleLabels[val] || val || "Pilih Role";
+                  }}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="CHILDREN">Anak</SelectItem>

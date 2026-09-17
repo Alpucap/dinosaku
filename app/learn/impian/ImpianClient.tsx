@@ -7,6 +7,13 @@ import GoalForm from '@/components/goals/GoalForm';
 import { Transaction, Goal } from '@/types/tracker';
 import { addGoalAction, allocateToGoalAction } from '../tracker/actions';
 import { PiggyBank, Target, Wallet } from 'lucide-react';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from '@/components/ui/dialog';
 
 interface ImpianClientProps {
     initialTransactions: Transaction[];
@@ -102,19 +109,30 @@ export default function ImpianClient({ initialTransactions, initialGoals }: Impi
                             </span>
                             Target Impianku
                         </h2>
-                        {!showGoalForm && (
-                            <button
-                                onClick={() => setShowGoalForm(true)}
-                                className="bg-info-soft hover:bg-info/20 text-info font-bold text-sm py-2 px-4 rounded-xl border border-info/30 transition-all shadow-sm hover:-translate-y-1 flex items-center gap-2 shrink-0"
-                            >
-                                Tambah Impian!
-                            </button>
-                        )}
+                        <button
+                            onClick={() => setShowGoalForm(true)}
+                            className="bg-info-soft hover:bg-info/20 text-info font-bold text-sm py-2 px-4 rounded-xl border border-info/30 transition-all shadow-sm hover:-translate-y-0.5 flex items-center gap-2 shrink-0 cursor-pointer"
+                        >
+                            Tambah Impian!
+                        </button>
                     </div>
 
-                    {showGoalForm && (
-                        <GoalForm onSubmit={handleAddGoal} onCancel={() => setShowGoalForm(false)} />
-                    )}
+                    <Dialog open={showGoalForm} onOpenChange={setShowGoalForm}>
+                        <DialogContent className="sm:max-w-md">
+                            <DialogHeader>
+                                <DialogTitle className="text-xl font-heading font-bold text-brand-primary flex items-center gap-2">
+                                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-accent/15 text-brand-accent">
+                                        <Target size={18} />
+                                    </span>
+                                    Buat Target Impian Baru!
+                                </DialogTitle>
+                                <DialogDescription>
+                                    Tentukan barang yang ingin kamu beli dan target tabungannya.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <GoalForm onSubmit={handleAddGoal} onCancel={() => setShowGoalForm(false)} />
+                        </DialogContent>
+                    </Dialog>
 
                     {goals.length === 0 ? (
                         <div className="text-center py-10 border-2 border-dashed border-border rounded-2xl bg-surface-soft flex flex-col items-center">
@@ -123,6 +141,12 @@ export default function ImpianClient({ initialTransactions, initialGoals }: Impi
                             </span>
                             <p className="text-base text-text-primary font-bold">Belum ada target impian nih...</p>
                             <p className="text-sm text-text-muted mt-1 font-medium">Klik "Tambah Impian!" buat mulai menabung untuk barang kesukaanmu!</p>
+                            <button
+                                onClick={() => setShowGoalForm(true)}
+                                className="mt-4 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold text-sm py-2 px-5 rounded-xl shadow-sm transition-all cursor-pointer"
+                            >
+                                + Buat Impian Pertamamu
+                            </button>
                         </div>
                     ) : (
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
