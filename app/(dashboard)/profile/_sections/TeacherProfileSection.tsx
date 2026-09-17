@@ -1,5 +1,6 @@
-import { Briefcase, Users, KeyRound } from 'lucide-react';
+import { Briefcase, Users } from 'lucide-react';
 import { Field, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import { DUMMY_SCHOOLS } from '@/lib/data/dummy-schools';
 import { User } from '@/lib/data/dummy-users';
 
@@ -22,19 +23,25 @@ export function TeacherProfileSection({ formData, setFormData, myChildrenCount =
             <div className="grid gap-6 md:grid-cols-2 mb-6">
                 <div>
                     <FieldLabel>Nama Sekolah / Institusi</FieldLabel>
-                    <select
-                        className="flex h-10 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 mt-1"
-                        value={formData.schoolId || ''}
-                        onChange={(e) => setFormData({ ...formData, schoolId: e.target.value })}
+                    <Input
+                        type="text"
+                        placeholder="Contoh: SDN 1 Menteng, SD Al-Azhar..."
+                        value={formData.schoolName ?? ''}
+                        onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
+                        list="school-suggestions"
+                        className="mt-1"
                         suppressHydrationWarning
-                    >
-                        <option value="" disabled>Pilih Sekolah...</option>
+                    />
+                    <datalist id="school-suggestions">
                         {DUMMY_SCHOOLS.map((school) => (
-                            <option key={school.id} value={school.id}>
+                            <option key={school.id} value={school.name}>
                                 {school.name} ({school.city})
                             </option>
                         ))}
-                    </select>
+                    </datalist>
+                    <p className="text-xs text-text-muted mt-1.5">
+                        Ketik bebas nama sekolah tempat Anda mengajar.
+                    </p>
                 </div>
                 
                 <div className="p-4 bg-brand-primary/5 border border-brand-primary/20 rounded-xl flex items-center justify-between">

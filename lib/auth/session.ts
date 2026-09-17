@@ -19,7 +19,8 @@ export async function getSessionUser(): Promise<any | null> {
         ownedClasses: true,
         userBadges: {
           include: { badge: true }
-        }
+        },
+        school: true
       }
     });
 
@@ -50,6 +51,7 @@ export async function getSessionUser(): Promise<any | null> {
       createdAt: user.createdAt.toISOString(),
       parentId: user.parentId || undefined,
       schoolId: user.schoolId || undefined,
+      schoolName: user.school?.name || undefined,
       preferences: {
         notificationsEnabled: user.notificationsEnabled
       },

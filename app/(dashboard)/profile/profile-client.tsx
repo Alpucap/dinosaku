@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DUMMY_USERS, User } from '@/lib/data/dummy-users';
+import { DUMMY_SCHOOLS } from '@/lib/data/dummy-schools';
+import { updateProfile } from './actions';
 
 // Components
 import { toast } from '@/components/ui/toast';
@@ -27,9 +29,19 @@ export default function ProfileClient({
     serverTeacher?: any
 }) {
     const router = useRouter();
-    const [user, setUser] = useState(initialUser);
 
-    const [formData, setFormData] = useState(initialUser);
+    const initialSchoolName = initialUser.schoolName || 
+        (initialUser.schoolId ? DUMMY_SCHOOLS.find(s => s.id === initialUser.schoolId)?.name : '') || '';
+
+    const [user, setUser] = useState({
+        ...initialUser,
+        schoolName: initialSchoolName,
+    });
+
+    const [formData, setFormData] = useState({
+        ...initialUser,
+        schoolName: initialSchoolName,
+    });
     const [passwordForm, setPasswordForm] = useState({ current: '', new: '', confirm: '' });
 
     const [isSavingProfile, setIsSavingProfile] = useState(false);
@@ -58,17 +70,28 @@ export default function ProfileClient({
         router.refresh();
     };
 
-    const handleAvatarChange = (url: string) => {
+    const handleAvatarChange = async (url: string) => {
         const updatedUser = { ...user, avatarUrl: url };
         setUser(updatedUser);
         setFormData(updatedUser);
         setIsAvatarOpen(false);
-        toast.add({
-            title: "Avatar Diperbarui!",
-            description: "Foto profil dinosaurus Anda sudah diganti.",
-            type: "success",
-            timeout: 3000
-        });
+
+        try {
+            await updateProfile({
+                fullName: updatedUser.fullName,
+                username: updatedUser.username,
+                avatarUrl: url,
+                schoolName: updatedUser.schoolName,
+            });
+            toast.add({
+                title: "Avatar Diperbarui!",
+                description: "Foto profil Anda sudah diganti.",
+                type: "success",
+                timeout: 3000
+            });
+        } catch (err) {
+            console.error("Failed to update avatar:", err);
+        }
     };
 
     const handleSaveProfile = async () => {
@@ -97,17 +120,37 @@ export default function ProfileClient({
         setErrors(currentErrors);
 
         setIsSavingProfile(true);
-        await new Promise(resolve => setTimeout(resolve, 600));
-        setIsSavingProfile(false);
+        try {
+            await updateProfile({
+                fullName: formData.fullName,
+                username: formData.username,
+                avatarUrl: formData.avatarUrl,
+                schoolName: formData.schoolName,
+            });
 
-        setUser({ ...user, fullName: formData.fullName, username: formData.username, schoolId: formData.schoolId });
+            setUser({
+                ...user,
+                fullName: formData.fullName,
+                username: formData.username,
+                schoolName: formData.schoolName,
+            });
 
-        toast.add({
-            title: "Profil Diperbarui!",
-            description: "Informasi pribadi Anda telah disimpan.",
-            type: "success",
-            timeout: 3000
-        });
+            toast.add({
+                title: "Profil Diperbarui!",
+                description: "Informasi pribadi dan instansi Anda telah disimpan.",
+                type: "success",
+                timeout: 3000
+            });
+        } catch (err: any) {
+            toast.add({
+                title: "Gagal Menyimpan",
+                description: err.message || "Terjadi kesalahan saat menyimpan profil.",
+                type: "error",
+                timeout: 3000
+            });
+        } finally {
+            setIsSavingProfile(false);
+        }
     };
 
     const handleSavePassword = async () => {

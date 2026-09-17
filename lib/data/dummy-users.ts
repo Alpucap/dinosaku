@@ -32,6 +32,7 @@ export interface User {
 
     // FK dari School
     schoolId?: string;
+    schoolName?: string;
 
     // Data gamifikasi anak
     gamification?: {
