@@ -1,6 +1,5 @@
 import { requireRole } from "@/lib/auth/guard";
 import { Settings, User, Bell, Shield, Link as LinkIcon } from "lucide-react";
-import { ClassCodeCard } from "@/components/dino/ClassCodeCard";
 
 export default async function PengaturanPage() {
   const user = await requireRole(["parents", "teacher"]);
@@ -13,10 +12,6 @@ export default async function PengaturanPage() {
         <p>Kelola preferensi akun {user.role === 'teacher' ? 'Guru' : 'Orang Tua'} Anda di sini.</p>
       </header>
       <div className="flex flex-col gap-6 max-w-3xl">
-
-      {user.role === 'teacher' && (
-        <ClassCodeCard initialCode={user.classCode} plan={user.plan as any} />
-      )}
 
       {user.role === 'parents' && (
         <div className="rounded-xl border border-brand-accent/20 bg-brand-accent/5 p-5 flex flex-col sm:flex-row gap-4 items-center justify-between">

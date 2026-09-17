@@ -1,4 +1,5 @@
 import {
+  Briefcase,
   LayoutDashboard,
   TrendingUp,
   Users,
@@ -12,6 +13,7 @@ export const pembimbingMenuSections: SidebarMenuSection[] = [
   {
     items: [
       { name: "Dasbor", href: "/pembimbing", icon: LayoutDashboard },
+      { name: "Manajemen Kelas", href: "/pembimbing/kelas", icon: Briefcase },
       { name: "Progres Belajar", href: "/pembimbing/progres", icon: TrendingUp },
       { name: "Daftar Anak", href: "/pembimbing/anak", icon: Users },
       { name: "Aksi & Misi", href: "/pembimbing/aksi", icon: Target },

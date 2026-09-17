@@ -15,6 +15,8 @@ export async function getSessionUser(): Promise<any | null> {
       where: { id: sessionId },
       include: {
         gamification: true,
+        joinedClasses: { include: { teacher: { select: { id: true, fullName: true } } } },
+        ownedClasses: true,
         userBadges: {
           include: { badge: true }
         }
@@ -42,7 +44,9 @@ export async function getSessionUser(): Promise<any | null> {
       avatarUrl: user.avatarUrl || undefined,
       status: user.status.toLowerCase() as UserStatus,
       plan: user.plan ? user.plan.toLowerCase() as SubscriptionPlan : undefined,
-      classCode: user.classCode || undefined,
+      classCode: undefined, // deprecated
+      joinedClasses: user.joinedClasses || [],
+      ownedClasses: user.ownedClasses || [],
       createdAt: user.createdAt.toISOString(),
       parentId: user.parentId || undefined,
       schoolId: user.schoolId || undefined,

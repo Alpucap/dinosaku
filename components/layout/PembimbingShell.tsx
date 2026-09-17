@@ -20,7 +20,7 @@ export function PembimbingShell({
     return pembimbingMenuSections.map(section => ({
       ...section,
       items: section.items.filter(item => {
-        if (item.name === "Koleksi Cerita" && user?.role !== 'teacher') return false;
+        if ((item.name === "Koleksi Cerita" || item.name === "Manajemen Kelas") && user?.role !== 'teacher') return false;
         return true;
       })
     })).filter(section => section.items.length > 0);

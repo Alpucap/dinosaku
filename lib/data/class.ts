@@ -6,13 +6,17 @@ export function normalizeClassCode(raw: string): string {
   return raw.trim().toUpperCase().replace(/\s+/g, "");
 }
 
-export async function findClassTeacher(classCode: string) {
+export async function findClassroomByCode(classCode: string) {
   const code = normalizeClassCode(classCode);
   if (!code) return null;
 
-  return prisma.user.findFirst({
-    where: { role: "TEACHER", classCode: code },
-    select: { id: true, fullName: true, avatarUrl: true, classCode: true },
+  return prisma.classroom.findUnique({
+    where: { code },
+    include: {
+      teacher: {
+        select: { id: true, fullName: true, avatarUrl: true },
+      },
+    },
   });
 }
 
@@ -33,12 +37,12 @@ function randomClassCode(): string {
 
 type Db = typeof prisma | Prisma.TransactionClient;
 
-/** Diulang sampai dapat kode yang belum dipakai siapa pun, guru maupun murid. */
+/** Diulang sampai dapat kode yang belum dipakai siapa pun. */
 export async function generateUniqueClassCode(db: Db = prisma): Promise<string> {
   for (let attempt = 0; attempt < 20; attempt++) {
     const code = randomClassCode();
-    const taken = await db.user.findFirst({
-      where: { classCode: code },
+    const taken = await db.classroom.findUnique({
+      where: { code },
       select: { id: true },
     });
     if (!taken) return code;

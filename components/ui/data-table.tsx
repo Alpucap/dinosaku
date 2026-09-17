@@ -174,13 +174,13 @@ export function DataTable<TData extends RowData>({
 
   const filterableColumns = table
     .getAllLeafColumns()
-    .filter((column) => getColumnMeta(column)?.filterVariant)
+    .filter((column: any) => getColumnMeta(column)?.filterVariant)
 
   return (
     <div className="space-y-4">
       {filterableColumns.length > 0 && (
         <div className="flex flex-wrap items-end gap-4">
-          {filterableColumns.map((column) => {
+          {filterableColumns.map((column: any) => {
             const meta = getColumnMeta(column)
             const minWidth =
               meta?.filterVariant === "dateRange" ? "min-w-[300px]" : "min-w-[180px]"
@@ -200,9 +200,9 @@ export function DataTable<TData extends RowData>({
       <div className="rounded-xl border border-border bg-surface overflow-hidden">
         <Table>
           <TableHeader className="bg-surface-soft">
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map((headerGroup: any) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map((header: any) => {
                   return (
                     <TableHead
                       key={header.id}
@@ -239,12 +239,12 @@ export function DataTable<TData extends RowData>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row: any) => (
                 <TableRow
                   key={row.id}
                   className="hover:bg-surface-soft/50 transition-colors"
                 >
-                  {row.getAllCells().map((cell) => (
+                  {row.getAllCells().map((cell: any) => (
                     <TableCell
                       key={cell.id}
                       className={getColumnMeta(cell.column)?.hideOnMobile ? "hidden sm:table-cell" : ""}

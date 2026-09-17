@@ -28,7 +28,7 @@ export const columns: DataTableColumnDef<Activity>[] = [
   {
     accessorKey: "title",
     header: "Aktivitas",
-    cell: ({ row }) => {
+    cell: ({ row }: { row: any }) => {
       const act = row.original
       return (
         <div className="flex flex-col">
@@ -49,7 +49,7 @@ export const columns: DataTableColumnDef<Activity>[] = [
   {
     accessorKey: "user.fullName",
     header: "Nama Anak",
-    cell: ({ row }) => {
+    cell: ({ row }: { row: any }) => {
       return <span className="font-medium">{row.original.user.fullName}</span>
     },
     filterFn: "includesString",
@@ -63,7 +63,7 @@ export const columns: DataTableColumnDef<Activity>[] = [
   {
     accessorKey: "score",
     header: "Skor",
-    cell: ({ row }) => {
+    cell: ({ row }: { row: any }) => {
       const score = row.original.score
       if (score === null) return <div className="text-center text-text-muted text-sm">-</div>
       return <div className="text-center font-bold text-text-primary">{score}</div>
@@ -77,7 +77,7 @@ export const columns: DataTableColumnDef<Activity>[] = [
   {
     accessorKey: "createdAt",
     header: "Waktu",
-    cell: ({ row }) => (
+    cell: ({ row }: { row: any }) => (
       <div className="text-center text-sm text-text-secondary">{formatActivityDate(row.original.createdAt)}</div>
     ),
     filterFn: "inDateRange",

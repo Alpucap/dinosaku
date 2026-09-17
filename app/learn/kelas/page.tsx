@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { GraduationCap, UserRound } from "lucide-react";
 import { getSessionUser } from "@/lib/auth/session";
-import { findClassTeacher } from "@/lib/data/class";
 import { JoinClassForm } from "@/components/dino/JoinClassForm";
 
 export default async function KelasPage() {
   const user = await getSessionUser();
-  const teacher = user?.classCode ? await findClassTeacher(user.classCode) : null;
+  const joinedClasses = user?.joinedClasses || [];
 
   return (
     <div className="learning-page">
@@ -30,28 +29,32 @@ export default async function KelasPage() {
         ) : user.role !== "children" ? (
           <div className="rounded-xl border border-default bg-surface p-6">
             <p className="text-text-secondary">
-              Halaman ini untuk akun anak. Guru membagikan kode kelasnya lewat
-              menu Daftar Anak di dasbor Pembimbing.
+              Halaman ini untuk akun anak. Guru bisa membuat dan mengelola kelas di menu <strong>Manajemen Kelas</strong>.
             </p>
           </div>
         ) : (
           <>
-            {teacher ? (
-              <div className="flex items-start gap-4 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-5">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-primary text-white">
-                  <GraduationCap size={20} />
-                </span>
-                <div className="min-w-0">
-                  <h3 className="font-bold text-brand-primary">
-                    Kamu sudah di kelas ini
-                  </h3>
-                  <div className="mt-3 inline-block rounded-lg border border-border-strong bg-white px-4 py-2 font-mono text-lg font-bold tracking-widest text-text-primary shadow-sm">
-                    {teacher.classCode}
+            {joinedClasses.length > 0 ? (
+              <div className="flex flex-col gap-4">
+                <h2 className="font-bold text-lg text-text-primary">Daftar Kelasku</h2>
+                {joinedClasses.map((cls: any) => (
+                  <div key={cls.id} className="flex items-start gap-4 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-5">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-primary text-white">
+                      <GraduationCap size={20} />
+                    </span>
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-brand-primary">
+                        {cls.name}
+                      </h3>
+                      <div className="mt-3 inline-block rounded-lg border border-border-strong bg-white px-4 py-2 font-mono text-lg font-bold tracking-widest text-text-primary shadow-sm">
+                        {cls.code}
+                      </div>
+                      <p className="mt-3 flex items-center gap-2 text-sm text-text-secondary">
+                        <UserRound size={16} aria-hidden /> Guru: {cls.teacher?.fullName}
+                      </p>
+                    </div>
                   </div>
-                  <p className="mt-3 flex items-center gap-2 text-sm text-text-secondary">
-                    <UserRound size={16} aria-hidden /> Guru: {teacher.fullName}
-                  </p>
-                </div>
+                ))}
               </div>
             ) : (
               <div className="rounded-xl border border-dashed border-border-strong bg-surface p-6 text-center">
@@ -65,7 +68,7 @@ export default async function KelasPage() {
             )}
 
             <div className="rounded-xl border border-default bg-surface p-6">
-              <JoinClassForm currentCode={user.classCode} />
+              <JoinClassForm currentCode={undefined} />
               <p className="mt-4 text-xs text-text-muted">
                 Setelah gabung, gurumu bisa memantau progres belajarmu dan
                 mengirim misi lewat menu Aksi &amp; Misi.

@@ -12,10 +12,10 @@ export async function getTeacherStudentsForAssign() {
   if (!user || user.role !== 'teacher') throw new Error('Unauthorized');
 
   const guardian = await prisma.user.findUnique({ where: { id: user.id }});
-  if (!guardian?.classCode) return [];
+  if (false) return [];
 
   const students = await prisma.user.findMany({
-    where: { role: 'CHILDREN', classCode: guardian.classCode },
+    where: { role: 'CHILDREN', joinedClasses: { some: { teacherId: guardian?.id || "" } } },
     select: { id: true, fullName: true, username: true }
   });
   return students;

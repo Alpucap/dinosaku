@@ -1,4 +1,5 @@
 'use client';
+import Link from "next/link";
 import { GraduationCap, Star, Zap, Flame, Lock, Medal, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -49,9 +50,10 @@ export function ChildrenProfileSection({ user, myTeacher }: Props) {
                             Minta kode dari gurumu untuk mulai belajar bersama!
                         </p>
                     </div>
-                    <div className="flex w-full sm:w-auto gap-2 mt-2 sm:mt-0 shrink-0">
-                        <Input placeholder="Kode Kelas" className="w-full sm:w-28 bg-surface text-sm" suppressHydrationWarning />
-                        <Button className="bg-brand-primary text-white hover:bg-brand-primary-hover shadow-sm" suppressHydrationWarning>Gabung</Button>
+                    <div className="flex w-full sm:w-auto mt-2 sm:mt-0 shrink-0">
+                        <Link href="/learn/kelas">
+                            <Button variant="outline" className="text-brand-primary border-brand-primary hover:bg-brand-primary/5" suppressHydrationWarning>Masuk ke Kelasku</Button>
+                        </Link>
                     </div>
                 </div>
             )}

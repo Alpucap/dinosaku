@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth/session";
-import { findClassTeacher, normalizeClassCode } from "@/lib/data/class";
+import { findClassroomByCode, normalizeClassCode } from "@/lib/data/class";
 
 export async function POST(req: Request) {
   try {
@@ -31,31 +31,36 @@ export async function POST(req: Request) {
       );
     }
 
-    const teacher = await findClassTeacher(code);
+    const classroom = await findClassroomByCode(code);
 
-    if (!teacher) {
+    if (!classroom) {
       return NextResponse.json(
         { error: "Kode kelas tidak ditemukan. Coba periksa lagi ejaannya." },
         { status: 404 },
       );
     }
-
-    if (user.classCode === code) {
+    
+    const isAlreadyJoined = user.joinedClasses.some((c: any) => c.id === classroom.id);
+    if (isAlreadyJoined) {
       return NextResponse.json(
-        { error: `Kamu memang sudah ada di kelas ${code}.` },
+        { error: `Kamu sudah tergabung di kelas ${classroom.name}.` },
         { status: 409 },
       );
     }
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { classCode: code },
+      data: {
+        joinedClasses: {
+          connect: { id: classroom.id }
+        }
+      },
     });
 
     return NextResponse.json({
       success: true,
       classCode: code,
-      teacherName: teacher.fullName,
+      teacherName: classroom.teacher.fullName,
     });
   } catch (error) {
     console.error("Error joining class:", error);

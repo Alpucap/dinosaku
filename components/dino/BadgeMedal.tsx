@@ -1,4 +1,4 @@
-import { Flame, Footprints, LockKeyhole, Star, Medal, Crown, Coins } from 'lucide-react';
+import { Flame, Footprints, LockKeyhole, Star, Medal, Crown, Coins, Trophy, Award, PiggyBank } from 'lucide-react';
 
 const icons = { 
   first: Footprints, 
@@ -6,7 +6,10 @@ const icons = {
   veteran: Medal, 
   master: Crown, 
   rich: Coins, 
-  streak: Flame 
+  streak: Flame,
+  'weekly-top': Trophy,
+  'monthly-top': Award,
+  'gold-saver': PiggyBank
 };
 
 export default function BadgeMedal({ id, unlocked }: { id: string; unlocked: boolean }) {

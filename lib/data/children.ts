@@ -3,7 +3,6 @@ import { prisma } from "@/lib/prisma";
 export interface GuardianLike {
   id: string;
   role: string;
-  classCode?: string | null;
 }
 
 export interface GuardianChild {
@@ -11,7 +10,6 @@ export interface GuardianChild {
   fullName: string;
   username: string;
   avatarUrl: string | null;
-  classCode: string | null;
 }
 
 const CHILD_SELECT = {
@@ -19,29 +17,28 @@ const CHILD_SELECT = {
   fullName: true,
   username: true,
   avatarUrl: true,
-  classCode: true,
 } as const;
 
-/**
- * Orang tua dan guru terhubung ke anak lewat jalur berbeda: orang tua lewat
- * parentId, guru lewat classCode. Query langsung ke database — bukan array
- * dummy statis — karena classCode/parentId anak berubah lewat aksi nyata
- * (join kelas, generate ulang kode kelas, dsb), jadi datanya harus hidup.
- */
 export async function getChildrenForGuardian(
   guardian: GuardianLike,
 ): Promise<GuardianChild[]> {
-  if (guardian.role === "teacher") {
-    if (!guardian.classCode) return [];
+  if (guardian.role === "teacher" || guardian.role === "TEACHER") {
+    // Cari murid yang ada di kelas mana pun milik guru ini
     return prisma.user.findMany({
-      where: { role: "CHILDREN", classCode: guardian.classCode },
+      where: { 
+        role: "CHILDREN", 
+        joinedClasses: { some: { teacherId: guardian.id } } 
+      },
       select: CHILD_SELECT,
     });
   }
 
-  if (guardian.role === "parents") {
+  if (guardian.role === "parents" || guardian.role === "PARENTS") {
     return prisma.user.findMany({
-      where: { role: "CHILDREN", parentId: guardian.id },
+      where: { 
+        role: "CHILDREN", 
+        parentId: guardian.id 
+      },
       select: CHILD_SELECT,
     });
   }
@@ -50,10 +47,8 @@ export async function getChildrenForGuardian(
 }
 
 export function getGuardianScopeLabel(guardian: GuardianLike): string {
-  if (guardian.role === "teacher") {
-    return guardian.classCode
-      ? `Murid di kelas ${guardian.classCode}`
-      : "Kamu belum terhubung ke kelas mana pun";
+  if (guardian.role === "teacher" || guardian.role === "TEACHER") {
+    return "Murid di kelas-kelasmu";
   }
   return "Anak yang terhubung dengan akunmu";
 }

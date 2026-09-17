@@ -39,7 +39,6 @@ async function main() {
       where: { email: user.email },
       update: {
         role: user.role.toUpperCase() as any,
-        classCode: user.classCode,
         plan: user.plan ? user.plan.toUpperCase() as any : null,
         schoolId: user.schoolId
       },
@@ -51,7 +50,6 @@ async function main() {
         username: user.username,
         role: user.role.toUpperCase() as any,
         avatarUrl: user.avatarUrl,
-        classCode: user.classCode,
         plan: user.plan ? user.plan.toUpperCase() as any : null,
         parentId: user.parentId,
         schoolId: user.schoolId

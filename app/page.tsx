@@ -3,6 +3,8 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import ParallaxTransition from "@/components/hero-parallax/ParallaxTransition";
 import SubscriptionCTA from "@/components/SubscriptionCTA";
+import Testimonial from "@/components/Testimonial";
+import FAQ from "@/components/FAQ";
 import SectionWave from "@/components/SectionWave";
 import Reveal from "@/components/Reveal";
 import Parallax from "@/components/Parallax";
@@ -99,6 +101,8 @@ export default async function Home() {
               </div>
             </div>
           </ParallaxTransition>
+
+
 
           {/* FEATURES SECTION */}
           <section
@@ -207,13 +211,24 @@ export default async function Home() {
             variant="b"
           />
 
+          {/* TESTIMONIAL SECTION */}
+          <Testimonial />
+
           {/* SUBSCRIPTION CTA SECTION */}
           <SubscriptionCTA />
 
           <SectionWave
             above="bg-surface"
-            below="var(--color-surface-green)"
+            below="var(--color-surface-soft)"
             variant="a"
+          />
+
+          <FAQ />
+
+          <SectionWave
+            above="bg-surface-soft"
+            below="var(--color-surface-green)"
+            variant="b"
           />
         </main>
 

@@ -7,6 +7,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Check, LockKeyhole, Play, Flag } from 'lucide-react';
 import { useProgress } from '@/lib/use-progress';
 import LearningStats from '@/components/dino/LearningStats';
+import ChildBadges from '@/components/dino/ChildBadges';
 import AdventureWelcome from '@/components/dino/AdventureWelcome';
 
 export default function StoriesLibraryPage() {
@@ -16,6 +17,30 @@ export default function StoriesLibraryPage() {
   const [assignments, setAssignments] = useState<any[]>([]);
   const [isPremium, setIsPremium] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function syncProgressOnLoad() {
+      if (!ready) return;
+      try {
+        const { getPoints, getBadges, getStreak, readProgress } = await import('@/lib/progress');
+        const state = readProgress();
+        const profile = state.profiles.find(p => p.id === state.activeProfileId);
+        if (profile) {
+          await fetch('/api/progress/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              totalPoints: getPoints(profile),
+              badges: getBadges(profile),
+              currentStreak: getStreak(profile.studyDays)
+            })
+          });
+        }
+      } catch(e) {}
+    }
+    
+    syncProgressOnLoad();
+  }, [ready]);
 
   useEffect(() => {
     async function loadData() {
@@ -53,6 +78,8 @@ export default function StoriesLibraryPage() {
 
     loadData();
     
+
+
     // Auto-refresh misi setiap 5 detik
     const interval = setInterval(pollAssignments, 5000);
     return () => clearInterval(interval);
@@ -87,6 +114,7 @@ export default function StoriesLibraryPage() {
     )}
 
     <LearningStats />
+    <ChildBadges />
     <section aria-labelledby="adventure-map-heading">
       <div className="section-heading"><div><p className="eyebrow">Bab 01 · Kenalan dengan uang</p><h2 id="adventure-map-heading">Peta petualanganmu</h2></div><span>{completed} / {presetStories.length} selesai</span></div>
       <progress className="learning-progress mb-8" value={completed} max={Math.max(1, presetStories.length)} aria-label="Cerita selesai" />

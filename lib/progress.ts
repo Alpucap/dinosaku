@@ -16,6 +16,9 @@ export const BADGES = [
   { id: 'master', name: 'Master Edukasi', description: 'Berhasil menyelesaikan dan lulus 10 misi.' },
   { id: 'rich', name: 'Sultan Poin', description: 'Berhasil mengumpulkan lebih dari 200 poin secara total.' },
   { id: 'streak', name: 'Rajin Belajar', description: 'Selesaikan kuis selama tiga hari berturut-turut.' },
+  { id: 'weekly-top', name: 'Juara Mingguan', description: 'Berhasil menjadi Top 1 Global dalam seminggu.' },
+  { id: 'monthly-top', name: 'Juara Bulanan', description: 'Berhasil menjadi Top 1 Global dalam sebulan.' },
+  { id: 'gold-saver', name: 'Celengan Emas', description: 'Mengumpulkan 1.000 Poin dan menjadi master literasi finansial.' },
 ] as const;
 
 export function localDay(date = new Date()): string {
@@ -101,6 +104,9 @@ export function getBadges(profile: Profile): string[] {
     ...(profile.completedStories.length >= 10 ? ['master'] : []),
     ...(totalPoints > 200 ? ['rich'] : []),
     ...(profile.studyDays.some(day => getStreak(profile.studyDays, day) >= 3) ? ['streak'] : []),
+    ...(totalPoints >= 100 ? ['weekly-top'] : []),
+    ...(totalPoints >= 500 ? ['monthly-top'] : []),
+    ...(totalPoints >= 1000 ? ['gold-saver'] : []),
   ];
 }
 

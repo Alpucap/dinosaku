@@ -2,20 +2,20 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function UnlinkButton({ role, childName, childId }: { role: string, childName: string, childId: string }) {
+export default function UnlinkButton({ role, childName, childId, classId }: { role: string, childName: string, childId: string, classId?: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const actionText = role === 'teacher' ? 'Keluarkan' : 'Putuskan';
   
   const handleUnlink = async () => {
-    const confirmed = window.confirm(`Apakah Anda yakin ingin ${actionText.toLowerCase()} akses ${childName} dari dasbor ini?`);
+    const confirmed = window.confirm(`Apakah Anda yakin ingin ${actionText.toLowerCase()} akses ${childName} dari ${classId ? 'kelas ini' : 'dasbor ini'}?`);
     if (confirmed) {
       setLoading(true);
       try {
         const res = await fetch('/api/pembimbing/unlink', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ childId })
+          body: JSON.stringify({ childId, classId })
         });
         if (res.ok) {
           router.refresh();

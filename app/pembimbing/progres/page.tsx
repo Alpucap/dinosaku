@@ -6,8 +6,8 @@ export default async function ProgresBelajarPage() {
   const user = await requireRole(["parents", "teacher"]);
 
   let childrenIds = [];
-  if (user.role === 'teacher' && user.classCode) {
-    const children = await prisma.user.findMany({ where: { role: 'CHILDREN', classCode: user.classCode }, select: { id: true } });
+  if (user.role === 'teacher' ) {
+    const children = await prisma.user.findMany({ where: { role: 'CHILDREN', joinedClasses: { some: { teacherId: user.id } } }, select: { id: true } });
     childrenIds = children.map((c: any) => c.id);
   } else if (user.role === 'parents') {
     const children = await prisma.user.findMany({ where: { role: 'CHILDREN', parentId: user.id }, select: { id: true } });

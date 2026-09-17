@@ -26,7 +26,7 @@ export default async function LeaderboardPage(props: PageProps) {
     where: { user: { role: 'CHILDREN' } },
     orderBy: { totalPoints: 'desc' },
     take: 10,
-    include: { user: { select: { id: true, fullName: true, classCode: true, avatarUrl: true } } }
+    include: { user: { select: { id: true, fullName: true, avatarUrl: true } } }
   });
 
   // Cari rank global user saat ini jika tidak ada di Top 10
@@ -55,11 +55,10 @@ export default async function LeaderboardPage(props: PageProps) {
   let schoolName = 'Sekolah';
   let totalClassCount = 0;
   
-  if (user.classCode) {
+  const firstClass = user.role === 'children' ? (await prisma.classroom.findFirst({ where: { students: { some: { id: user.id } } }, include: { teacher: true } })) : null;
+  if (firstClass) {
     // Cari guru yang memiliki classCode yang sama
-    const teacher = await prisma.user.findFirst({
-      where: { role: 'TEACHER', classCode: user.classCode }
-    });
+    const teacher = firstClass.teacher;
     
     const schoolIdToUse = user.schoolId || teacher?.schoolId;
     if (schoolIdToUse) {
@@ -68,11 +67,11 @@ export default async function LeaderboardPage(props: PageProps) {
     }
 
     totalClassCount = await prisma.gamification.count({
-      where: { user: { classCode: user.classCode, role: 'CHILDREN' } }
+      where: { user: { role: 'CHILDREN', joinedClasses: { some: { id: firstClass.id } } } }
     });
 
     classGamifications = await prisma.gamification.findMany({
-      where: { user: { classCode: user.classCode, role: 'CHILDREN' } },
+      where: { user: { role: 'CHILDREN', joinedClasses: { some: { id: firstClass.id } } } },
       orderBy: { totalPoints: 'desc' },
       take: limit,
       skip,
@@ -173,14 +172,14 @@ export default async function LeaderboardPage(props: PageProps) {
         </section>
 
         {/* LEADERBOARD KELAS/SEKOLAH */}
-        {user.classCode && (
+        {firstClass && (
           <section className="leaderboard-sheet flex flex-col" aria-label="Peringkat Sekolah">
             <div className="leaderboard-title">
               <span className="leaderboard-icon">
                 <Users size={24} className="text-brand-primary" />
               </span>
               <div>
-                <h2>{schoolName} - Kelas {user.classCode}</h2>
+                <h2>{schoolName} - Kelas {firstClass.name}</h2>
                 <p>Bersaing secara sehat dengan teman sekelasmu.</p>
               </div>
             </div>

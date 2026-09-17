@@ -17,7 +17,7 @@ export default async function ProfilePage() {
         });
     } else if (user.role === 'teacher' && user.classCode) {
         myChildren = await prisma.user.findMany({
-            where: { role: 'CHILDREN', classCode: user.classCode },
+            where: { role: 'CHILDREN', joinedClasses: { some: { teacherId: user.id } } },
             select: { id: true, plan: true, fullName: true, username: true, avatarUrl: true }
         });
     }
@@ -25,8 +25,8 @@ export default async function ProfilePage() {
     let myTeacher = null;
     if (user.role === 'children' && user.classCode) {
         myTeacher = await prisma.user.findFirst({
-            where: { role: 'TEACHER', classCode: user.classCode },
-            select: { id: true, fullName: true, classCode: true }
+            where: { role: 'TEACHER', ownedClasses: { some: { students: { some: { id: user.id } } } } },
+            select: { id: true, fullName: true }
         });
     }
 

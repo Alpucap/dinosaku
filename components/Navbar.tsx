@@ -7,7 +7,7 @@ import { ProfileAvatar } from "@/components/layout/ProfileAvatar";
 function getNavLabel(role: string) {
   if (role === "children") return "Berpetualang";
   if (role === "admin") return "Dashboard";
-  return "Kelas";
+  return "Dasbor";
 }
 
 export default async function Navbar() {

@@ -8,8 +8,8 @@ export default async function AksiDanMisiPage() {
   const user = await requireRole(["parents", "teacher"]);
 
   let children: any[] = [];
-  if (user.role === 'teacher' && user.classCode) {
-    children = await prisma.user.findMany({ where: { role: 'CHILDREN', classCode: user.classCode }, select: { id: true, fullName: true } });
+  if (user.role === 'teacher' ) {
+    children = await prisma.user.findMany({ where: { role: 'CHILDREN', joinedClasses: { some: { teacherId: user.id } } }, select: { id: true, fullName: true } });
   } else if (user.role === 'parents') {
     children = await prisma.user.findMany({ where: { role: 'CHILDREN', parentId: user.id }, select: { id: true, fullName: true } });
   }

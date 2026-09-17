@@ -44,7 +44,7 @@ export default async function KoleksiGuruPage() {
   }));
 
   const students = await prisma.user.findMany({
-    where: { classCode: user.classCode, role: 'CHILDREN' },
+    where: { joinedClasses: { some: { teacherId: user.id } }, role: 'CHILDREN' },
     select: { id: true, fullName: true, username: true }
   });
 
