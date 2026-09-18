@@ -9,13 +9,17 @@ export function ActivityCompositionDonut({ slices }: { slices: CompositionSlice[
   const totalCount = slices.reduce((sum, s) => sum + s.count, 0);
   const visible = slices.filter((s) => s.count > 0);
 
-  let offset = 0;
-  const arcs = visible.map((slice) => {
-    const length = Math.max((slice.percent / 100) * CIRCUMFERENCE - GAP, 0);
-    const arc = { ...slice, dasharray: `${length} ${CIRCUMFERENCE - length}`, dashoffset: -offset };
-    offset += (slice.percent / 100) * CIRCUMFERENCE;
-    return arc;
-  });
+  const { arcs } = visible.reduce(
+    (acc, slice) => {
+      const length = Math.max((slice.percent / 100) * CIRCUMFERENCE - GAP, 0);
+      const arc = { ...slice, dasharray: `${length} ${CIRCUMFERENCE - length}`, dashoffset: -acc.offset };
+      return {
+        arcs: [...acc.arcs, arc],
+        offset: acc.offset + (slice.percent / 100) * CIRCUMFERENCE,
+      };
+    },
+    { arcs: [] as (CompositionSlice & { dasharray: string; dashoffset: number })[], offset: 0 }
+  );
 
 
   const storySlice = slices.find(s => s.type === 'STORY_READ')?.count || 0;

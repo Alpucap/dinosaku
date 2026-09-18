@@ -22,7 +22,7 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem("dinosaku-sidebar-expanded");
     if (saved !== null) {
-      setIsDesktopExpanded(saved === "true");
+      setTimeout(() => setIsDesktopExpanded(saved === "true"), 0);
     }
     // Delay transition enabling to prevent hydration flash
     const timer = setTimeout(() => setIsMounted(true), 50);

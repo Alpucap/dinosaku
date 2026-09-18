@@ -1,52 +1,71 @@
-# 🦖 Dinosaku: Generative AI for Kids Financial Literacy
+# Dinosaku: AI-Powered Financial Literacy Platform for Early Childhood Education
 
-Dinosaku is an interactive financial literacy platform designed specifically for children. By blending Generative AI (Google Gemini) and gamification, Dinosaku delivers an engaging and personalized learning experience about managing money through interactive adventure stories.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-dinosaku.vercel.app-success?style=for-the-badge&logo=vercel)](https://dinosaku.vercel.app/)
 
----
+Dinosaku is an interactive, gamified financial literacy platform tailored for early childhood and elementary education. By leveraging Google's Generative AI (Gemini), the platform delivers a personalized learning experience through dynamically generated stories, interactive quizzes, and assignment tracking. The application serves a dual-sided architecture: an engaging interface for children and a comprehensive analytical dashboard for guardians (parents and educators).
 
-## 🌟 Core Features
+## Table of Contents
+- System Architecture & Core Features
+- Business Model & Monetization Strategy
+- User Roles and Demo Credentials
+- Technology Stack and Third-Party Resources
+- Installation and Configuration Guide
+- Application Workflows (User Guide)
+- Credits and Acknowledgements
+- License
 
-- 🗺️ **Adventure Map (Peta Petualangan)**: A structured learning path where children can complete various story chapters and quizzes regarding financial literacy.
-- 🤖 **AI-Powered Stories & Quizzes**: Utilizes the Google Gemini API to dynamically generate illustrated stories (comics) and quizzes based on specific topics (e.g., Saving, Investment) and themes (e.g., Space, Underwater).
-- 👨‍🏫 **Guardian Dashboard (Dasbor Pembimbing)**: A dedicated portal for parents and teachers to monitor learning progress, points, and real-world saving goals of their children/students.
-- 🎯 **Mission & Assignments (Penugasan)**: A feature for Guardians to assign specific "missions" to children. Children will receive a prominent Mission Banner notification upon logging in.
-- 🏆 **Gamification Engine**: Features Points, Streaks, and Badges to ensure children stay highly motivated to learn.
+## System Architecture & Core Features
 
----
+- **Gamified Adventure Map**: A structured curriculum topology where children navigate through different thematic chapters and quizzes focused on core financial concepts (e.g., saving, spending, earning).
+- **Generative AI Integration**: Utilizes the Google Gemini API to instantly generate personalized comic scripts and interactive quizzes based on selected themes (e.g., Astronauts, Under the Sea).
+- **AI Image Generation**: Employs Google's Gemini Image Generation models to visually render character illustrations in real-time, bringing the educational stories to life.
+- **Guardian Analytics Dashboard**: A centralized portal designed for both parents (B2C) and teachers (B2B) to monitor learning progress, track points, and oversee real-world saving goals.
+- **Dynamic Assignment System**: Enables educators to deploy "Special Missions" (custom AI learning paths) to specific students or entire classrooms simultaneously.
+- **Gamification Engine**: A comprehensive engagement loop featuring streaks, point accumulation, and unlockable badges to ensure high retention rates among children.
 
-## 🔐 Demo Logic Credentials (For Judges & Testing)
+## Business Model & Monetization Strategy
 
-The application is pre-seeded with dummy accounts to help you test all features seamlessly without needing to register. **No password is required**, simply select the profile from the Login page.
+To ensure sustainable operations and cover the overhead costs of AI inference, Dinosaku operates as a tiered Software-as-a-Service (SaaS) with hybrid monetization logic:
+1. **B2C Premium Tier (Parents)**: Designed for families. Unlocks complete tracking capabilities, detailed AI learning reports, and increased monthly API token allowances (energy) per child.
+2. **B2B Classroom & Enterprise Tier (Schools/Educators)**: Enables educators to bulk-license student accounts, unlocking access to classroom-wide analytics, multi-class dashboard support, and synchronous curriculum deployment capabilities.
+3. **Pay-as-you-go Micro-transactions**: A top-up energy system allowing users to seamlessly purchase extra AI usage tokens on demand when their monthly baseline quota has been depleted.
 
-### 1. Children Role
-- **Name/Username:** Bagas (`bagas_s`)
-- **Use Case:** Test the core learning loop. View the Adventure Map, read AI-generated stories, complete quizzes to earn points, and view unlocked badges. Try completing a "Special Mission" if assigned by a teacher.
+## User Roles and Demo Credentials
 
-### 2. Teacher Role
-- **Name/Username:** Siti Aminah (`bu_siti`)
-- **Use Case:** Access the Guardian Dashboard. View the class leaderboard, track total points of all students, and use the **"Penugasan"** menu to assign a new learning topic to a specific student (e.g., Bagas). 
+The platform is pre-seeded with dummy accounts for immediate testing. Authentication bypasses standard password validation for the demo environment; users simply need to select a profile from the login interface.
 
-### 3. Parent Role
-- **Name/Username:** Budi Santoso (`budi_parent`)
-- **Use Case:** Access the Guardian Dashboard scoped only to their own child. Monitor the child's real-world "Saving Goal" (Target Tabungan) progress and learning activity timeline.
+**1. Student / Child Profile**
+- **Username:** `bagas_s`
+- **Full Name:** Bagas Santoso
+- **Capabilities:** Access the Adventure Map, read AI-generated stories, complete quizzes, view unlocked badges, and execute Special Missions assigned by a teacher.
 
----
+**2. Educator / Teacher Profile**
+- **Username:** `bu_siti`
+- **Full Name:** Siti Aminah, S.Pd
+- **Capabilities:** Access the Guardian Dashboard. View the class leaderboard, manage multiple classrooms (Multi-Class Support), track student progress, and assign new learning topics via the Assignment menu.
 
-## 🛠️ Technology Stack
+**3. Parent Profile**
+- **Username:** `budi_ortu`
+- **Full Name:** Budi Santoso
+- **Capabilities:** Access the Guardian Dashboard isolated to linked child accounts. Monitor real-world Saving Goal progress, view chronological learning timelines, and manage subscription tiers.
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router) + React
-- **ORM**: [Prisma](https://www.prisma.io/)
-- **Database**: PostgreSQL (via [Neon](https://neon.tech/))
-- **Storage**: Firebase Storage (For saving AI-generated story images)
-- **AI Engine**: Google Gemini API
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React
+## Technology Stack and Third-Party Resources
 
----
+- **Core Framework**: [Next.js 15](https://nextjs.org/) (React, App Router architecture)
+- **Database ORM**: [Prisma](https://www.prisma.io/)
+- **Database Provider**: PostgreSQL (Hosted via [Neon](https://neon.tech/))
+- **File Storage**: Firebase Storage (Utilized for archiving AI-generated story images and media assets)
+- **Artificial Intelligence**: Google Gemini API (Text and Image Generation)
+- **Styling UI**: Tailwind CSS, Shadcn UI
+- **Iconography**: Lucide React
 
-## 🚀 Installation Steps
+## Installation and Configuration Guide
 
-Follow these steps to run the Dinosaku project locally on your machine.
+### Prerequisites
+- Node.js v18.0.0 or higher
+- A PostgreSQL database instance
+- A Google AI Studio API Key (Gemini)
+- A Firebase Project (with Storage enabled and Admin SDK credentials)
 
 ### 1. Clone the Repository
 ```bash
@@ -59,66 +78,70 @@ cd dinosaku
 npm install
 ```
 
-### 3. Sync the Database
-Push the Prisma schema to your PostgreSQL database to create the necessary tables and generate the Prisma Client:
+### 3. Environment Configuration
+Create a `.env` file in the root directory and define the following variables:
+
+```env
+# Database Connection (Neon, Supabase, or Local PostgreSQL)
+DATABASE_URL="postgresql://user:password@host:port/db_name?sslmode=require"
+
+# Google Generative AI (Gemini) API Key
+GEMINI_API_KEY="AIzaSy..."
+
+# Firebase Admin SDK Configuration (Required for image storage)
+# Obtain from Firebase Console -> Project Settings -> Service Accounts
+FIREBASE_PROJECT_ID="your-project-id"
+FIREBASE_CLIENT_EMAIL="firebase-adminsdk-xxx@your-project-id.iam.gserviceaccount.com"
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+FIREBASE_STORAGE_BUCKET="your-project-id.appspot.com"
+```
+
+### 4. Database Initialization
+Synchronize the Prisma schema with your PostgreSQL instance to generate the necessary tables:
 ```bash
 npx prisma db push
 ```
+*(Optional)* Seed the database with the provided dummy accounts:
+```bash
+npx prisma db seed
+```
 
-### 4. Run the Development Server
+### 5. Start the Development Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+The application will be accessible at [http://localhost:3000](http://localhost:3000).
 
----
+## Application Workflows (User Guide)
 
-## ⚙️ Configuration Parameters (`.env`)
+### Core Learning Loop (Student)
+1. Navigate to `/login` and select the **Bagas Santoso** profile.
+2. The user will be redirected to the Adventure Map (`/learn`).
+3. If a Special Mission has been assigned by an educator, a priority banner will appear. Selecting "Start Mission" triggers the AI to generate a custom story.
+4. Alternatively, select any unlocked node on the map, read the educational narrative, and complete the concluding quiz to earn gamification points.
 
-Create a `.env` file in the root directory. You must configure the following parameters for the app to function properly:
+### Assignment Deployment (Educator)
+1. Navigate to `/login` and select the **Siti Aminah** profile.
+2. The user will be directed to the Guardian Dashboard.
+3. Access the **"Penugasan"** (Assignments) module from the sidebar.
+4. Complete the mission form: Select a target student or classroom, specify a financial topic (e.g., Savings, Needs vs Wants), and define a creative theme (e.g., Space Exploration).
+5. The assignment status will remain "Pending" until the student successfully completes the generated module.
 
-```env
-# [REQUIRED] PostgreSQL Database URL (e.g., Neon, Supabase, local PostgreSQL)
-# Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=require
-DATABASE_URL="postgresql://user:password@host:port/db_name?sslmode=require"
+### Progress Monitoring (Parent)
+1. Navigate to `/login` and select the **Budi Santoso** profile.
+2. Access the **"Target Tabungan"** (Savings Goal) module from the sidebar.
+3. Monitor the visual progress of the child's real-world saving objectives.
+4. Access the **"Progres Belajar"** module to review a detailed, chronological ledger of completed stories and quiz performance metrics.
 
-# [REQUIRED] Google Gemini API Key
-# Obtain this from Google AI Studio. Used for generating stories and quizzes.
-GEMINI_API_KEY="AIzaSy..."
+## Future Roadmap
+While the current MVP successfully validates the core concept of AI-generated educational stories, our future milestones include:
+- **Audio & Voice Narrative**: Integrating Google Cloud Text-to-Speech (TTS) API to narrate the AI stories aloud, assisting early-age children who are still learning to read.
+- **Real Bank Integration**: Establishing an open-banking API connection to track real-world pocket money balances alongside virtual gamification points.
+- **Comprehensive SaaS Monetization**: Full deployment of the subscription payment gateway (B2B and B2C tiers) via Midtrans/Xendit to support scalable AI token expenditures.
+- **Multilingual Support**: Allowing the Gemini models to seamlessly transition the UI and story output into local dialects and foreign languages for broader accessibility.
 
-# [REQUIRED] Firebase Admin SDK Configuration
-# Used for securely uploading base64 images generated by the app to Firebase Storage.
-# Obtain these from your Firebase Console -> Project Settings -> Service Accounts.
-FIREBASE_PROJECT_ID="dinosaku-xxx"
-FIREBASE_CLIENT_EMAIL="firebase-adminsdk-xxx@dinosaku-xxx.iam.gserviceaccount.com"
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-FIREBASE_STORAGE_BUCKET="dinosaku-xxx.appspot.com"
-```
+## Credits and Acknowledgements
+Dinosaku was developed with an emphasis on creating a safe, educational, and engaging digital environment for children. The platform extensively utilizes Google's Gemini LLMs to maintain a dynamic and personalized content pipeline without requiring manual content authoring. All third-party libraries, UI components, and APIs used remain the property of their respective creators.
 
----
-
-## 📖 User Guide & Walkthrough
-
-Here is a quick guide on how to navigate and use the application:
-
-### Flow 1: Learning as a Child
-1. Go to `http://localhost:3000/login` and click on **Bagas**.
-2. You will land on the **Adventure Map**.
-3. If a teacher has assigned a mission, you will see a banner at the top. Click **"Mulai Misi Khusus"** to auto-generate a story based on the teacher's requirement.
-4. Alternatively, click on any unlocked node on the map, read the comic, and answer the quiz at the end to earn points and badges.
-
-### Flow 2: Assigning a Mission as a Teacher
-1. Go to `http://localhost:3000/login` and click on **Budi Guru**.
-2. You will land on the **Guardian Dashboard** showing class statistics.
-3. On the sidebar, click **"Penugasan"** (Assignments).
-4. Fill out the "Buat Misi Baru" form: Select a child (e.g., Bagas), pick a Financial Topic (e.g., "Menabung"), and pick a Theme (e.g., "Luar Angkasa"). Click Submit.
-5. The assignment will appear in the History list as "Pending". It will automatically change to "Completed" once the child finishes the story.
-
-### Flow 3: Monitoring Savings as a Parent
-1. Go to `http://localhost:3000/login` and click on **Cindy Mom**.
-2. On the sidebar, click **"Target Tabungan"** (Savings Goal).
-3. View the visual progress bar of what the child is currently saving for (e.g., "Beli Robot Dinosaurus - 30% Terkumpul"). 
-4. Click **"Progres Belajar"** to see a chronological timeline of when the child read stories and what quiz scores they received.
-
----
-*Built with ❤️ for early childhood financial literacy.*
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
