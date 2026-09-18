@@ -17,9 +17,19 @@ export async function POST(req: Request) {
         data: { userId: user.id, totalPoints, currentStreak: currentStreak || 0 }
       });
     } else {
+      let nextPoints = gamification.totalPoints;
+      if (recentActivity?.pointsEarned) {
+        nextPoints += recentActivity.pointsEarned;
+      } else {
+        nextPoints = Math.max(gamification.totalPoints, totalPoints);
+      }
+      
       await prisma.gamification.update({
         where: { userId: user.id },
-        data: { totalPoints, currentStreak: currentStreak !== undefined ? currentStreak : gamification.currentStreak }
+        data: { 
+          totalPoints: nextPoints, 
+          currentStreak: Math.max(gamification.currentStreak, currentStreak || 0) 
+        }
       });
     }
 
