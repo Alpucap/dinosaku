@@ -1,10 +1,12 @@
 'use client';
 
 import { Flame, Medal, Zap } from 'lucide-react';
-import { useProgress } from '@/lib/use-progress';
+import { useGamification } from './GamificationProvider';
 
 export default function LearningStats() {
-  const { ready, points, streak, energy } = useProgress();
+  const { gamification } = useGamification();
+  const { totalPoints: points, currentStreak: streak, energy } = gamification;
+  const ready = true;
 
   return (
     <div className="learning-stats" aria-label="Ringkasan progres">

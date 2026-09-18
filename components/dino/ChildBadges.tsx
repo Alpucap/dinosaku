@@ -1,9 +1,12 @@
 'use client';
 import { Trophy, Medal, Star, LockKeyhole } from 'lucide-react';
 import { useProgress } from '@/lib/use-progress';
+import { useGamification } from './GamificationProvider';
 
 export default function ChildBadges() {
-  const { ready, points, streak } = useProgress();
+  const { ready, badges } = useProgress();
+  const { gamification } = useGamification();
+  const { currentStreak: streak, totalPoints: points } = gamification;
 
   if (!ready) return null;
 

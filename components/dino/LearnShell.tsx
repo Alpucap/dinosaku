@@ -9,6 +9,8 @@ import { learnMenuSections, learnRootHrefs } from "@/lib/menu/learn";
 import { LearnSidebarFooter } from "@/components/dino/Sidebar";
 import type { ProfileUser } from "@/components/layout/ProfileAvatar";
 
+import { GamificationProvider } from "./GamificationProvider";
+
 export function LearnShell({
   children,
   user,
@@ -16,32 +18,40 @@ export function LearnShell({
   children: React.ReactNode;
   user?: ProfileUser | null;
 }) {
+  const initialGamification = {
+    totalPoints: user?.gamification?.totalPoints || 0,
+    currentStreak: user?.gamification?.currentStreak || 0,
+    energy: user?.gamification?.energy || 0,
+  };
+
   return (
-    <SidebarProvider>
-      <TooltipProvider>
-        <div className="flex h-dvh w-full overflow-hidden bg-background font-sans">
-          <a href="#learning-content" className="skip-link">
-            Lewati ke isi
-          </a>
+    <GamificationProvider initialState={initialGamification}>
+      <SidebarProvider>
+        <TooltipProvider>
+          <div className="flex h-dvh w-full overflow-hidden bg-background font-sans">
+            <a href="#learning-content" className="skip-link">
+              Lewati ke isi
+            </a>
 
-          <AppSidebar
-            menuSections={learnMenuSections}
-            rootHrefs={learnRootHrefs}
-            footer={<LearnSidebarFooter />}
-          />
+            <AppSidebar
+              menuSections={learnMenuSections}
+              rootHrefs={learnRootHrefs}
+              footer={<LearnSidebarFooter />}
+            />
 
-          <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-            <DashboardHeader title="Petualangan Belajar" user={user} />
-            <main
-              id="learning-content"
-              tabIndex={-1}
-              className="relative min-w-0 flex-1 overflow-y-auto"
-            >
-              {children}
-            </main>
+            <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+              <DashboardHeader title="Petualangan Belajar" user={user} />
+              <main
+                id="learning-content"
+                tabIndex={-1}
+                className="relative min-w-0 flex-1 overflow-y-auto"
+              >
+                {children}
+              </main>
+            </div>
           </div>
-        </div>
-      </TooltipProvider>
-    </SidebarProvider>
+        </TooltipProvider>
+      </SidebarProvider>
+    </GamificationProvider>
   );
 }

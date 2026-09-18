@@ -1,10 +1,12 @@
 "use client";
 
 import { Flame } from "lucide-react";
-import { useProgress } from "@/lib/use-progress";
+import { useGamification } from "./GamificationProvider";
 
 export function LearnSidebarFooter() {
-  const { ready, streak } = useProgress();
+  const { gamification } = useGamification();
+  const streak = gamification.currentStreak;
+  const ready = true;
 
   return (
     <div className="flex flex-col gap-2">

@@ -8,6 +8,7 @@ import { Gesture } from '@/components/dino/HandController';
 import { CheckCircle2, XCircle, Trophy, ArrowRight, BookOpen, Map, Send, HelpCircle, Sparkles, Star, RefreshCcw } from 'lucide-react';
 import { BADGES, getBadges, readProgress, recordQuiz } from '@/lib/progress';
 import { useProgress } from '@/lib/use-progress';
+import { useGamification } from './GamificationProvider';
 import BadgeMedal from './BadgeMedal';
 
 export default function QuizViewer({ quiz, storyId, onRestart, onContinue, restartLabel = 'Ganti Topik Baru' }: {
@@ -23,6 +24,7 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
   const [showResult, setShowResult] = useState(false);
   const [newBadges, setNewBadges] = useState<string[]>([]);
   const [lanjutan, setLanjutan] = useState('');
+  const { addPoints } = useGamification();
   const owner = useRef<string | null>(null);
   const resultSaved = useRef(false);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -89,6 +91,9 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
     setShowResult(true);
 
     // SINKRONISASI KE DATABASE NEON
+    const pointsEarned = 2 + Math.round((score / quiz.length) * 8);
+    addPoints(pointsEarned);
+    
     import('@/lib/progress').then(({ getPoints, getStreak }) => {
       fetch('/api/progress/sync', {
         method: 'POST',
@@ -101,7 +106,7 @@ export default function QuizViewer({ quiz, storyId, onRestart, onContinue, resta
             type: 'QUIZ_COMPLETED',
             title: `Menyelesaikan Misi`,
             score: score,
-            pointsEarned: 2 + Math.round((score / quiz.length) * 8)
+            pointsEarned: pointsEarned
           }
         })
       }).catch(console.error);

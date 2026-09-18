@@ -18,6 +18,7 @@ export type ProfileUser = {
   role?: Role;
   gamification?: {
     totalPoints?: number;
+    currentStreak?: number;
     energy?: number;
   };
 };
