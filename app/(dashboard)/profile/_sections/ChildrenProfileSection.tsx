@@ -27,7 +27,7 @@ export function ChildrenProfileSection({ user, myTeacher }: Props) {
     return (
         <>
             {/* Classroom section */}
-            {user.classCode && myTeacher ? (
+            {myTeacher ? (
                 <div className="bg-brand-primary/5 border border-brand-primary/20 rounded-xl p-4 flex items-start sm:items-center gap-4">
                     <div className="bg-brand-primary/10 text-brand-primary p-2.5 rounded-lg shrink-0">
                         <GraduationCap className="h-6 w-6" />
