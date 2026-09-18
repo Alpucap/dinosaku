@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { User } from '@/lib/data/dummy-users';
-import { useProgress } from '@/lib/use-progress';
 import { BADGES } from '@/lib/progress';
 import BadgeMedal from '@/components/dino/BadgeMedal';
 
@@ -16,13 +15,10 @@ interface Props {
 }
 
 export function ChildrenProfileSection({ user, myTeacher }: Props) {
-    const { profile, points: localPoints, streak: localStreak, badges: localBadges, ready } = useProgress();
-    
-    // Fallback to dummy data if no profile (Server Side Rendering or not started)
-    const totalPoints = ready && profile ? localPoints : (user.gamification?.totalPoints || 0);
-    const currentStreak = ready && profile ? localStreak : (user.gamification?.currentStreak || 0);
-    const unlockedBadges = ready && profile ? localBadges : [];
-    const totalBadges = ready && profile ? unlockedBadges.length : (user.gamification?.totalBadges || 0);
+    const totalPoints = user.gamification?.totalPoints || 0;
+    const currentStreak = user.gamification?.currentStreak || 0;
+    const totalBadges = user.gamification?.totalBadges || 0;
+    const unlockedBadges = (user.gamification?.badges || []).map((b: any) => typeof b === 'string' ? b : (b.id || b.badgeId));
 
     return (
         <>
